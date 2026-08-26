@@ -151,12 +151,17 @@
 
         <div class="header-actions">
 
-            <button
-                class="header-action"
-                id="wishlistHeader"
-            >
+           <button class="header-action wishlist-header-btn" id="wishlistHeader">
 
-                <i class="fa-regular fa-heart"></i>
+                <span class="wishlist-icon-wrap">
+
+                    <i class="fa-regular fa-heart"></i>
+
+                    <b id="wishlistCount">
+                        0
+                    </b>
+
+                </span>
 
                 <span>Wishlist</span>
 
@@ -1347,6 +1352,61 @@
 
 </div>
 
+<!-- =====================================================
+     WISHLIST OVERLAY
+===================================================== -->
+
+<div
+    class="wishlist-overlay"
+    id="wishlistOverlay"
+></div>
+
+
+<!-- =====================================================
+     WISHLIST DRAWER
+===================================================== -->
+
+<aside
+    class="wishlist-drawer"
+    id="wishlistDrawer"
+>
+
+    <div class="wishlist-header">
+
+        <div>
+
+            <i class="fa-solid fa-heart"></i>
+
+            <h2>
+                My Wishlist
+            </h2>
+
+            <span id="wishlistCountText">
+                0 items
+            </span>
+
+        </div>
+
+
+        <button
+            type="button"
+            class="wishlist-close"
+            id="closeWishlistBtn"
+        >
+
+            <i class="fa-solid fa-xmark"></i>
+
+        </button>
+
+    </div>
+
+
+    <div
+        class="wishlist-items"
+        id="wishlistItems"
+    ></div>
+
+</aside>
 
 
 <!-- JS -->
