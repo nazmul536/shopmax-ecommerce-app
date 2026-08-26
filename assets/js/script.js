@@ -49,10 +49,15 @@ let currentModalProduct = null;
 ========================================================= */
 
 const flashProducts =
-    document.getElementById("flashProducts");
+    document.getElementById(
+        "flashProducts"
+    );
+
 
 const trendingProducts =
-    document.getElementById("trendingProducts");
+    document.getElementById(
+        "trendingProducts"
+    );
 
 
 /* =========================================================
@@ -60,13 +65,21 @@ const trendingProducts =
 ========================================================= */
 
 const searchInput =
-    document.getElementById("searchInput");
+    document.getElementById(
+        "searchInput"
+    );
+
 
 const searchBtn =
-    document.getElementById("searchBtn");
+    document.getElementById(
+        "searchBtn"
+    );
+
 
 const categorySelect =
-    document.getElementById("categorySelect");
+    document.getElementById(
+        "categorySelect"
+    );
 
 
 /* =========================================================
@@ -74,10 +87,15 @@ const categorySelect =
 ========================================================= */
 
 const categoriesBtn =
-    document.getElementById("categoriesBtn");
+    document.getElementById(
+        "categoriesBtn"
+    );
+
 
 const categoryDropdown =
-    document.getElementById("categoryDropdown");
+    document.getElementById(
+        "categoryDropdown"
+    );
 
 
 /* =========================================================
@@ -85,28 +103,51 @@ const categoryDropdown =
 ========================================================= */
 
 const cartBtn =
-    document.getElementById("cartBtn");
+    document.getElementById(
+        "cartBtn"
+    );
+
 
 const cartCount =
-    document.getElementById("cartCount");
+    document.getElementById(
+        "cartCount"
+    );
+
 
 const cartDrawer =
-    document.getElementById("cartDrawer");
+    document.getElementById(
+        "cartDrawer"
+    );
+
 
 const cartOverlay =
-    document.getElementById("cartOverlay");
+    document.getElementById(
+        "cartOverlay"
+    );
+
 
 const closeCartBtn =
-    document.getElementById("closeCartBtn");
+    document.getElementById(
+        "closeCartBtn"
+    );
+
 
 const cartItems =
-    document.getElementById("cartItems");
+    document.getElementById(
+        "cartItems"
+    );
+
 
 const cartTotal =
-    document.getElementById("cartTotal");
+    document.getElementById(
+        "cartTotal"
+    );
+
 
 const checkoutBtn =
-    document.getElementById("checkoutBtn");
+    document.getElementById(
+        "checkoutBtn"
+    );
 
 
 /* =========================================================
@@ -118,25 +159,30 @@ const wishlistHeader =
         "wishlistHeader"
     );
 
+
 const wishlistDrawer =
     document.getElementById(
         "wishlistDrawer"
     );
+
 
 const wishlistOverlay =
     document.getElementById(
         "wishlistOverlay"
     );
 
+
 const closeWishlistBtn =
     document.getElementById(
         "closeWishlistBtn"
     );
 
+
 const wishlistItems =
     document.getElementById(
         "wishlistItems"
     );
+
 
 const wishlistCountText =
     document.getElementById(
@@ -153,60 +199,72 @@ const productModal =
         "productModal"
     );
 
+
 const productModalOverlay =
     document.getElementById(
         "productModalOverlay"
     );
+
 
 const closeProductModalBtn =
     document.getElementById(
         "closeProductModal"
     );
 
+
 const modalProductImage =
     document.getElementById(
         "modalProductImage"
     );
+
 
 const modalProductCategory =
     document.getElementById(
         "modalProductCategory"
     );
 
+
 const modalProductTitle =
     document.getElementById(
         "modalProductTitle"
     );
+
 
 const modalProductRating =
     document.getElementById(
         "modalProductRating"
     );
 
+
 const modalProductPrice =
     document.getElementById(
         "modalProductPrice"
     );
+
 
 const modalProductDescription =
     document.getElementById(
         "modalProductDescription"
     );
 
+
 const modalQuantityEl =
     document.getElementById(
         "modalQuantity"
     );
+
 
 const modalDecrease =
     document.getElementById(
         "modalDecrease"
     );
 
+
 const modalIncrease =
     document.getElementById(
         "modalIncrease"
     );
+
 
 const modalAddToCart =
     document.getElementById(
@@ -348,7 +406,10 @@ function showLoading(
                     class="product-image"
                     style="
                         background:#f1f5f9;
-                        animation:shopmaxPulse 1.3s infinite;
+                        animation:
+                            shopmaxPulse
+                            1.3s
+                            infinite;
                     "
                 ></div>
 
@@ -549,7 +610,11 @@ function createProductCard(
                         "
                         data-action="wishlist"
                         data-id="${product.id}"
-                        aria-label="Add to wishlist"
+                        aria-label="${
+                            liked
+                                ? "Remove from wishlist"
+                                : "Add to wishlist"
+                        }"
                     >
 
                         <i
@@ -790,9 +855,9 @@ function attachProductEvents(
             "[data-action]"
         )
         .forEach(
-            button => {
+            element => {
 
-                button.addEventListener(
+                element.addEventListener(
                     "click",
                     handleProductAction
                 );
@@ -989,6 +1054,13 @@ function filterProducts() {
 
 /* =========================================================
    CATEGORY MENU
+   DESKTOP:
+   - All Categories click opens main menu
+   - Submenu hover handled by CSS
+
+   MOBILE:
+   - All Categories click opens menu
+   - Electronics/Fashion click opens submenu below
 ========================================================= */
 
 function setupCategoryMenu() {
@@ -1001,25 +1073,47 @@ function setupCategoryMenu() {
     }
 
 
+    /* =====================================================
+       ALL CATEGORIES BUTTON
+    ===================================================== */
+
     categoriesBtn.addEventListener(
         "click",
         event => {
 
+            event.preventDefault();
             event.stopPropagation();
 
 
-            categoryDropdown.classList.toggle(
-                "show"
-            );
+            const isOpen =
+                categoryDropdown.classList.contains(
+                    "show"
+                );
 
 
-            categoriesBtn.classList.toggle(
-                "active"
-            );
+            if (isOpen) {
+
+                closeCategoryMenu();
+
+            } else {
+
+                categoryDropdown.classList.add(
+                    "show"
+                );
+
+                categoriesBtn.classList.add(
+                    "active"
+                );
+
+            }
 
         }
     );
 
+
+    /* =====================================================
+       CATEGORY DROPDOWN
+    ===================================================== */
 
     categoryDropdown.addEventListener(
         "click",
@@ -1027,75 +1121,282 @@ function setupCategoryMenu() {
 
             event.stopPropagation();
 
+
+            /*
+               Parent category button
+            */
+
+            const categoryButton =
+                event.target.closest(
+                    ".category-item > button"
+                );
+
+
+            if (categoryButton) {
+
+                const item =
+                    categoryButton.closest(
+                        ".category-item"
+                    );
+
+
+                if (!item) {
+                    return;
+                }
+
+
+                const submenu =
+                    item.querySelector(
+                        ":scope > .category-submenu"
+                    );
+
+
+                /* =========================================
+                   MOBILE SUBMENU
+                ========================================= */
+
+                if (
+                    submenu &&
+                    window.innerWidth <= 768
+                ) {
+
+                    event.preventDefault();
+
+
+                    /*
+                       Close other open submenus
+                    */
+
+                    categoryDropdown
+                        .querySelectorAll(
+                            ".category-item.mobile-open"
+                        )
+                        .forEach(
+                            openItem => {
+
+                                if (
+                                    openItem !== item
+                                ) {
+
+                                    openItem.classList.remove(
+                                        "mobile-open"
+                                    );
+
+                                }
+
+                            }
+                        );
+
+
+                    /*
+                       Toggle current submenu
+                    */
+
+                    item.classList.toggle(
+                        "mobile-open"
+                    );
+
+
+                    return;
+
+                }
+
+
+                /* =========================================
+                   CATEGORY WITH NO SUBMENU
+                ========================================= */
+
+                const category =
+                    categoryButton.dataset.category;
+
+
+                if (
+                    category &&
+                    category !== "all"
+                ) {
+
+                    selectHomeCategory(
+                        category
+                    );
+
+                    closeCategoryMenu();
+
+                }
+
+                return;
+
+            }
+
+
+            /* =================================================
+               SUBMENU LINKS
+            ================================================= */
+
+            const submenuLink =
+                event.target.closest(
+                    ".category-submenu a[data-category]"
+                );
+
+
+            if (submenuLink) {
+
+                event.preventDefault();
+
+
+                const category =
+                    submenuLink.dataset.category;
+
+
+                if (!category) {
+                    return;
+                }
+
+
+                selectHomeCategory(
+                    category
+                );
+
+
+                closeCategoryMenu();
+
+            }
+
         }
     );
 
+
+    /* =====================================================
+       OUTSIDE CLICK
+    ===================================================== */
 
     document.addEventListener(
         "click",
-        () => {
+        event => {
 
-            categoryDropdown.classList.remove(
-                "show"
-            );
+            if (
+                categoryDropdown.contains(
+                    event.target
+                )
+            ) {
+                return;
+            }
 
 
-            categoriesBtn.classList.remove(
-                "active"
-            );
+            if (
+                categoriesBtn.contains(
+                    event.target
+                )
+            ) {
+                return;
+            }
+
+
+            closeCategoryMenu();
 
         }
     );
 
 
+    /* =====================================================
+       RESIZE
+    ===================================================== */
+
+    window.addEventListener(
+        "resize",
+        () => {
+
+            if (
+                window.innerWidth > 768
+            ) {
+
+                closeAllMobileSubmenus();
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   SELECT HOME CATEGORY
+========================================================= */
+
+function selectHomeCategory(
+    category
+) {
+
+    if (!category) {
+        return;
+    }
+
+
+    if (
+        categorySelect
+    ) {
+
+        categorySelect.value =
+            category;
+
+    }
+
+
+    filterProducts();
+
+
+    /*
+       Scroll to product section
+    */
+
     document
-        .querySelectorAll(
-            "[data-category]"
+        .getElementById(
+            "flashSale"
+        )
+        ?.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+}
+
+
+/* =========================================================
+   CLOSE CATEGORY MENU
+========================================================= */
+
+function closeCategoryMenu() {
+
+    categoryDropdown?.classList.remove(
+        "show"
+    );
+
+
+    categoriesBtn?.classList.remove(
+        "active"
+    );
+
+
+    closeAllMobileSubmenus();
+
+}
+
+
+/* =========================================================
+   CLOSE MOBILE SUBMENUS
+========================================================= */
+
+function closeAllMobileSubmenus() {
+
+    categoryDropdown
+        ?.querySelectorAll(
+            ".category-item.mobile-open"
         )
         .forEach(
             item => {
 
-                item.addEventListener(
-                    "click",
-                    event => {
-
-                        event.preventDefault();
-
-
-                        const category =
-                            item.dataset.category;
-
-
-                        if (
-                            !category
-                        ) {
-                            return;
-                        }
-
-
-                        if (
-                            categorySelect
-                        ) {
-
-                            categorySelect.value =
-                                category;
-
-                        }
-
-
-                        filterProducts();
-
-
-                        categoryDropdown.classList.remove(
-                            "show"
-                        );
-
-
-                        categoriesBtn.classList.remove(
-                            "active"
-                        );
-
-                    }
+                item.classList.remove(
+                    "mobile-open"
                 );
 
             }
@@ -1314,12 +1615,10 @@ function updateCartCount() {
                 total,
                 item
             ) =>
-
                 total +
                 Number(
                     item.quantity || 0
                 ),
-
             0
         );
 
@@ -1400,7 +1699,6 @@ function renderCart() {
                 sum,
                 item
             ) =>
-
                 sum +
                 (
                     Number(
@@ -1410,7 +1708,6 @@ function renderCart() {
                         item.quantity
                     )
                 ),
-
             0
         );
 
@@ -1489,12 +1786,14 @@ function createCartItem(
                             data-cart-action="decrease"
                             data-id="${item.id}"
                         >
+
                             <i
                                 class="
                                     fa-solid
                                     fa-minus
                                 "
                             ></i>
+
                         </button>
 
 
@@ -1508,12 +1807,14 @@ function createCartItem(
                             data-cart-action="increase"
                             data-id="${item.id}"
                         >
+
                             <i
                                 class="
                                     fa-solid
                                     fa-plus
                                 "
                             ></i>
+
                         </button>
 
                     </div>
@@ -1714,6 +2015,7 @@ function setupWishlist() {
 
             event.stopPropagation();
 
+
             openWishlist();
 
         }
@@ -1745,11 +2047,6 @@ function setupWishlist() {
 ========================================================= */
 
 function ensureWishlistBadgeStyles() {
-
-    /*
-       Existing CSS-এর উপর dependency না রেখে
-       JS থেকেই badge-এর required CSS add করা হচ্ছে।
-    */
 
     if (
         document.getElementById(
@@ -1794,6 +2091,7 @@ function ensureWishlistBadgeStyles() {
 
         #wishlistHeader .wishlist-icon-wrap > i {
             display: block;
+
             line-height: 1;
         }
 
@@ -1819,39 +2117,54 @@ function ensureWishlistBadgeStyles() {
 
             box-sizing: border-box;
 
-            background: #ef4444 !important;
-            color: #ffffff !important;
+            background:
+                #ef4444 !important;
 
-            border: 2px solid #ffffff !important;
+            color:
+                #ffffff !important;
 
-            border-radius: 50% !important;
+            border:
+                2px solid #ffffff !important;
+
+            border-radius:
+                50% !important;
 
             font-family:
                 Arial,
                 sans-serif !important;
 
-            font-size: 9px !important;
+            font-size:
+                9px !important;
 
-            font-weight: 700 !important;
+            font-weight:
+                700 !important;
 
-            line-height: 1 !important;
+            line-height:
+                1 !important;
 
-            white-space: nowrap;
+            white-space:
+                nowrap;
 
-            z-index: 999 !important;
+            z-index:
+                999 !important;
 
-            pointer-events: none;
+            pointer-events:
+                none;
         }
 
 
-        #wishlistHeader #wishlistHeaderCount.hidden {
+        #wishlistHeader
+        #wishlistHeaderCount.hidden {
+
             display: none !important;
+
         }
 
 
         @media (max-width: 768px) {
 
-            #wishlistHeader .wishlist-icon-wrap {
+            #wishlistHeader
+            .wishlist-icon-wrap {
 
                 width: 20px;
                 height: 20px;
@@ -1860,7 +2173,8 @@ function ensureWishlistBadgeStyles() {
             }
 
 
-            #wishlistHeader #wishlistHeaderCount {
+            #wishlistHeader
+            #wishlistHeaderCount {
 
                 top: -7px !important;
                 right: -7px !important;
@@ -1886,7 +2200,7 @@ function ensureWishlistBadgeStyles() {
 
 
 /* =========================================================
-   CREATE / UPDATE HEADER WISHLIST BADGE
+   UPDATE WISHLIST COUNT
 ========================================================= */
 
 function updateWishlistCount() {
@@ -1896,27 +2210,14 @@ function updateWishlistCount() {
     }
 
 
-    /*
-       Badge CSS নিশ্চিত করা
-    */
-
     ensureWishlistBadgeStyles();
 
-
-    /*
-       Heart icon খুঁজে বের করা
-    */
 
     let heartIcon =
         wishlistHeader.querySelector(
             "i.fa-heart"
         );
 
-
-    /*
-       যদি fa-heart না পাওয়া যায়,
-       header-এর প্রথম icon নেওয়া হবে।
-    */
 
     if (!heartIcon) {
 
@@ -1928,19 +2229,11 @@ function updateWishlistCount() {
     }
 
 
-    /*
-       Heart icon wrapper খুঁজবে।
-    */
-
     let iconWrapper =
         wishlistHeader.querySelector(
             ".wishlist-icon-wrap"
         );
 
-
-    /*
-       প্রথমবার wrapper create হবে।
-    */
 
     if (
         heartIcon &&
@@ -1957,10 +2250,6 @@ function updateWishlistCount() {
             "wishlist-icon-wrap";
 
 
-        /*
-           Icon-কে wrapper-এর মধ্যে নেওয়া
-        */
-
         heartIcon.parentNode.insertBefore(
             iconWrapper,
             heartIcon
@@ -1974,19 +2263,11 @@ function updateWishlistCount() {
     }
 
 
-    /*
-       Existing badge খুঁজবে
-    */
-
     let badge =
         document.getElementById(
             "wishlistHeaderCount"
         );
 
-
-    /*
-       Badge না থাকলে create করবে
-    */
 
     if (!badge) {
 
@@ -2006,11 +2287,6 @@ function updateWishlistCount() {
     }
 
 
-    /*
-       Badge-কে heart icon-এর wrapper-এর ভিতরে রাখবে।
-       তাই Cart-এর মতো icon-এর উপরে red number দেখা যাবে।
-    */
-
     if (
         iconWrapper
     ) {
@@ -2028,17 +2304,9 @@ function updateWishlistCount() {
     }
 
 
-    /*
-       Wishlist count
-    */
-
     badge.textContent =
         wishlist.length;
 
-
-    /*
-       Wishlist empty হলে badge hide
-    */
 
     if (
         wishlist.length === 0
@@ -2056,10 +2324,6 @@ function updateWishlistCount() {
 
     }
 
-
-    /*
-       Wishlist drawer-এর count
-    */
 
     if (
         wishlistCountText
@@ -2082,10 +2346,6 @@ function updateWishlistCount() {
 function toggleWishlist(
     id
 ) {
-
-    /*
-       Remove duplicates first
-    */
 
     wishlist =
         [
@@ -2133,23 +2393,11 @@ function toggleWishlist(
     saveWishlist();
 
 
-    /*
-       Header count immediately update
-    */
-
     updateWishlistCount();
 
 
-    /*
-       Drawer update
-    */
-
     renderWishlist();
 
-
-    /*
-       Product card hearts update
-    */
 
     rerenderProducts();
 
@@ -2538,10 +2786,6 @@ function handleWishlistAction(
     }
 
 
-    /*
-       Add wishlist product to cart
-    */
-
     if (
         action === "cart"
     ) {
@@ -2555,10 +2799,6 @@ function handleWishlistAction(
 
     }
 
-
-    /*
-       Remove from wishlist
-    */
 
     if (
         action === "remove"
@@ -2687,14 +2927,7 @@ function setupModal() {
             closeWishlist();
 
 
-            categoryDropdown?.classList.remove(
-                "show"
-            );
-
-
-            categoriesBtn?.classList.remove(
-                "active"
-            );
+            closeCategoryMenu();
 
         }
     );
@@ -2722,15 +2955,20 @@ function openProductModal(
         product;
 
 
-    modalQuantity = 1;
+    modalQuantity =
+        1;
 
 
     closeCart();
 
     closeWishlist();
 
+    closeCategoryMenu();
 
-    if (modalProductImage) {
+
+    if (
+        modalProductImage
+    ) {
 
         modalProductImage.src =
             product.image;
@@ -3112,7 +3350,9 @@ function formatCategory(
     }
 
 
-    return value
+    return String(
+        value
+    )
         .replace(
             /'/g,
             ""
@@ -3216,26 +3456,34 @@ function escapeHTML(
 window.loadProducts =
     loadProducts;
 
+
 window.addToCart =
     addToCart;
+
 
 window.toggleWishlist =
     toggleWishlist;
 
+
 window.openCart =
     openCart;
+
 
 window.closeCart =
     closeCart;
 
+
 window.openWishlist =
     openWishlist;
+
 
 window.closeWishlist =
     closeWishlist;
 
+
 window.openProductModal =
     openProductModal;
+
 
 window.closeProductModalWindow =
     closeProductModalWindow;
