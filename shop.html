@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="ShopMax - Browse products, filter by category and sort by price or rating."
+    >
+
+    <title>Shop - ShopMax</title>
+
+
+    <!-- =====================================================
+         FONT AWESOME
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    >
+
+
+    <!-- =====================================================
+         GLOBAL CSS
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="assets/css/style.css"
+    >
+
+
+    <!-- =====================================================
+         SHOP CSS
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="assets/css/shop.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     TOP BAR
+========================================================= -->
+
+<div class="top-bar">
+
+    <div class="container top-bar-inner">
+
+        <div class="top-sale">
+
+            <i class="fa-solid fa-fire"></i>
+
+            Hot Deals
+
+            <span>
+                Summer Sale For All Products - Up To 50% Off
+            </span>
+
+        </div>
+
+
+        <div class="top-links">
+
+            <a href="#">
+                Track Order
+            </a>
+
+            <a href="#">
+                Help Center
+            </a>
+
+            <button type="button">
+                English
+                <i class="fa-solid fa-chevron-down"></i>
+            </button>
+
+            <button type="button">
+                USD
+                <i class="fa-solid fa-chevron-down"></i>
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<header class="header">
+
+    <div class="container header-main">
+
+
+        <!-- LOGO -->
+
+        <a
+            href="index.html"
+            class="logo"
+        >
+
+            <span class="logo-icon">
+                <i class="fa-solid fa-bag-shopping"></i>
+            </span>
+
+            <span>
+                Shop<span>Max</span>
+            </span>
+
+        </a>
+
+
+
+        <!-- SEARCH -->
+
+        <div class="search-box">
+
+            <select
+                id="shopHeaderCategory"
+                aria-label="Search category"
+            >
+
+                <option value="all">
+                    All Categories
+                </option>
+
+                <option value="electronics">
+                    Electronics
+                </option>
+
+                <option value="jewelery">
+                    Jewelry
+                </option>
+
+                <option value="men's clothing">
+                    Men's Clothing
+                </option>
+
+                <option value="women's clothing">
+                    Women's Clothing
+                </option>
+
+            </select>
+
+
+            <input
+                type="text"
+                id="shopSearch"
+                placeholder="Search for products..."
+                autocomplete="off"
+            >
+
+
+            <button
+                type="button"
+                id="shopSearchBtn"
+                aria-label="Search"
+            >
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+            </button>
+
+        </div>
+
+
+
+        <!-- HEADER ACTIONS -->
+
+        <div class="header-actions">
+
+
+            <!-- WISHLIST -->
+
+            <button
+                type="button"
+                class="header-action"
+                id="wishlistHeader"
+            >
+
+                <span class="wishlist-icon-wrap">
+
+                    <i class="fa-regular fa-heart"></i>
+
+                </span>
+
+                <span>
+                    Wishlist
+                </span>
+
+                <b id="wishlistCount">
+                    0
+                </b>
+
+            </button>
+
+
+
+            <!-- ACCOUNT -->
+
+            <button
+                type="button"
+                class="header-action"
+            >
+
+                <i class="fa-regular fa-user"></i>
+
+                <span>
+                    Account
+                </span>
+
+            </button>
+
+
+
+            <!-- CART -->
+
+            <button
+                type="button"
+                class="header-action cart-header-btn"
+                id="cartBtn"
+            >
+
+                <span class="cart-icon-wrap">
+
+                    <i class="fa-solid fa-cart-shopping"></i>
+
+                    <b id="cartCount">
+                        0
+                    </b>
+
+                </span>
+
+                <span>
+                    Cart
+                </span>
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         NAVIGATION
+    ====================================================== -->
+
+    <div class="navigation">
+
+        <div class="container navigation-inner">
+
+
+            <!-- ALL CATEGORIES -->
+
+            <div class="categories-wrapper">
+
+                <button
+                    type="button"
+                    class="categories-btn"
+                    id="categoriesBtn"
+                >
+
+                    <i class="fa-solid fa-bars"></i>
+
+                    All Categories
+
+                    <i
+                        class="fa-solid fa-chevron-down arrow"
+                    ></i>
+
+                </button>
+
+
+                <!-- CATEGORY DROPDOWN -->
+
+                <div
+                    class="category-dropdown"
+                    id="categoryDropdown"
+                >
+
+                    <div class="category-dropdown-title">
+
+                        <i class="fa-solid fa-layer-group"></i>
+
+                        Shop By Category
+
+                    </div>
+
+
+                    <!-- ELECTRONICS -->
+
+                    <div class="category-item has-submenu">
+
+                        <button type="button">
+
+                            <span>
+
+                                <i class="fa-solid fa-laptop"></i>
+
+                                Electronics
+
+                            </span>
+
+                            <i
+                                class="fa-solid fa-chevron-right"
+                            ></i>
+
+                        </button>
+
+
+                        <div class="category-submenu">
+
+                            <a
+                                href="#"
+                                data-category="electronics"
+                            >
+                                Laptops
+                            </a>
+
+                            <a href="#">
+                                Smartphones
+                            </a>
+
+                            <a href="#">
+                                Headphones
+                            </a>
+
+                            <a href="#">
+                                Cameras
+                            </a>
+
+                            <a href="#">
+                                Accessories
+                            </a>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- FASHION -->
+
+                    <div class="category-item has-submenu">
+
+                        <button type="button">
+
+                            <span>
+
+                                <i class="fa-solid fa-shirt"></i>
+
+                                Fashion
+
+                            </span>
+
+                            <i
+                                class="fa-solid fa-chevron-right"
+                            ></i>
+
+                        </button>
+
+
+                        <div class="category-submenu">
+
+                            <a
+                                href="#"
+                                data-category="men's clothing"
+                            >
+                                Men's Clothing
+                            </a>
+
+                            <a
+                                href="#"
+                                data-category="women's clothing"
+                            >
+                                Women's Clothing
+                            </a>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- JEWELLERY -->
+
+                    <div class="category-item">
+
+                        <button
+                            type="button"
+                            data-category="jewelery"
+                        >
+
+                            <span>
+
+                                <i class="fa-solid fa-gem"></i>
+
+                                Jewellery
+
+                            </span>
+
+                        </button>
+
+                    </div>
+
+
+
+                    <!-- HOME -->
+
+                    <div class="category-item">
+
+                        <button type="button">
+
+                            <span>
+
+                                <i class="fa-solid fa-house"></i>
+
+                                Home & Kitchen
+
+                            </span>
+
+                        </button>
+
+                    </div>
+
+
+
+                    <!-- SPORTS -->
+
+                    <div class="category-item">
+
+                        <button type="button">
+
+                            <span>
+
+                                <i class="fa-solid fa-futbol"></i>
+
+                                Sports
+
+                            </span>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- NAV LINKS -->
+
+            <nav class="nav-links">
+
+                <a href="index.html">
+                    Home
+                </a>
+
+                <a
+                    href="shop.html"
+                    class="active"
+                >
+                    Shop
+                </a>
+
+                <a href="#">
+                    Deals
+                </a>
+
+                <a href="#">
+                    Pages
+                </a>
+
+                <a href="#">
+                    Blog
+                </a>
+
+                <a href="#">
+                    Contact
+                </a>
+
+            </nav>
+
+
+
+            <!-- HOTLINE -->
+
+            <div class="hotline">
+
+                <i class="fa-solid fa-headset"></i>
+
+                Hotline:
+
+                <strong>
+                    (800) 123-4567
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+
+<!-- =========================================================
+     SHOP HERO
+========================================================= -->
+
+<section class="shop-hero">
+
+    <div class="container">
+
+
+        <!-- BREADCRUMB -->
+
+        <div class="shop-breadcrumb">
+
+            <a href="index.html">
+                Home
+            </a>
+
+            <i class="fa-solid fa-chevron-right"></i>
+
+            <span>
+                Shop
+            </span>
+
+        </div>
+
+
+
+        <!-- HEADING -->
+
+        <div class="shop-heading">
+
+            <div>
+
+                <span class="shop-eyebrow">
+                    SHOPMAX STORE
+                </span>
+
+                <h1>
+                    Explore Our Products
+                </h1>
+
+                <p>
+                    Discover quality products at great prices.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     SHOP PAGE
+========================================================= -->
+
+<main class="shop-page">
+
+    <div class="container">
+
+
+        <!-- =================================================
+             TOOLBAR
+        ================================================== -->
+
+        <div class="shop-toolbar">
+
+
+            <!-- CATEGORY -->
+
+            <div class="shop-control">
+
+                <label for="shopCategory">
+                    Category
+                </label>
+
+                <div class="select-wrap">
+
+                    <select id="shopCategory">
+
+                        <option value="all">
+                            All Categories
+                        </option>
+
+                        <option value="electronics">
+                            Electronics
+                        </option>
+
+                        <option value="jewelery">
+                            Jewellery
+                        </option>
+
+                        <option value="men's clothing">
+                            Men's Clothing
+                        </option>
+
+                        <option value="women's clothing">
+                            Women's Clothing
+                        </option>
+
+                    </select>
+
+                    <i
+                        class="fa-solid fa-chevron-down"
+                    ></i>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- SORT -->
+
+            <div class="shop-control">
+
+                <label for="shopSort">
+                    Sort By
+                </label>
+
+                <div class="select-wrap">
+
+                    <select id="shopSort">
+
+                        <option value="default">
+                            Default
+                        </option>
+
+                        <option value="price-low">
+                            Price: Low → High
+                        </option>
+
+                        <option value="price-high">
+                            Price: High → Low
+                        </option>
+
+                        <option value="rating">
+                            Rating: High → Low
+                        </option>
+
+                        <option value="name">
+                            Name: A → Z
+                        </option>
+
+                    </select>
+
+                    <i
+                        class="fa-solid fa-chevron-down"
+                    ></i>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- RESULT COUNT -->
+
+            <div class="shop-result">
+
+                <strong id="shopResultCount">
+                    0
+                </strong>
+
+                <span>
+                    Products Found
+                </span>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ACTIVE FILTER -->
+
+        <div
+            class="shop-active-filter"
+            id="shopActiveFilter"
+        ></div>
+
+
+
+        <!-- =================================================
+             PRODUCT GRID
+        ================================================== -->
+
+        <section
+            class="shop-products-grid"
+            id="shopProducts"
+        >
+
+            <!-- Products generated by JavaScript -->
+
+        </section>
+
+
+
+        <!-- =================================================
+             NO RESULTS
+        ================================================== -->
+
+        <div
+            class="shop-no-results"
+            id="shopNoResults"
+            hidden
+        >
+
+            <div class="no-results-icon">
+
+                <i class="fa-solid fa-box-open"></i>
+
+            </div>
+
+            <h2>
+                No products found
+            </h2>
+
+            <p>
+                Try another search or category.
+            </p>
+
+            <button
+                type="button"
+                id="clearShopFilters"
+            >
+                Clear Filters
+            </button>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+
+<!-- =========================================================
+     CART OVERLAY
+========================================================= -->
+
+<div
+    class="cart-overlay"
+    id="cartOverlay"
+></div>
+
+
+
+<!-- =========================================================
+     CART DRAWER
+========================================================= -->
+
+<aside
+    class="cart-drawer"
+    id="cartDrawer"
+>
+
+    <div class="drawer-header">
+
+        <div>
+
+            <span>
+                YOUR CART
+            </span>
+
+            <h2>
+                Shopping Cart
+            </h2>
+
+        </div>
+
+
+        <button
+            type="button"
+            id="closeCartBtn"
+            class="drawer-close"
+            aria-label="Close cart"
+        >
+
+            <i class="fa-solid fa-xmark"></i>
+
+        </button>
+
+    </div>
+
+
+    <div
+        class="cart-items"
+        id="cartItems"
+    ></div>
+
+
+    <div class="cart-footer">
+
+        <div class="cart-total-row">
+
+            <span>
+                Total
+            </span>
+
+            <strong id="cartTotal">
+                $0.00
+            </strong>
+
+        </div>
+
+
+        <button
+            type="button"
+            id="checkoutBtn"
+            class="checkout-btn"
+        >
+
+            Checkout
+
+            <i class="fa-solid fa-arrow-right"></i>
+
+        </button>
+
+    </div>
+
+</aside>
+
+
+
+<!-- =========================================================
+     WISHLIST OVERLAY
+========================================================= -->
+
+<div
+    class="wishlist-overlay"
+    id="wishlistOverlay"
+></div>
+
+
+
+<!-- =========================================================
+     WISHLIST DRAWER
+========================================================= -->
+
+<aside
+    class="wishlist-drawer"
+    id="wishlistDrawer"
+>
+
+    <div class="drawer-header">
+
+        <div>
+
+            <span>
+                SAVED PRODUCTS
+            </span>
+
+            <h2>
+                My Wishlist
+            </h2>
+
+            <small id="wishlistCountText">
+                0 items
+            </small>
+
+        </div>
+
+
+        <button
+            type="button"
+            id="closeWishlistBtn"
+            class="drawer-close"
+            aria-label="Close wishlist"
+        >
+
+            <i class="fa-solid fa-xmark"></i>
+
+        </button>
+
+    </div>
+
+
+    <div
+        class="wishlist-items"
+        id="wishlistItems"
+    ></div>
+
+</aside>
+
+
+
+<!-- =========================================================
+     PRODUCT MODAL
+========================================================= -->
+
+<div
+    class="product-modal"
+    id="productModal"
+>
+
+
+    <!-- MODAL OVERLAY -->
+
+    <div
+        class="product-modal-overlay"
+        id="productModalOverlay"
+    ></div>
+
+
+
+    <!-- MODAL CONTENT -->
+
+    <div class="product-modal-content">
+
+
+        <!-- =================================================
+             PRODUCT IMAGE
+        ================================================== -->
+
+        <div class="modal-product-image-section">
+
+            <span class="modal-image-badge">
+                SHOPMAX
+            </span>
+
+
+            <button
+                type="button"
+                class="modal-close"
+                id="closeProductModal"
+                aria-label="Close product details"
+            >
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+
+            <img
+                id="modalProductImage"
+                src=""
+                alt="Product"
+            >
+
+        </div>
+
+
+
+        <!-- =================================================
+             PRODUCT DETAILS
+        ================================================== -->
+
+        <div class="modal-product-content">
+
+
+            <!-- CATEGORY -->
+
+            <span
+                class="modal-category"
+                id="modalProductCategory"
+            ></span>
+
+
+            <!-- TITLE -->
+
+            <h2
+                id="modalProductTitle"
+            ></h2>
+
+
+            <!-- RATING -->
+
+            <div
+                class="modal-rating"
+                id="modalProductRating"
+            ></div>
+
+
+            <!-- PRICE -->
+
+            <div
+                class="modal-price"
+                id="modalProductPrice"
+            ></div>
+
+
+            <!-- DESCRIPTION -->
+
+            <p
+                class="modal-description"
+                id="modalProductDescription"
+            ></p>
+
+
+
+            <!-- =================================================
+                 QUANTITY
+            ================================================== -->
+
+            <div class="modal-quantity-area">
+
+                <span>
+                    Quantity
+                </span>
+
+
+                <div class="modal-quantity-controls">
+
+
+                    <button
+                        type="button"
+                        id="modalDecrease"
+                        aria-label="Decrease quantity"
+                    >
+
+                        <i class="fa-solid fa-minus"></i>
+
+                    </button>
+
+
+                    <strong id="modalQuantity">
+                        1
+                    </strong>
+
+
+                    <button
+                        type="button"
+                        id="modalIncrease"
+                        aria-label="Increase quantity"
+                    >
+
+                        <i class="fa-solid fa-plus"></i>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 ACTION BUTTONS
+            ================================================== -->
+
+            <div class="modal-actions">
+
+
+                <button
+                    type="button"
+                    id="modalAddToCart"
+                    class="modal-add-cart"
+                >
+
+                    <i class="fa-solid fa-cart-plus"></i>
+
+                    Add To Cart
+
+                </button>
+
+
+                <button
+                    type="button"
+                    id="modalBuyNow"
+                    class="modal-buy-now"
+                >
+
+                    Buy Now
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
+<script src="assets/js/shop.js"></script>
+
+
+</body>
+
+</html>
