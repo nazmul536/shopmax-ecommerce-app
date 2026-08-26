@@ -5,78 +5,105 @@
 
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <meta name="description"
+        content="ShopMax modern e-commerce website">
+
+    <title>ShopMax - E-commerce</title>
+
+    <!-- Font Awesome -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
     >
 
+    <!-- CSS -->
     <link
         rel="stylesheet"
         href="assets/css/style.css"
     >
 
-    <title>ShopMax - E-commerce</title>
-
 </head>
+
 
 <body>
 
 
-    <!-- =====================================
-         TOP OFFER BAR
-    ====================================== -->
+<!-- =====================================================
+     TOP BAR
+===================================================== -->
 
-    <div class="top-bar">
+<div class="top-bar">
 
-        <div class="top-bar-left">
+    <div class="container top-bar-inner">
 
-            🔥 Hot Deals
-
+        <div class="top-sale">
+            <i class="fa-solid fa-fire"></i>
+            Hot Deals
             <span>
                 Summer Sale For All Products - Up To 50% Off
             </span>
-
         </div>
 
+        <div class="top-links">
 
-        <div class="top-bar-right">
+            <a href="#">Track Order</a>
+            <a href="#">Help Center</a>
 
-            <span>Track Order</span>
+            <button>
+                English
+                <i class="fa-solid fa-chevron-down"></i>
+            </button>
 
-            <span>Help Center</span>
-
-            <span>English ▾</span>
-
-            <span>USD ▾</span>
+            <button>
+                USD
+                <i class="fa-solid fa-chevron-down"></i>
+            </button>
 
         </div>
 
     </div>
 
-
-
-    <!-- =====================================
-         HEADER
-    ====================================== -->
-
-    <header class="header">
-
-
-        <!-- Logo -->
-
-        <div class="logo">
-
-            🛍️ Shop<span>Max</span>
-
-        </div>
+</div>
 
 
 
-        <!-- Search -->
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header class="header">
+
+    <div class="container header-main">
+
+
+        <!-- LOGO -->
+
+        <a
+            href="#"
+            class="logo"
+        >
+
+            <span class="logo-icon">
+                <i class="fa-solid fa-bag-shopping"></i>
+            </span>
+
+            <span>
+                Shop<span>Max</span>
+            </span>
+
+        </a>
+
+
+        <!-- SEARCH -->
 
         <div class="search-box">
 
-            <select id="categorySelect">
+            <select
+                id="categorySelect"
+            >
 
                 <option value="all">
                     All Categories
@@ -112,984 +139,508 @@
                 id="searchBtn"
                 type="button"
             >
-                🔍
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
             </button>
 
         </div>
 
 
-
-        <!-- Header Actions -->
+        <!-- HEADER ACTIONS -->
 
         <div class="header-actions">
 
+            <button
+                class="header-action"
+                id="wishlistHeader"
+            >
 
-            <!-- Wishlist -->
+                <i class="fa-regular fa-heart"></i>
 
-            <div>
+                <span>Wishlist</span>
 
-                ♡
-
-                <span>
-                    Wishlist
-                </span>
-
-            </div>
+            </button>
 
 
+            <button
+                class="header-action"
+            >
 
-            <!-- Account -->
+                <i class="fa-regular fa-user"></i>
 
-            <div>
+                <span>Account</span>
 
-                👤
-
-                <span>
-                    Account
-                </span>
-
-            </div>
+            </button>
 
 
-
-            <!-- Cart -->
-
-            <div
-                class="cart"
+            <button
+                class="header-action cart-header-btn"
                 id="cartBtn"
             >
 
-                🛒
+                <span class="cart-icon-wrap">
 
-                <span>
-                    Cart
+                    <i class="fa-solid fa-cart-shopping"></i>
+
+                    <b id="cartCount">
+                        0
+                    </b>
+
                 </span>
 
-                <small
-                    id="cartCount"
-                    class="cart-count"
-                >
-                    0
-                </small>
+                <span>Cart</span>
 
-            </div>
-
-        </div>
-
-    </header>
-
-
-
-    <!-- =====================================
-         NAVBAR
-    ====================================== -->
-
-    <nav class="navbar">
-
-
-        <div class="categories-btn">
-
-            ☰ All Categories
+            </button>
 
         </div>
 
 
-        <div class="nav-links">
-
-            <a
-                href="#"
-                class="active"
-            >
-                Home
-            </a>
-
-            <a href="#">
-                Shop
-            </a>
-
-            <a href="#">
-                Deals
-            </a>
-
-            <a href="#">
-                Pages
-            </a>
-
-            <a href="#">
-                Blog
-            </a>
-
-            <a href="#">
-                Contact
-            </a>
-
-        </div>
-
-
-        <div class="hotline">
-
-            ☎ Hotline:
-
-            <strong>
-                (800) 123-4567
-            </strong>
-
-        </div>
-
-    </nav>
-
-
-
-    <!-- =====================================
-         MAIN
-    ====================================== -->
-
-    <main>
-
-
-        <!-- =================================
-             HERO SECTION
-        ================================== -->
-
-        <section class="hero-section">
-
-
-            <!-- Category Sidebar -->
-
-            <aside class="category-sidebar">
-
-
-                <h3>
-                    ☰ All Categories
-                </h3>
-
-
-                <ul>
-
-                    <li>
-                        💻 Electronics
-                        <span>›</span>
-                    </li>
-
-                    <li>
-                        👕 Fashion
-                        <span>›</span>
-                    </li>
-
-                    <li>
-                        🏠 Home & Kitchen
-                        <span>›</span>
-                    </li>
-
-                    <li>
-                        💄 Beauty & Health
-                        <span>›</span>
-                    </li>
-
-                    <li>
-                        ⚽ Sports & Outdoors
-                        <span>›</span>
-                    </li>
-
-                    <li>
-                        🎮 Toys & Games
-                        <span>›</span>
-                    </li>
-
-                    <li>
-                        🚗 Automotive
-                        <span>›</span>
-                    </li>
-
-                    <li>
-                        📚 Books & Media
-                        <span>›</span>
-                    </li>
-
-                    <li>
-                        🛒 Groceries
-                        <span>›</span>
-                    </li>
-
-                </ul>
-
-            </aside>
-
-
-
-            <!-- Hero Banner -->
-
-            <div class="hero-banner">
-
-
-                <div class="hero-content">
-
-                    <p>
-                        SUMMER SALE
-                    </p>
-
-
-                    <h1>
-
-                        Up to 50% Off
-
-                        <br>
-
-                        On Top Brands
-
-                    </h1>
-
-
-                    <span>
-
-                        Discover amazing products
-                        at unbeatable prices.
-
-                    </span>
-
-
-                    <button type="button">
-
-                        Shop Now →
-
-                    </button>
-
-                </div>
-
-            </div>
-
-
-
-            <!-- Hero Offers -->
-
-            <div class="hero-offers">
-
-
-                <div class="offer-card">
-
-                    <div>
-
-                        <small>
-                            Smart Watch Series 8
-                        </small>
-
-                        <strong>
-                            From $199.99
-                        </strong>
-
-                    </div>
-
-                    <span>
-                        ⌚
-                    </span>
-
-                </div>
-
-
-
-                <div class="offer-card">
-
-                    <div>
-
-                        <small>
-                            Wireless Headphones
-                        </small>
-
-                        <strong>
-                            From $89.99
-                        </strong>
-
-                    </div>
-
-                    <span>
-                        🎧
-                    </span>
-
-                </div>
-
-
-
-                <div class="offer-card">
-
-                    <div>
-
-                        <small>
-                            MacBook Air M2
-                        </small>
-
-                        <strong>
-                            From $999.00
-                        </strong>
-
-                    </div>
-
-                    <span>
-                        💻
-                    </span>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- =================================
-             FEATURES
-        ================================== -->
-
-        <section class="features">
-
-
-            <div>
-
-                🚚
-
-                <strong>
-                    Free Shipping
-                </strong>
-
-                <small>
-                    On orders over $99
-                </small>
-
-            </div>
-
-
-            <div>
-
-                ↩️
-
-                <strong>
-                    Easy Returns
-                </strong>
-
-                <small>
-                    30 days return policy
-                </small>
-
-            </div>
-
-
-            <div>
-
-                🔒
-
-                <strong>
-                    Secure Payment
-                </strong>
-
-                <small>
-                    100% secure payment
-                </small>
-
-            </div>
-
-
-            <div>
-
-                🎧
-
-                <strong>
-                    24/7 Support
-                </strong>
-
-                <small>
-                    Dedicated support
-                </small>
-
-            </div>
-
-
-            <div>
-
-                🏆
-
-                <strong>
-                    Best Price
-                </strong>
-
-                <small>
-                    Guaranteed price
-                </small>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- =================================
-             FLASH SALE
-        ================================== -->
-
-        <section class="section">
-
-
-            <div class="section-header">
-
-                <h2>
-                    ⚡ Flash Sale
-                </h2>
-
-
-                <div class="countdown">
-
-                    02 : 15 : 30 : 45
-
-                </div>
-
-            </div>
-
-
-            <div
-                id="flashProducts"
-                class="product-grid"
-            >
-
-            </div>
-
-        </section>
-
-
-
-        <!-- =================================
-             POPULAR CATEGORIES
-        ================================== -->
-
-        <section class="section">
-
-
-            <div class="section-header">
-
-                <h2>
-                    Popular Categories
-                </h2>
-
-
-                <a href="#">
-                    View All →
-                </a>
-
-            </div>
-
-
-
-            <div class="categories-grid">
-
-
-                <div class="category-card">
-
-                    💻
-
-                    <span>
-                        Electronics
-                    </span>
-
-                </div>
-
-
-                <div class="category-card">
-
-                    👕
-
-                    <span>
-                        Fashion
-                    </span>
-
-                </div>
-
-
-                <div class="category-card">
-
-                    🏠
-
-                    <span>
-                        Home & Kitchen
-                    </span>
-
-                </div>
-
-
-                <div class="category-card">
-
-                    💄
-
-                    <span>
-                        Beauty
-                    </span>
-
-                </div>
-
-
-                <div class="category-card">
-
-                    ⚽
-
-                    <span>
-                        Sports
-                    </span>
-
-                </div>
-
-
-                <div class="category-card">
-
-                    🎮
-
-                    <span>
-                        Toys
-                    </span>
-
-                </div>
-
-
-                <div class="category-card">
-
-                    🚗
-
-                    <span>
-                        Automotive
-                    </span>
-
-                </div>
-
-
-                <div class="category-card">
-
-                    📚
-
-                    <span>
-                        Books
-                    </span>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- =================================
-             TRENDING PRODUCTS
-        ================================== -->
-
-        <section class="section">
-
-
-            <div class="section-header">
-
-                <h2>
-                    Trending Products
-                </h2>
-
-
-                <a href="#">
-                    View All →
-                </a>
-
-            </div>
-
-
-            <div
-                id="trendingProducts"
-                class="product-grid"
-            >
-
-            </div>
-
-        </section>
-
-
-
-        <!-- =================================
-             PROMOTIONAL BANNERS
-        ================================== -->
-
-        <section class="promo-grid">
-
-
-            <div class="promo-card">
-
-                <h3>
-                    New Arrivals
-                </h3>
-
-                <p>
-                    Discover the latest products
-                </p>
-
-                <button type="button">
-                    Shop Now →
-                </button>
-
-            </div>
-
-
-
-            <div class="promo-card">
-
-                <h3>
-                    Top Deals Of The Day
-                </h3>
-
-                <p>
-                    Best products at amazing prices
-                </p>
-
-                <button type="button">
-                    Shop Now →
-                </button>
-
-            </div>
-
-
-
-            <div class="promo-card">
-
-                <h3>
-                    Get 10% Off
-                </h3>
-
-                <p>
-                    On your first order
-                </p>
-
-                <button type="button">
-                    Use Code: SHOPMAX10
-                </button>
-
-            </div>
-
-        </section>
-
-    </main>
-
-
-
-    <!-- =====================================
-         CART OVERLAY
-    ====================================== -->
-
-    <div
-        id="cartOverlay"
-        class="cart-overlay"
-    >
     </div>
 
 
+    <!-- NAVIGATION -->
 
-    <!-- =====================================
-         CART DRAWER
-    ====================================== -->
+    <div class="navigation">
 
-    <aside
-        id="cartDrawer"
-        class="cart-drawer"
-    >
+        <div class="container navigation-inner">
 
 
-        <div class="cart-header">
+            <!-- ALL CATEGORIES -->
+
+            <div class="categories-wrapper">
+
+                <button
+                    class="categories-btn"
+                    id="categoriesBtn"
+                    type="button"
+                >
+
+                    <i class="fa-solid fa-bars"></i>
+
+                    All Categories
+
+                    <i class="fa-solid fa-chevron-down arrow"></i>
+
+                </button>
 
 
-            <h2>
-                🛒 Shopping Cart
-            </h2>
+                <!-- CATEGORY DROPDOWN -->
+
+                <div
+                    class="category-dropdown"
+                    id="categoryDropdown"
+                >
 
 
-            <button
-                id="closeCartBtn"
-                class="close-cart"
-                type="button"
-            >
-                ✕
-            </button>
+                    <div class="category-dropdown-title">
 
-        </div>
+                        <i class="fa-solid fa-layer-group"></i>
+
+                        Shop By Category
+
+                    </div>
 
 
+                    <!-- ELECTRONICS -->
 
-        <div
-            id="cartItems"
-            class="cart-items"
-        >
+                    <div class="category-item has-submenu">
 
-            <div class="empty-cart">
+                        <button type="button">
 
-                <div class="empty-cart-icon">
-                    🛒
+                            <span>
+                                <i class="fa-solid fa-laptop"></i>
+                                Electronics
+                            </span>
+
+                            <i class="fa-solid fa-chevron-right"></i>
+
+                        </button>
+
+
+                        <div class="category-submenu">
+
+                            <a
+                                href="#"
+                                data-category="electronics"
+                            >
+                                Laptops
+                            </a>
+
+                            <a href="#">
+                                Smartphones
+                            </a>
+
+                            <a href="#">
+                                Headphones
+                            </a>
+
+                            <a href="#">
+                                Cameras
+                            </a>
+
+                            <a href="#">
+                                Accessories
+                            </a>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- FASHION -->
+
+                    <div class="category-item has-submenu">
+
+                        <button type="button">
+
+                            <span>
+                                <i class="fa-solid fa-shirt"></i>
+                                Fashion
+                            </span>
+
+                            <i class="fa-solid fa-chevron-right"></i>
+
+                        </button>
+
+
+                        <div class="category-submenu">
+
+                            <a
+                                href="#"
+                                data-category="men's clothing"
+                            >
+                                Men's Clothing
+                            </a>
+
+                            <a
+                                href="#"
+                                data-category="women's clothing"
+                            >
+                                Women's Clothing
+                            </a>
+
+                            <a href="#">
+                                Shoes
+                            </a>
+
+                            <a href="#">
+                                Bags
+                            </a>
+
+                            <a href="#">
+                                Accessories
+                            </a>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- HOME -->
+
+                    <div class="category-item">
+
+                        <button type="button">
+
+                            <span>
+                                <i class="fa-solid fa-house"></i>
+                                Home & Kitchen
+                            </span>
+
+                            <i class="fa-solid fa-chevron-right"></i>
+
+                        </button>
+
+                    </div>
+
+
+                    <!-- BEAUTY -->
+
+                    <div class="category-item">
+
+                        <button type="button">
+
+                            <span>
+                                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                Beauty & Health
+                            </span>
+
+                            <i class="fa-solid fa-chevron-right"></i>
+
+                        </button>
+
+                    </div>
+
+
+                    <!-- SPORTS -->
+
+                    <div class="category-item">
+
+                        <button type="button">
+
+                            <span>
+                                <i class="fa-solid fa-futbol"></i>
+                                Sports & Outdoors
+                            </span>
+
+                            <i class="fa-solid fa-chevron-right"></i>
+
+                        </button>
+
+                    </div>
+
+
+                    <!-- TOYS -->
+
+                    <div class="category-item">
+
+                        <button type="button">
+
+                            <span>
+                                <i class="fa-solid fa-gamepad"></i>
+                                Toys & Games
+                            </span>
+
+                            <i class="fa-solid fa-chevron-right"></i>
+
+                        </button>
+
+                    </div>
+
+
+                    <!-- AUTOMOTIVE -->
+
+                    <div class="category-item">
+
+                        <button type="button">
+
+                            <span>
+                                <i class="fa-solid fa-car"></i>
+                                Automotive
+                            </span>
+
+                            <i class="fa-solid fa-chevron-right"></i>
+
+                        </button>
+
+                    </div>
+
+
+                    <!-- BOOKS -->
+
+                    <div class="category-item">
+
+                        <button type="button">
+
+                            <span>
+                                <i class="fa-solid fa-book"></i>
+                                Books & Media
+                            </span>
+
+                            <i class="fa-solid fa-chevron-right"></i>
+
+                        </button>
+
+                    </div>
+
+
+                    <!-- GROCERY -->
+
+                    <div class="category-item">
+
+                        <button type="button">
+
+                            <span>
+                                <i class="fa-solid fa-basket-shopping"></i>
+                                Groceries
+                            </span>
+
+                            <i class="fa-solid fa-chevron-right"></i>
+
+                        </button>
+
+                    </div>
+
                 </div>
-
-                <p>
-                    Your cart is empty.
-                </p>
-
-                <small>
-                    Add some products to your cart.
-                </small>
 
             </div>
 
-        </div>
+
+            <!-- NAV LINKS -->
+
+            <nav class="nav-links">
+
+                <a
+                    href="#"
+                    class="active"
+                >
+                    Home
+                </a>
+
+                <a href="#">
+                    Shop
+                </a>
+
+                <a href="#">
+                    Deals
+                </a>
+
+                <a href="#">
+                    Pages
+                </a>
+
+                <a href="#">
+                    Blog
+                </a>
+
+                <a href="#">
+                    Contact
+                </a>
+
+            </nav>
 
 
+            <!-- HOTLINE -->
 
-        <div class="cart-footer">
+            <div class="hotline">
 
+                <i class="fa-solid fa-headset"></i>
 
-            <div class="cart-total">
-
-                <span>
-                    Total
-                </span>
-
-
-                <strong id="cartTotal">
-                    $0.00
+                Hotline:
+                <strong>
+                    (800) 123-4567
                 </strong>
 
             </div>
 
-
-            <button
-                id="checkoutBtn"
-                class="checkout-btn"
-                type="button"
-            >
-
-                Proceed To Checkout
-
-            </button>
-
         </div>
 
-    </aside>
+    </div>
+
+</header>
 
 
-<!-- ========================================
-     PRODUCT DETAILS MODAL
-======================================== -->
 
-<div
-    class="product-modal"
-    id="productModal"
->
+<!-- =====================================================
+     MAIN
+===================================================== -->
 
-    <div class="product-modal-overlay"></div>
+<main>
 
 
-    <div class="product-modal-content">
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section class="hero-section">
+
+    <div class="container">
+
+        <div class="hero">
 
 
-        <!-- =================================
-             CLOSE BUTTON
-        ================================== -->
+            <div class="hero-content">
 
-        <button
-            class="product-modal-close"
-            id="closeProductModal"
-            type="button"
-            aria-label="Close product details"
-        >
-
-            <span></span>
-            <span></span>
-
-        </button>
-
-
-        <!-- =================================
-             LEFT SIDE - PRODUCT IMAGE
-        ================================== -->
-
-        <div class="modal-product-image-section">
-
-            <div class="modal-image-wrapper">
-
-                <img
-                    id="modalProductImage"
-                    src=""
-                    alt="Product"
-                >
-
-            </div>
-
-        </div>
-
-
-        <!-- =================================
-             RIGHT SIDE - PRODUCT INFO
-        ================================== -->
-
-        <div class="modal-product-details">
-
-
-            <!-- CATEGORY -->
-
-            <span
-                class="modal-product-category"
-                id="modalProductCategory"
-            >
-
-                Category
-
-            </span>
-
-
-            <!-- TITLE -->
-
-            <h2
-                class="modal-product-title"
-                id="modalProductTitle"
-            >
-
-                Product Title
-
-            </h2>
-
-
-            <!-- RATING -->
-
-            <div
-                class="modal-product-rating"
-                id="modalProductRating"
-            >
-
-                ⭐ 4.5
-                <span>(120 reviews)</span>
-
-            </div>
-
-
-            <!-- PRICE -->
-
-            <div
-                class="modal-product-price"
-                id="modalProductPrice"
-            >
-
-                $99.99
-
-            </div>
-
-
-            <!-- DESCRIPTION -->
-
-            <p
-                class="modal-product-description"
-                id="modalProductDescription"
-            >
-
-                Product description goes here.
-
-            </p>
-
-
-            <!-- =================================
-                 QUANTITY
-            ================================== -->
-
-            <div class="modal-quantity-section">
-
-                <span class="quantity-label">
-
-                    Quantity
-
+                <span class="hero-badge">
+                    LIMITED TIME OFFER
                 </span>
 
 
-                <div class="modal-quantity-control">
+                <h1>
+                    Upgrade Your
+                    <strong>
+                        Everyday Shopping
+                    </strong>
+                </h1>
 
 
-                    <button
-                        id="modalDecrease"
-                        class="modal-quantity-btn"
-                        type="button"
-                    >
-
-                        −
-
-                    </button>
+                <p>
+                    Discover premium products, exclusive deals
+                    and everyday essentials — all in one place.
+                </p>
 
 
-                    <span
-                        id="modalQuantity"
-                        class="modal-quantity-number"
-                    >
-
-                        1
-
-                    </span>
-
+                <div class="hero-buttons">
 
                     <button
-                        id="modalIncrease"
-                        class="modal-quantity-btn"
-                        type="button"
+                        class="primary-btn"
                     >
-
-                        +
-
+                        Shop Now
+                        <i class="fa-solid fa-arrow-right"></i>
                     </button>
 
+                    <button
+                        class="secondary-btn"
+                    >
+                        Explore Deals
+                    </button>
+
+                </div>
+
+
+                <div class="hero-stats">
+
+                    <div>
+                        <strong>10K+</strong>
+                        <span>Products</span>
+                    </div>
+
+                    <div>
+                        <strong>4.8</strong>
+                        <span>Customer Rating</span>
+                    </div>
+
+                    <div>
+                        <strong>24/7</strong>
+                        <span>Support</span>
+                    </div>
 
                 </div>
 
             </div>
 
 
-            <!-- =================================
-                 ACTION BUTTONS
-            ================================== -->
+            <!-- HERO VISUAL -->
 
-            <div class="modal-actions">
+            <div class="hero-visual">
 
+                <div class="hero-circle"></div>
 
-                <button
-                    id="modalAddToCart"
-                    class="modal-add-cart-btn"
-                    type="button"
-                >
+                <div class="hero-card">
 
-                    <span>🛒</span>
+                    <div class="hero-card-icon">
+                        <i class="fa-solid fa-bag-shopping"></i>
+                    </div>
 
-                    Add To Cart
+                    <div class="hero-lines">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
 
-                </button>
-
-
-                <button
-                    class="modal-buy-btn"
-                    type="button"
-                >
-
-                    Buy Now
-
-                </button>
+                </div>
 
 
-            </div>
+                <div class="discount-circle">
+
+                    <small>UP TO</small>
+
+                    <strong>30%</strong>
+
+                    <small>OFF</small>
+
+                </div>
 
 
-            <!-- =================================
-                 TRUST INFORMATION
-            ================================== -->
+                <div class="delivery-card">
 
-            <div class="modal-product-features">
-
-
-                <div class="modal-feature">
-
-                    <span class="feature-icon">
-                        🚚
-                    </span>
+                    <i class="fa-solid fa-check"></i>
 
                     <div>
 
                         <strong>
-                            Free Shipping
+                            Free Delivery
                         </strong>
 
                         <small>
@@ -1100,50 +651,695 @@
 
                 </div>
 
+            </div>
 
-                <div class="modal-feature">
+        </div>
 
-                    <span class="feature-icon">
-                        🔒
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     BENEFITS
+===================================================== -->
+
+<section class="benefits-section">
+
+    <div class="container benefits">
+
+
+        <div class="benefit">
+
+            <i class="fa-solid fa-truck-fast"></i>
+
+            <div>
+                <strong>Free Shipping</strong>
+                <span>On orders over $99</span>
+            </div>
+
+        </div>
+
+
+        <div class="benefit">
+
+            <i class="fa-solid fa-rotate-left"></i>
+
+            <div>
+                <strong>Easy Returns</strong>
+                <span>30 days return policy</span>
+            </div>
+
+        </div>
+
+
+        <div class="benefit">
+
+            <i class="fa-solid fa-lock"></i>
+
+            <div>
+                <strong>Secure Payment</strong>
+                <span>100% secure payment</span>
+            </div>
+
+        </div>
+
+
+        <div class="benefit">
+
+            <i class="fa-solid fa-headset"></i>
+
+            <div>
+                <strong>24/7 Support</strong>
+                <span>Dedicated support</span>
+            </div>
+
+        </div>
+
+
+        <div class="benefit">
+
+            <i class="fa-solid fa-trophy"></i>
+
+            <div>
+                <strong>Best Price</strong>
+                <span>Guaranteed price</span>
+            </div>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     FLASH SALE
+===================================================== -->
+
+<section
+    class="products-section"
+    id="flashSale"
+>
+
+    <div class="container">
+
+
+        <div class="section-heading">
+
+            <h2>
+                <i class="fa-solid fa-bolt"></i>
+                Flash Sale
+            </h2>
+
+
+            <div
+                class="countdown"
+                id="countdown"
+            >
+                02 : 15 : 30 : 45
+            </div>
+
+        </div>
+
+
+        <div
+            class="product-grid"
+            id="flashProducts"
+        ></div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     POPULAR CATEGORIES
+===================================================== -->
+
+<section class="categories-section">
+
+    <div class="container">
+
+
+        <div class="section-heading">
+
+            <h2>
+                Popular Categories
+            </h2>
+
+            <a href="#">
+                View All
+                <i class="fa-solid fa-arrow-right"></i>
+            </a>
+
+        </div>
+
+
+        <div class="popular-categories">
+
+
+            <button
+                class="category-card"
+                data-category="electronics"
+            >
+
+                <i class="fa-solid fa-laptop"></i>
+
+                <span>
+                    Electronics
+                </span>
+
+            </button>
+
+
+            <button
+                class="category-card"
+                data-category="men's clothing"
+            >
+
+                <i class="fa-solid fa-shirt"></i>
+
+                <span>
+                    Fashion
+                </span>
+
+            </button>
+
+
+            <button
+                class="category-card"
+            >
+
+                <i class="fa-solid fa-house"></i>
+
+                <span>
+                    Home & Kitchen
+                </span>
+
+            </button>
+
+
+            <button
+                class="category-card"
+            >
+
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+
+                <span>
+                    Beauty
+                </span>
+
+            </button>
+
+
+            <button
+                class="category-card"
+            >
+
+                <i class="fa-solid fa-futbol"></i>
+
+                <span>
+                    Sports
+                </span>
+
+            </button>
+
+
+            <button
+                class="category-card"
+            >
+
+                <i class="fa-solid fa-gamepad"></i>
+
+                <span>
+                    Toys
+                </span>
+
+            </button>
+
+
+            <button
+                class="category-card"
+            >
+
+                <i class="fa-solid fa-car"></i>
+
+                <span>
+                    Automotive
+                </span>
+
+            </button>
+
+
+            <button
+                class="category-card"
+            >
+
+                <i class="fa-solid fa-book"></i>
+
+                <span>
+                    Books
+                </span>
+
+            </button>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     TRENDING
+===================================================== -->
+
+<section class="products-section trending-section">
+
+    <div class="container">
+
+
+        <div class="section-heading">
+
+            <h2>
+                Trending Products
+            </h2>
+
+            <a href="#">
+                View All
+                <i class="fa-solid fa-arrow-right"></i>
+            </a>
+
+        </div>
+
+
+        <div
+            class="product-grid"
+            id="trendingProducts"
+        ></div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     PROMO CARDS
+===================================================== -->
+
+<section class="promo-section">
+
+    <div class="container promo-grid">
+
+
+        <div class="promo-card">
+
+            <div class="promo-icon">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+            </div>
+
+            <h3>
+                New Arrivals
+            </h3>
+
+            <p>
+                Discover the latest products
+            </p>
+
+            <button>
+                Shop Now
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+
+        </div>
+
+
+        <div class="promo-card">
+
+            <div class="promo-icon">
+                <i class="fa-solid fa-tags"></i>
+            </div>
+
+            <h3>
+                Top Deals Of The Day
+            </h3>
+
+            <p>
+                Best products at amazing prices
+            </p>
+
+            <button>
+                Shop Now
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+
+        </div>
+
+
+        <div class="promo-card">
+
+            <div class="promo-icon">
+                <i class="fa-solid fa-percent"></i>
+            </div>
+
+            <h3>
+                Get 10% Off
+            </h3>
+
+            <p>
+                On your first order
+            </p>
+
+            <button>
+                Use Code: SHOPMAX10
+            </button>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+</main>
+
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer class="footer">
+
+    <div class="container">
+
+        <div class="footer-logo">
+
+            <i class="fa-solid fa-bag-shopping"></i>
+
+            ShopMax
+
+        </div>
+
+
+        <p>
+            Your one-stop destination for quality products.
+        </p>
+
+
+        <div class="footer-links">
+
+            <a href="#">About Us</a>
+            <a href="#">Contact</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms & Conditions</a>
+
+        </div>
+
+
+        <p class="copyright">
+            © 2026 ShopMax. All rights reserved.
+        </p>
+
+    </div>
+
+</footer>
+
+
+
+<!-- =====================================================
+     CART OVERLAY
+===================================================== -->
+
+<div
+    class="drawer-overlay"
+    id="cartOverlay"
+></div>
+
+
+
+<!-- =====================================================
+     CART DRAWER
+===================================================== -->
+
+<aside
+    class="cart-drawer"
+    id="cartDrawer"
+>
+
+
+    <div class="cart-header">
+
+        <div>
+
+            <i class="fa-solid fa-cart-shopping"></i>
+
+            <h2>
+                Shopping Cart
+            </h2>
+
+        </div>
+
+
+        <button
+            id="closeCartBtn"
+            class="close-btn"
+        >
+
+            <i class="fa-solid fa-xmark"></i>
+
+        </button>
+
+    </div>
+
+
+    <div
+        class="cart-items"
+        id="cartItems"
+    ></div>
+
+
+    <div class="cart-footer">
+
+        <div class="cart-total-row">
+
+            <span>
+                Total
+            </span>
+
+            <strong id="cartTotal">
+                $0.00
+            </strong>
+
+        </div>
+
+
+        <button
+            class="checkout-btn"
+            id="checkoutBtn"
+        >
+
+            Proceed To Checkout
+
+            <i class="fa-solid fa-arrow-right"></i>
+
+        </button>
+
+    </div>
+
+</aside>
+
+
+
+<!-- =====================================================
+     PRODUCT MODAL
+===================================================== -->
+
+<div
+    class="product-modal"
+    id="productModal"
+>
+
+
+    <div
+        class="product-modal-overlay"
+        id="productModalOverlay"
+    ></div>
+
+
+    <div class="product-modal-content">
+
+
+        <button
+            class="modal-close"
+            id="closeProductModal"
+        >
+
+            <i class="fa-solid fa-xmark"></i>
+
+        </button>
+
+
+        <!-- IMAGE -->
+
+        <div class="modal-product-image-section">
+
+            <span
+                class="modal-image-badge"
+            >
+                BEST SELLER
+            </span>
+
+            <img
+                id="modalProductImage"
+                src=""
+                alt=""
+            >
+
+        </div>
+
+
+        <!-- CONTENT -->
+
+        <div class="modal-product-content">
+
+
+            <span
+                class="modal-product-category"
+                id="modalProductCategory"
+            ></span>
+
+
+            <h2
+                id="modalProductTitle"
+            ></h2>
+
+
+            <div
+                class="modal-rating"
+                id="modalProductRating"
+            ></div>
+
+
+            <div
+                class="modal-price"
+                id="modalProductPrice"
+            ></div>
+
+
+            <p
+                class="modal-description"
+                id="modalProductDescription"
+            ></p>
+
+
+            <!-- QUANTITY -->
+
+            <div class="modal-quantity-area">
+
+                <strong>
+                    Quantity
+                </strong>
+
+
+                <div class="modal-quantity">
+
+                    <button
+                        id="modalDecrease"
+                    >
+                        <i class="fa-solid fa-minus"></i>
+                    </button>
+
+
+                    <span
+                        id="modalQuantity"
+                    >
+                        1
                     </span>
 
-                    <div>
 
-                        <strong>
-                            Secure Payment
-                        </strong>
-
-                        <small>
-                            100% secure checkout
-                        </small>
-
-                    </div>
+                    <button
+                        id="modalIncrease"
+                    >
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
 
                 </div>
-
-
-                <div class="modal-feature">
-
-                    <span class="feature-icon">
-                        ↩️
-                    </span>
-
-                    <div>
-
-                        <strong>
-                            Easy Returns
-                        </strong>
-
-                        <small>
-                            30 days return policy
-                        </small>
-
-                    </div>
-
-                </div>
-
 
             </div>
+
+
+            <!-- ACTION -->
+
+            <button
+                class="modal-add-cart"
+                id="modalAddToCart"
+            >
+
+                <i class="fa-solid fa-cart-plus"></i>
+
+                Add To Cart
+
+            </button>
+
+            <button
+                class="modal-buy-now"
+                id="modalBuyNow"
+                type="button"
+            >
+
+                <i class="fa-solid fa-bolt"></i>
+
+                Buy Now
+
+            </button>
+
+
+            <div class="modal-features">
+
+                <div>
+
+                    <i class="fa-solid fa-truck-fast"></i>
+
+                    <span>
+                        Free Shipping
+                    </span>
+
+                </div>
+
+
+                <div>
+
+                    <i class="fa-solid fa-lock"></i>
+
+                    <span>
+                        Secure Payment
+                    </span>
+
+                </div>
+
+
+                <div>
+
+                    <i class="fa-solid fa-rotate-left"></i>
+
+                    <span>
+                        Easy Returns
+                    </span>
+
+                </div>
+
+            </div>
+
 
         </div>
 
@@ -1152,104 +1348,10 @@
 </div>
 
 
-    <!-- =====================================
-         FOOTER
-    ====================================== -->
 
-    <footer class="footer">
+<!-- JS -->
 
-
-        <div class="footer-logo">
-
-            🛍️ ShopMax
-
-        </div>
-
-
-        <p>
-            Your one-stop destination for
-            quality products.
-        </p>
-
-
-        <div class="footer-links">
-
-            <a href="#">
-                About Us
-            </a>
-
-            <a href="#">
-                Contact
-            </a>
-
-            <a href="#">
-                Privacy Policy
-            </a>
-
-            <a href="#">
-                Terms & Conditions
-            </a>
-
-        </div>
-
-
-        <p>
-            © 2026 ShopMax.
-            All rights reserved.
-        </p>
-
-    </footer>
-
-
-
-    <!-- =====================================
-         JAVASCRIPT
-    ====================================== -->
-
-    <script src="assets/js/script.js"></script>
-
-
-    <!-- Modal Overlay Close -->
-
-    <script>
-
-        document.addEventListener(
-            "click",
-            function (event) {
-
-                const modal =
-                    document.getElementById(
-                        "productModal"
-                    );
-
-
-                if (!modal) {
-                    return;
-                }
-
-
-                if (
-                    event.target.classList.contains(
-                        "product-modal-overlay"
-                    )
-                ) {
-
-                    if (
-                        typeof closeProductModalFunc ===
-                        "function"
-                    ) {
-
-                        closeProductModalFunc();
-
-                    }
-
-                }
-
-            }
-        );
-
-    </script>
-
+<script src="assets/js/script.js"></script>
 
 </body>
 
