@@ -2705,7 +2705,7 @@ img{
     }
 
     .header-action > span{
-        display:none;
+        display:inline !important;
     }
 
     .header-action .cart-icon-wrap{
@@ -5026,7 +5026,7 @@ body.wishlist-open {
     }
 
     #wishlistCount {
-        top: -6px;
+        top: -4px;
         right: -7px;
 
         width: 14px;
@@ -5046,6 +5046,7 @@ body.wishlist-open {
 
     .wishlist-icon-wrap > i {
         font-size: 13px;
+        padding-top: 3px;
     }
 
     #wishlistCount {
@@ -5601,3 +5602,238 @@ body.wishlist-open {
     }
 
 }
+
+/* =========================================================
+   RECENTLY VIEWED
+   PREMIUM / THEMEFOREST STYLE
+========================================================= */
+
+.recently-viewed-section {
+    padding-top: 8px;
+    padding-bottom: 34px;
+}
+
+.recently-viewed-section[hidden] {
+    display: none !important;
+}
+
+
+/* =========================================================
+   SECTION HEADER
+========================================================= */
+
+.recently-viewed-section .section-heading {
+    min-height: 46px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 10px;
+}
+
+
+/* TITLE */
+
+.recently-viewed-section .section-heading h2 {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    gap: 9px;
+
+    color: #172033;
+
+    font-size: 23px;
+    font-weight: 800;
+
+    line-height: 1.2;
+}
+
+.recently-viewed-section .section-heading h2::before {
+    content: "";
+
+    width: 4px;
+    height: 22px;
+
+    flex: 0 0 4px;
+
+    border-radius: 10px;
+
+    background: #2864e8;
+}
+
+
+/* =========================================================
+   CLEAR BUTTON
+========================================================= */
+
+.clear-recently-viewed {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    height: 31px;
+
+    padding: 0 11px;
+
+    border: 1px solid #dfe5ed;
+    border-radius: 6px;
+
+    background: #ffffff;
+
+    color: #64748b;
+
+    font-size: 9px;
+    font-weight: 800;
+
+    line-height: 1;
+
+    transition:
+        color .2s ease,
+        background .2s ease,
+        border-color .2s ease,
+        transform .2s ease;
+}
+
+.clear-recently-viewed:hover {
+    border-color: #cbdaf5;
+
+    background: #f5f8ff;
+
+    color: #2864e8;
+
+    transform: translateY(-1px);
+}
+
+.clear-recently-viewed:active {
+    transform: translateY(0);
+}
+
+
+/* =========================================================
+   PRODUCT GRID
+========================================================= */
+
+.recently-viewed-section
+.product-grid {
+    margin-top: 0;
+}
+
+
+/* =========================================================
+   PRODUCT CARD POLISH
+   Existing card structure stays unchanged.
+========================================================= */
+
+.recently-viewed-section
+.product-card {
+    border-color: #e1e7ef;
+
+    transition:
+        transform .22s ease,
+        border-color .22s ease,
+        box-shadow .22s ease;
+}
+
+.recently-viewed-section
+.product-card:hover {
+    border-color: #d4e0f4;
+
+    box-shadow:
+        0 14px 32px rgba(23, 32, 51, .08);
+}
+
+
+/* =========================================================
+   IMAGE AREA
+========================================================= */
+
+.recently-viewed-section
+.product-image {
+    background:
+        linear-gradient(
+            180deg,
+            #f8fafc 0%,
+            #f4f7fb 100%
+        );
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 768px) {
+
+    .recently-viewed-section {
+        padding-top: 5px;
+        padding-bottom: 20px;
+    }
+
+    .recently-viewed-section
+    .section-heading {
+        min-height: 34px;
+
+        margin-bottom: 7px;
+    }
+
+    .recently-viewed-section
+    .section-heading h2 {
+        gap: 6px;
+
+        font-size: 16px;
+    }
+
+    .recently-viewed-section
+    .section-heading h2::before {
+        width: 3px;
+        height: 16px;
+    }
+
+    .clear-recently-viewed {
+        height: 26px;
+
+        padding: 0 8px;
+
+        border-radius: 5px;
+
+        font-size: 7px;
+    }
+
+}
+
+
+/* =========================================================
+   VERY SMALL PHONE
+========================================================= */
+
+@media (max-width: 360px) {
+
+    .recently-viewed-section {
+        padding-top: 4px;
+        padding-bottom: 17px;
+    }
+
+    .recently-viewed-section
+    .section-heading h2 {
+        font-size: 14px;
+    }
+
+    .recently-viewed-section
+    .section-heading h2::before {
+        width: 3px;
+        height: 14px;
+    }
+
+    .clear-recently-viewed {
+        height: 24px;
+
+        padding: 0 7px;
+
+        font-size: 6px;
+    }
+
+}
+

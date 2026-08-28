@@ -1,6 +1,21 @@
 /* =========================================================
    SHOPMAX E-COMMERCE
    COMPLETE FINAL JAVASCRIPT
+   HOME PAGE
+
+   Features:
+   - Fake Store API
+   - Flash Sale Products
+   - Trending Products
+   - Search
+   - Category Filter
+   - Category Menu
+   - Cart
+   - Wishlist
+   - Product Quick View Modal
+   - Recently Viewed
+   - Countdown
+   - LocalStorage
 ========================================================= */
 
 
@@ -18,26 +33,68 @@ const API_URL =
 
 let products = [];
 
+
+/* =========================================================
+   CART STATE
+========================================================= */
+
 let cart =
     JSON.parse(
-        localStorage.getItem("shopmax-cart")
+        localStorage.getItem(
+            "shopmax-cart"
+        )
     ) || [];
 
 
+/* =========================================================
+   WISHLIST STATE
+========================================================= */
+
 let wishlist =
     JSON.parse(
-        localStorage.getItem("shopmax-wishlist")
+        localStorage.getItem(
+            "shopmax-wishlist"
+        )
     ) || [];
 
 
 /*
-   Remove duplicate wishlist IDs
+   Normalize wishlist IDs
 */
 
 wishlist = [
-    ...new Set(wishlist)
+    ...new Set(
+        wishlist.map(Number)
+    )
 ];
 
+
+/* =========================================================
+   RECENTLY VIEWED STATE
+========================================================= */
+
+let recentlyViewed =
+    JSON.parse(
+        localStorage.getItem(
+            "shopmax-recently-viewed"
+        )
+    ) || [];
+
+
+/*
+   Normalize Recently Viewed IDs
+*/
+
+recentlyViewed = [
+    ...new Set(
+        recentlyViewed.map(Number)
+    )
+];
+
+
+/* =========================================================
+   MODAL STATE
+========================================================= */
 
 let modalQuantity = 1;
 
@@ -273,6 +330,28 @@ const modalAddToCart =
 
 
 /* =========================================================
+   RECENTLY VIEWED DOM
+========================================================= */
+
+const recentlyViewedSection =
+    document.getElementById(
+        "recentlyViewedSection"
+    );
+
+
+const recentlyViewedProducts =
+    document.getElementById(
+        "recentlyViewedProducts"
+    );
+
+
+const clearRecentlyViewedBtn =
+    document.getElementById(
+        "clearRecentlyViewed"
+    );
+
+
+/* =========================================================
    INITIALIZE
 ========================================================= */
 
@@ -299,6 +378,10 @@ document.addEventListener(
         setupWishlist();
 
         setupModal();
+
+        setupRecentlyViewed();
+
+        loadRecentlyViewed();
 
         startCountdown();
 
@@ -338,24 +421,95 @@ async function loadProducts() {
         }
 
 
-        products =
+        const data =
             await response.json();
 
 
+        /*
+           Normalize product data
+        */
+
+        products =
+            data.map(
+                product => ({
+
+                    ...product,
+
+                    id:
+                        Number(
+                            product.id
+                        ),
+
+                    price:
+                        Number(
+                            product.price
+                        )
+
+                })
+            );
+
+
+        /*
+           Keep only valid wishlist IDs
+        */
+
+        wishlist =
+            wishlist.filter(
+                id =>
+                    products.some(
+                        product =>
+                            product.id === id
+                    )
+            );
+
+
+        saveWishlist();
+
+
+        /*
+           Keep only valid Recently Viewed IDs
+        */
+
+        recentlyViewed =
+            recentlyViewed.filter(
+                id =>
+                    products.some(
+                        product =>
+                            product.id === id
+                    )
+            );
+
+
+        saveRecentlyViewedState();
+
+
+        /*
+           Render products
+        */
+
         renderFlashProducts(
-            products.slice(0, 4)
+            products.slice(
+                0,
+                4
+            )
         );
 
 
         renderTrendingProducts(
-            products.slice(4, 8)
+            products.slice(
+                4,
+                8
+            )
         );
 
 
         renderWishlist();
 
+        renderRecentlyViewed();
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         console.error(
             "Product loading error:",
@@ -366,6 +520,7 @@ async function loadProducts() {
         showError(
             flashProducts
         );
+
 
         showError(
             trendingProducts
@@ -389,7 +544,8 @@ function showLoading(
     }
 
 
-    container.innerHTML = "";
+    container.innerHTML =
+        "";
 
 
     for (
@@ -400,7 +556,9 @@ function showLoading(
 
         container.innerHTML += `
 
-            <div class="product-card">
+            <div
+                class="product-card"
+            >
 
                 <div
                     class="product-image"
@@ -414,7 +572,9 @@ function showLoading(
                 ></div>
 
 
-                <div class="product-info">
+                <div
+                    class="product-info"
+                >
 
                     <div
                         style="
@@ -526,11 +686,15 @@ function createProductCard(
 ) {
 
     const rating =
-        product.rating?.rate || 4.2;
+        Number(
+            product.rating?.rate || 4.2
+        );
 
 
     const reviewCount =
-        product.rating?.count || 100;
+        Number(
+            product.rating?.count || 100
+        );
 
 
     const discounts = [
@@ -553,7 +717,9 @@ function createProductCard(
 
 
     const oldPrice =
-        product.price /
+        Number(
+            product.price
+        ) /
         (
             1 -
             discount / 100
@@ -562,7 +728,9 @@ function createProductCard(
 
     const liked =
         wishlist.includes(
-            product.id
+            Number(
+                product.id
+            )
         );
 
 
@@ -570,6 +738,7 @@ function createProductCard(
 
         <article
             class="product-card"
+            data-product-id="${product.id}"
         >
 
             <div
@@ -633,7 +802,10 @@ function createProductCard(
 
                     <button
                         type="button"
-                        class="product-action-btn"
+                        class="
+                            product-action-btn
+                            quick-view-btn
+                        "
                         data-action="view"
                         data-id="${product.id}"
                         aria-label="View product"
@@ -688,7 +860,7 @@ function createProductCard(
                         "
                     ></i>
 
-                    ${rating}
+                    ${rating.toFixed(1)}
 
 
                     <span>
@@ -703,7 +875,9 @@ function createProductCard(
                 >
 
                     <strong>
-                        $${product.price.toFixed(2)}
+                        $${Number(
+                            product.price
+                        ).toFixed(2)}
                     </strong>
 
 
@@ -839,6 +1013,7 @@ function renderTrendingProducts(
 
 /* =========================================================
    PRODUCT EVENTS
+   Event delegation
 ========================================================= */
 
 function attachProductEvents(
@@ -850,49 +1025,70 @@ function attachProductEvents(
     }
 
 
-    container
-        .querySelectorAll(
-            "[data-action]"
-        )
-        .forEach(
-            element => {
+    /*
+       Remove any previous delegated handler.
+    */
 
-                element.addEventListener(
-                    "click",
-                    handleProductAction
-                );
-
-            }
-        );
+    container.onclick =
+        handleProductContainerClick;
 
 }
 
 
 /* =========================================================
-   PRODUCT ACTION
+   PRODUCT CONTAINER CLICK
 ========================================================= */
 
-function handleProductAction(
+function handleProductContainerClick(
     event
 ) {
+
+    const actionElement =
+        event.target.closest(
+            "[data-action]"
+        );
+
+
+    if (!actionElement) {
+        return;
+    }
+
+
+    if (
+        !this.contains(
+            actionElement
+        )
+    ) {
+        return;
+    }
+
+
+    event.preventDefault();
 
     event.stopPropagation();
 
 
     const action =
-        this.dataset.action;
+        actionElement.dataset.action;
 
 
     const id =
         Number(
-            this.dataset.id
+            actionElement.dataset.id
         );
+
+
+    if (!id) {
+        return;
+    }
 
 
     const product =
         products.find(
             item =>
-                item.id === id
+                Number(
+                    item.id
+                ) === id
         );
 
 
@@ -900,6 +1096,10 @@ function handleProductAction(
         return;
     }
 
+
+    /* =====================================================
+       CART
+    ===================================================== */
 
     if (
         action === "cart"
@@ -910,8 +1110,15 @@ function handleProductAction(
             1
         );
 
+
+        return;
+
     }
 
+
+    /* =====================================================
+       WISHLIST
+    ===================================================== */
 
     if (
         action === "wishlist"
@@ -921,8 +1128,15 @@ function handleProductAction(
             id
         );
 
+
+        return;
+
     }
 
+
+    /* =====================================================
+       VIEW / EYE
+    ===================================================== */
 
     if (
         action === "view"
@@ -931,6 +1145,9 @@ function handleProductAction(
         openProductModal(
             product
         );
+
+
+        return;
 
     }
 
@@ -982,7 +1199,7 @@ function setupSearch() {
 
 
 /* =========================================================
-   FILTER
+   FILTER PRODUCTS
 ========================================================= */
 
 function filterProducts() {
@@ -1006,12 +1223,16 @@ function filterProducts() {
             product => {
 
                 const title =
-                    product.title
+                    String(
+                        product.title || ""
+                    )
                         .toLowerCase();
 
 
                 const categoryName =
-                    product.category
+                    String(
+                        product.category || ""
+                    )
                         .toLowerCase();
 
 
@@ -1041,12 +1262,18 @@ function filterProducts() {
 
 
     renderFlashProducts(
-        filtered.slice(0, 4)
+        filtered.slice(
+            0,
+            4
+        )
     );
 
 
     renderTrendingProducts(
-        filtered.slice(4, 8)
+        filtered.slice(
+            4,
+            8
+        )
     );
 
 }
@@ -1054,13 +1281,6 @@ function filterProducts() {
 
 /* =========================================================
    CATEGORY MENU
-   DESKTOP:
-   - All Categories click opens main menu
-   - Submenu hover handled by CSS
-
-   MOBILE:
-   - All Categories click opens menu
-   - Electronics/Fashion click opens submenu below
 ========================================================= */
 
 function setupCategoryMenu() {
@@ -1073,15 +1293,12 @@ function setupCategoryMenu() {
     }
 
 
-    /* =====================================================
-       ALL CATEGORIES BUTTON
-    ===================================================== */
-
     categoriesBtn.addEventListener(
         "click",
         event => {
 
             event.preventDefault();
+
             event.stopPropagation();
 
 
@@ -1091,15 +1308,20 @@ function setupCategoryMenu() {
                 );
 
 
-            if (isOpen) {
+            if (
+                isOpen
+            ) {
 
                 closeCategoryMenu();
 
-            } else {
+            }
+
+            else {
 
                 categoryDropdown.classList.add(
                     "show"
                 );
+
 
                 categoriesBtn.classList.add(
                     "active"
@@ -1111,9 +1333,9 @@ function setupCategoryMenu() {
     );
 
 
-    /* =====================================================
-       CATEGORY DROPDOWN
-    ===================================================== */
+    /*
+       Parent categories
+    */
 
     categoryDropdown.addEventListener(
         "click",
@@ -1122,17 +1344,15 @@ function setupCategoryMenu() {
             event.stopPropagation();
 
 
-            /*
-               Parent category button
-            */
-
             const categoryButton =
                 event.target.closest(
                     ".category-item > button"
                 );
 
 
-            if (categoryButton) {
+            if (
+                categoryButton
+            ) {
 
                 const item =
                     categoryButton.closest(
@@ -1151,9 +1371,9 @@ function setupCategoryMenu() {
                     );
 
 
-                /* =========================================
-                   MOBILE SUBMENU
-                ========================================= */
+                /*
+                   Mobile submenu
+                */
 
                 if (
                     submenu &&
@@ -1163,22 +1383,18 @@ function setupCategoryMenu() {
                     event.preventDefault();
 
 
-                    /*
-                       Close other open submenus
-                    */
-
                     categoryDropdown
                         .querySelectorAll(
                             ".category-item.mobile-open"
                         )
                         .forEach(
-                            openItem => {
+                            otherItem => {
 
                                 if (
-                                    openItem !== item
+                                    otherItem !== item
                                 ) {
 
-                                    openItem.classList.remove(
+                                    otherItem.classList.remove(
                                         "mobile-open"
                                     );
 
@@ -1187,10 +1403,6 @@ function setupCategoryMenu() {
                             }
                         );
 
-
-                    /*
-                       Toggle current submenu
-                    */
 
                     item.classList.toggle(
                         "mobile-open"
@@ -1202,9 +1414,9 @@ function setupCategoryMenu() {
                 }
 
 
-                /* =========================================
-                   CATEGORY WITH NO SUBMENU
-                ========================================= */
+                /*
+                   Desktop category
+                */
 
                 const category =
                     categoryButton.dataset.category;
@@ -1219,18 +1431,20 @@ function setupCategoryMenu() {
                         category
                     );
 
+
                     closeCategoryMenu();
 
                 }
+
 
                 return;
 
             }
 
 
-            /* =================================================
-               SUBMENU LINKS
-            ================================================= */
+            /*
+               Submenu link
+            */
 
             const submenuLink =
                 event.target.closest(
@@ -1238,7 +1452,9 @@ function setupCategoryMenu() {
                 );
 
 
-            if (submenuLink) {
+            if (
+                submenuLink
+            ) {
 
                 event.preventDefault();
 
@@ -1247,14 +1463,15 @@ function setupCategoryMenu() {
                     submenuLink.dataset.category;
 
 
-                if (!category) {
-                    return;
-                }
-
-
-                selectHomeCategory(
+                if (
                     category
-                );
+                ) {
+
+                    selectHomeCategory(
+                        category
+                    );
+
+                }
 
 
                 closeCategoryMenu();
@@ -1265,9 +1482,9 @@ function setupCategoryMenu() {
     );
 
 
-    /* =====================================================
-       OUTSIDE CLICK
-    ===================================================== */
+    /*
+       Outside click
+    */
 
     document.addEventListener(
         "click",
@@ -1297,9 +1514,9 @@ function setupCategoryMenu() {
     );
 
 
-    /* =====================================================
-       RESIZE
-    ===================================================== */
+    /*
+       Resize
+    */
 
     window.addEventListener(
         "resize",
@@ -1320,7 +1537,7 @@ function setupCategoryMenu() {
 
 
 /* =========================================================
-   SELECT HOME CATEGORY
+   SELECT CATEGORY
 ========================================================= */
 
 function selectHomeCategory(
@@ -1345,17 +1562,15 @@ function selectHomeCategory(
     filterProducts();
 
 
-    /*
-       Scroll to product section
-    */
-
     document
         .getElementById(
             "flashSale"
         )
         ?.scrollIntoView({
-            behavior: "smooth",
-            block: "start"
+            behavior:
+                "smooth",
+            block:
+                "start"
         });
 
 }
@@ -1426,9 +1641,7 @@ function setupCategoryCards() {
                             card.dataset.category;
 
 
-                        if (
-                            !category
-                        ) {
+                        if (!category) {
                             return;
                         }
 
@@ -1465,20 +1678,36 @@ function setupCategoryCards() {
 
 
 /* =========================================================
-   CART
+   CART SETUP
 ========================================================= */
 
 function setupCart() {
 
     cartBtn?.addEventListener(
         "click",
-        openCart
+        event => {
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+            openCart();
+
+        }
     );
 
 
     closeCartBtn?.addEventListener(
         "click",
-        closeCart
+        event => {
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+            closeCart();
+
+        }
     );
 
 
@@ -1516,37 +1745,60 @@ function addToCart(
     }
 
 
+    const id =
+        Number(
+            product.id
+        );
+
+
+    const qty =
+        Math.max(
+            1,
+            Number(
+                quantity
+            ) || 1
+        );
+
+
     const existing =
         cart.find(
             item =>
-                item.id ===
-                product.id
+                Number(
+                    item.id
+                ) === id
         );
 
 
     if (existing) {
 
-        existing.quantity +=
-            quantity;
+        existing.quantity =
+            Number(
+                existing.quantity
+            ) +
+            qty;
 
-    } else {
+    }
+
+    else {
 
         cart.push({
 
             id:
-                product.id,
+                id,
 
             title:
                 product.title,
 
             price:
-                product.price,
+                Number(
+                    product.price
+                ),
 
             image:
                 product.image,
 
             quantity:
-                quantity
+                qty
 
         });
 
@@ -1617,7 +1869,8 @@ function updateCartCount() {
             ) =>
                 total +
                 Number(
-                    item.quantity || 0
+                    item.quantity ||
+                    0
                 ),
             0
         );
@@ -1693,31 +1946,7 @@ function renderCart() {
             .join("");
 
 
-    const total =
-        cart.reduce(
-            (
-                sum,
-                item
-            ) =>
-                sum +
-                (
-                    Number(
-                        item.price
-                    ) *
-                    Number(
-                        item.quantity
-                    )
-                ),
-            0
-        );
-
-
-    if (cartTotal) {
-
-        cartTotal.textContent =
-            `$${total.toFixed(2)}`;
-
-    }
+    updateCartTotal();
 
 }
 
@@ -1731,8 +1960,12 @@ function createCartItem(
 ) {
 
     const total =
-        Number(item.price) *
-        Number(item.quantity);
+        Number(
+            item.price
+        ) *
+        Number(
+            item.quantity
+        );
 
 
     return `
@@ -1868,6 +2101,11 @@ function handleCartAction(
     }
 
 
+    event.preventDefault();
+
+    event.stopPropagation();
+
+
     const action =
         button.dataset.cartAction;
 
@@ -1881,7 +2119,9 @@ function handleCartAction(
     const item =
         cart.find(
             product =>
-                product.id === id
+                Number(
+                    product.id
+                ) === id
         );
 
 
@@ -1913,7 +2153,9 @@ function handleCartAction(
             cart =
                 cart.filter(
                     product =>
-                        product.id !== id
+                        Number(
+                            product.id
+                        ) !== id
                 );
 
         }
@@ -1928,7 +2170,9 @@ function handleCartAction(
         cart =
             cart.filter(
                 product =>
-                    product.id !== id
+                    Number(
+                        product.id
+                    ) !== id
             );
 
 
@@ -1948,20 +2192,63 @@ function handleCartAction(
 
 
 /* =========================================================
+   CART TOTAL
+========================================================= */
+
+function updateCartTotal() {
+
+    if (!cartTotal) {
+        return;
+    }
+
+
+    const total =
+        cart.reduce(
+            (
+                sum,
+                item
+            ) =>
+                sum +
+                (
+                    Number(
+                        item.price
+                    ) *
+                    Number(
+                        item.quantity
+                    )
+                ),
+            0
+        );
+
+
+    cartTotal.textContent =
+        `$${total.toFixed(2)}`;
+
+}
+
+
+/* =========================================================
    OPEN CART
 ========================================================= */
 
 function openCart() {
 
-    if (!cartDrawer) {
-        return;
-    }
-
-
     closeWishlist();
 
 
-    cartDrawer.classList.add(
+    if (
+        productModal &&
+        productModal.classList.contains(
+            "show"
+        )
+    ) {
+
+        closeProductModalWindow();
+
+    }
+
+
+    cartDrawer?.classList.add(
         "open"
     );
 
@@ -2024,7 +2311,16 @@ function setupWishlist() {
 
     closeWishlistBtn?.addEventListener(
         "click",
-        closeWishlist
+        event => {
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+
+            closeWishlist();
+
+        }
     );
 
 
@@ -2043,164 +2339,7 @@ function setupWishlist() {
 
 
 /* =========================================================
-   WISHLIST BADGE STYLE
-========================================================= */
-
-function ensureWishlistBadgeStyles() {
-
-    if (
-        document.getElementById(
-            "shopmaxWishlistBadgeStyles"
-        )
-    ) {
-        return;
-    }
-
-
-    const style =
-        document.createElement(
-            "style"
-        );
-
-
-    style.id =
-        "shopmaxWishlistBadgeStyles";
-
-
-    style.textContent = `
-
-        #wishlistHeader {
-            position: relative !important;
-        }
-
-
-        #wishlistHeader .wishlist-icon-wrap {
-            position: relative !important;
-
-            width: 22px;
-            height: 22px;
-
-            display: inline-flex;
-
-            align-items: center;
-            justify-content: center;
-
-            flex: 0 0 22px;
-        }
-
-
-        #wishlistHeader .wishlist-icon-wrap > i {
-            display: block;
-
-            line-height: 1;
-        }
-
-
-        #wishlistHeader #wishlistHeaderCount {
-
-            position: absolute !important;
-
-            top: -8px !important;
-            right: -8px !important;
-
-            left: auto !important;
-
-            min-width: 17px !important;
-            height: 17px !important;
-
-            padding: 0 4px !important;
-
-            display: flex !important;
-
-            align-items: center !important;
-            justify-content: center !important;
-
-            box-sizing: border-box;
-
-            background:
-                #ef4444 !important;
-
-            color:
-                #ffffff !important;
-
-            border:
-                2px solid #ffffff !important;
-
-            border-radius:
-                50% !important;
-
-            font-family:
-                Arial,
-                sans-serif !important;
-
-            font-size:
-                9px !important;
-
-            font-weight:
-                700 !important;
-
-            line-height:
-                1 !important;
-
-            white-space:
-                nowrap;
-
-            z-index:
-                999 !important;
-
-            pointer-events:
-                none;
-        }
-
-
-        #wishlistHeader
-        #wishlistHeaderCount.hidden {
-
-            display: none !important;
-
-        }
-
-
-        @media (max-width: 768px) {
-
-            #wishlistHeader
-            .wishlist-icon-wrap {
-
-                width: 20px;
-                height: 20px;
-
-                flex-basis: 20px;
-            }
-
-
-            #wishlistHeader
-            #wishlistHeaderCount {
-
-                top: -7px !important;
-                right: -7px !important;
-
-                min-width: 15px !important;
-                height: 15px !important;
-
-                padding: 0 3px !important;
-
-                font-size: 8px !important;
-            }
-
-        }
-
-    `;
-
-
-    document.head.appendChild(
-        style
-    );
-
-}
-
-
-/* =========================================================
-   UPDATE WISHLIST COUNT
+   WISHLIST COUNT
 ========================================================= */
 
 function updateWishlistCount() {
@@ -2210,62 +2349,9 @@ function updateWishlistCount() {
     }
 
 
-    ensureWishlistBadgeStyles();
-
-
-    let heartIcon =
-        wishlistHeader.querySelector(
-            "i.fa-heart"
-        );
-
-
-    if (!heartIcon) {
-
-        heartIcon =
-            wishlistHeader.querySelector(
-                "i"
-            );
-
-    }
-
-
-    let iconWrapper =
-        wishlistHeader.querySelector(
-            ".wishlist-icon-wrap"
-        );
-
-
-    if (
-        heartIcon &&
-        !iconWrapper
-    ) {
-
-        iconWrapper =
-            document.createElement(
-                "span"
-            );
-
-
-        iconWrapper.className =
-            "wishlist-icon-wrap";
-
-
-        heartIcon.parentNode.insertBefore(
-            iconWrapper,
-            heartIcon
-        );
-
-
-        iconWrapper.appendChild(
-            heartIcon
-        );
-
-    }
-
-
     let badge =
         document.getElementById(
-            "wishlistHeaderCount"
+            "wishlistCount"
         );
 
 
@@ -2278,28 +2364,30 @@ function updateWishlistCount() {
 
 
         badge.id =
-            "wishlistHeaderCount";
+            "wishlistCount";
 
 
-        badge.className =
-            "wishlist-header-count";
+        const wrapper =
+            wishlistHeader.querySelector(
+                ".wishlist-icon-wrap"
+            );
 
-    }
 
+        if (wrapper) {
 
-    if (
-        iconWrapper
-    ) {
+            wrapper.appendChild(
+                badge
+            );
 
-        iconWrapper.appendChild(
-            badge
-        );
+        }
 
-    } else {
+        else {
 
-        wishlistHeader.appendChild(
-            badge
-        );
+            wishlistHeader.appendChild(
+                badge
+            );
+
+        }
 
     }
 
@@ -2308,21 +2396,10 @@ function updateWishlistCount() {
         wishlist.length;
 
 
-    if (
+    badge.style.display =
         wishlist.length === 0
-    ) {
-
-        badge.classList.add(
-            "hidden"
-        );
-
-    } else {
-
-        badge.classList.remove(
-            "hidden"
-        );
-
-    }
+            ? "none"
+            : "grid";
 
 
     if (
@@ -2347,26 +2424,24 @@ function toggleWishlist(
     id
 ) {
 
-    wishlist =
-        [
-            ...new Set(
-                wishlist
-            )
-        ];
-
-
-    const exists =
-        wishlist.includes(
+    id =
+        Number(
             id
         );
 
 
-    if (exists) {
+    if (
+        wishlist.includes(
+            id
+        )
+    ) {
 
         wishlist =
             wishlist.filter(
                 item =>
-                    item !== id
+                    Number(
+                        item
+                    ) !== id
             );
 
 
@@ -2375,7 +2450,9 @@ function toggleWishlist(
             "heart-crack"
         );
 
-    } else {
+    }
+
+    else {
 
         wishlist.push(
             id
@@ -2390,16 +2467,21 @@ function toggleWishlist(
     }
 
 
-    saveWishlist();
+    wishlist =
+        [
+            ...new Set(
+                wishlist
+            )
+        ];
 
+
+    saveWishlist();
 
     updateWishlistCount();
 
-
     renderWishlist();
 
-
-    rerenderProducts();
+    rerenderHomeProducts();
 
 }
 
@@ -2421,10 +2503,18 @@ function saveWishlist() {
 
 
 /* =========================================================
-   RERENDER PRODUCTS
+   RERENDER HOME PRODUCTS
 ========================================================= */
 
-function rerenderProducts() {
+function rerenderHomeProducts() {
+
+    if (
+        !products ||
+        products.length === 0
+    ) {
+        return;
+    }
+
 
     const search =
         searchInput
@@ -2445,12 +2535,18 @@ function rerenderProducts() {
             product => {
 
                 const title =
-                    product.title
+                    String(
+                        product.title ||
+                        ""
+                    )
                         .toLowerCase();
 
 
                 const categoryName =
-                    product.category
+                    String(
+                        product.category ||
+                        ""
+                    )
                         .toLowerCase();
 
 
@@ -2480,12 +2576,18 @@ function rerenderProducts() {
 
 
     renderFlashProducts(
-        filtered.slice(0, 4)
+        filtered.slice(
+            0,
+            4
+        )
     );
 
 
     renderTrendingProducts(
-        filtered.slice(4, 8)
+        filtered.slice(
+            4,
+            8
+        )
     );
 
 }
@@ -2497,18 +2599,25 @@ function rerenderProducts() {
 
 function openWishlist() {
 
-    if (!wishlistDrawer) {
-        return;
-    }
-
-
     closeCart();
+
+
+    if (
+        productModal &&
+        productModal.classList.contains(
+            "show"
+        )
+    ) {
+
+        closeProductModalWindow();
+
+    }
 
 
     renderWishlist();
 
 
-    wishlistDrawer.classList.add(
+    wishlistDrawer?.classList.add(
         "open"
     );
 
@@ -2562,8 +2671,25 @@ function renderWishlist() {
     }
 
 
+    const items =
+        wishlist
+            .map(
+                id =>
+                    products.find(
+                        product =>
+                            Number(
+                                product.id
+                            ) ===
+                            Number(
+                                id
+                            )
+                    )
+            )
+            .filter(Boolean);
+
+
     if (
-        wishlist.length === 0
+        items.length === 0
     ) {
 
         wishlistItems.innerHTML = `
@@ -2593,48 +2719,6 @@ function renderWishlist() {
 
         `;
 
-        return;
-
-    }
-
-
-    const items =
-        wishlist
-            .map(
-                id =>
-                    products.find(
-                        product =>
-                            product.id === id
-                    )
-            )
-            .filter(Boolean);
-
-
-    if (
-        items.length === 0
-    ) {
-
-        wishlistItems.innerHTML = `
-
-            <div
-                class="empty-wishlist"
-            >
-
-                <i
-                    class="
-                        fa-regular
-                        fa-heart
-                    "
-                ></i>
-
-
-                <h3>
-                    Your wishlist is empty
-                </h3>
-
-            </div>
-
-        `;
 
         return;
 
@@ -2652,7 +2736,7 @@ function renderWishlist() {
 
 
 /* =========================================================
-   CREATE WISHLIST ITEM
+   WISHLIST ITEM
 ========================================================= */
 
 function createWishlistItem(
@@ -2663,7 +2747,6 @@ function createWishlistItem(
 
         <div
             class="wishlist-item"
-            data-id="${product.id}"
         >
 
             <div
@@ -2692,12 +2775,16 @@ function createWishlistItem(
 
 
                 <strong>
-                    $${product.price.toFixed(2)}
+                    $${Number(
+                        product.price
+                    ).toFixed(2)}
                 </strong>
 
 
                 <div
-                    class="wishlist-item-actions"
+                    class="
+                        wishlist-item-actions
+                    "
                 >
 
                     <button
@@ -2722,7 +2809,6 @@ function createWishlistItem(
                         type="button"
                         data-wishlist-action="remove"
                         data-id="${product.id}"
-                        aria-label="Remove from wishlist"
                     >
 
                         <i
@@ -2764,6 +2850,11 @@ function handleWishlistAction(
     }
 
 
+    event.preventDefault();
+
+    event.stopPropagation();
+
+
     const action =
         button.dataset.wishlistAction;
 
@@ -2777,7 +2868,9 @@ function handleWishlistAction(
     const product =
         products.find(
             item =>
-                item.id === id
+                Number(
+                    item.id
+                ) === id
         );
 
 
@@ -2795,6 +2888,7 @@ function handleWishlistAction(
             1
         );
 
+
         return;
 
     }
@@ -2804,28 +2898,264 @@ function handleWishlistAction(
         action === "remove"
     ) {
 
-        wishlist =
-            wishlist.filter(
-                item =>
-                    item !== id
-            );
-
-
-        saveWishlist();
-
-        updateWishlistCount();
-
-        renderWishlist();
-
-        rerenderProducts();
-
-
-        showToast(
-            "Removed from wishlist",
-            "heart-crack"
+        toggleWishlist(
+            id
         );
 
     }
+
+}
+
+
+/* =========================================================
+   RECENTLY VIEWED SETUP
+========================================================= */
+
+function setupRecentlyViewed() {
+
+    clearRecentlyViewedBtn?.addEventListener(
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+
+            clearRecentlyViewed();
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   SAVE RECENTLY VIEWED
+========================================================= */
+
+function saveRecentlyViewed(
+    productId
+) {
+
+    const id =
+        Number(
+            productId
+        );
+
+
+    if (!id) {
+        return;
+    }
+
+
+    /*
+       Remove previous occurrence
+       so newest product goes first.
+    */
+
+    recentlyViewed =
+        recentlyViewed.filter(
+            item =>
+                Number(
+                    item
+                ) !== id
+        );
+
+
+    recentlyViewed.unshift(
+        id
+    );
+
+
+    /*
+       Keep only latest four.
+    */
+
+    recentlyViewed =
+        recentlyViewed.slice(
+            0,
+            4
+        );
+
+
+    saveRecentlyViewedState();
+
+}
+
+
+/* =========================================================
+   SAVE RECENTLY VIEWED STATE
+========================================================= */
+
+function saveRecentlyViewedState() {
+
+    localStorage.setItem(
+        "shopmax-recently-viewed",
+        JSON.stringify(
+            recentlyViewed
+        )
+    );
+
+}
+
+
+/* =========================================================
+   LOAD RECENTLY VIEWED
+========================================================= */
+
+function loadRecentlyViewed() {
+
+    renderRecentlyViewed();
+
+}
+
+
+/* =========================================================
+   RENDER RECENTLY VIEWED
+========================================================= */
+
+function renderRecentlyViewed() {
+
+    if (
+        !recentlyViewedSection ||
+        !recentlyViewedProducts
+    ) {
+        return;
+    }
+
+
+    /*
+       Wait for API data.
+    */
+
+    if (
+        !products ||
+        products.length === 0
+    ) {
+
+        recentlyViewedSection.hidden =
+            true;
+
+        recentlyViewedProducts.innerHTML =
+            "";
+
+        return;
+
+    }
+
+
+    /*
+       Resolve saved IDs.
+    */
+
+    const viewedProducts =
+        recentlyViewed
+            .map(
+                id =>
+                    products.find(
+                        product =>
+                            Number(
+                                product.id
+                            ) ===
+                            Number(
+                                id
+                            )
+                    )
+            )
+            .filter(Boolean);
+
+
+    /*
+       Clean invalid IDs.
+    */
+
+    recentlyViewed =
+        viewedProducts.map(
+            product =>
+                Number(
+                    product.id
+                )
+        );
+
+
+    saveRecentlyViewedState();
+
+
+    /*
+       Hide section when empty.
+    */
+
+    if (
+        viewedProducts.length === 0
+    ) {
+
+        recentlyViewedSection.hidden =
+            true;
+
+        recentlyViewedProducts.innerHTML =
+            "";
+
+        return;
+
+    }
+
+
+    /*
+       Show section.
+    */
+
+    recentlyViewedSection.hidden =
+        false;
+
+
+    /*
+       Reuse normal product cards.
+    */
+
+    recentlyViewedProducts.innerHTML =
+        viewedProducts
+            .map(
+                (
+                    product,
+                    index
+                ) =>
+                    createProductCard(
+                        product,
+                        index
+                    )
+            )
+            .join("");
+
+
+    /*
+       Same click system as Flash
+       and Trending.
+    */
+
+    attachProductEvents(
+        recentlyViewedProducts
+    );
+
+}
+
+
+/* =========================================================
+   CLEAR RECENTLY VIEWED
+========================================================= */
+
+function clearRecentlyViewed() {
+
+    recentlyViewed =
+        [];
+
+
+    localStorage.removeItem(
+        "shopmax-recently-viewed"
+    );
+
+
+    renderRecentlyViewed();
 
 }
 
@@ -2838,7 +3168,16 @@ function setupModal() {
 
     closeProductModalBtn?.addEventListener(
         "click",
-        closeProductModalWindow
+        event => {
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+
+            closeProductModalWindow();
+
+        }
     );
 
 
@@ -2914,20 +3253,18 @@ function setupModal() {
         event => {
 
             if (
-                event.key !== "Escape"
+                event.key === "Escape"
             ) {
-                return;
+
+                closeProductModalWindow();
+
+                closeCart();
+
+                closeWishlist();
+
+                closeCategoryMenu();
+
             }
-
-
-            closeProductModalWindow();
-
-            closeCart();
-
-            closeWishlist();
-
-
-            closeCategoryMenu();
 
         }
     );
@@ -2951,6 +3288,22 @@ function openProductModal(
     }
 
 
+    /*
+       Save to Recently Viewed
+    */
+
+    saveRecentlyViewed(
+        product.id
+    );
+
+
+    /*
+       Update section immediately
+    */
+
+    renderRecentlyViewed();
+
+
     currentModalProduct =
         product;
 
@@ -2966,6 +3319,10 @@ function openProductModal(
     closeCategoryMenu();
 
 
+    /*
+       IMAGE
+    */
+
     if (
         modalProductImage
     ) {
@@ -2979,6 +3336,10 @@ function openProductModal(
     }
 
 
+    /*
+       CATEGORY
+    */
+
     if (
         modalProductCategory
     ) {
@@ -2991,6 +3352,10 @@ function openProductModal(
     }
 
 
+    /*
+       TITLE
+    */
+
     if (
         modalProductTitle
     ) {
@@ -3001,12 +3366,22 @@ function openProductModal(
     }
 
 
+    /*
+       RATING
+    */
+
     const rating =
-        product.rating?.rate || 4.2;
+        Number(
+            product.rating?.rate ||
+            4.2
+        );
 
 
     const reviewCount =
-        product.rating?.count || 100;
+        Number(
+            product.rating?.count ||
+            100
+        );
 
 
     if (
@@ -3024,7 +3399,7 @@ function openProductModal(
 
 
             <span>
-                ${rating}
+                ${rating.toFixed(1)}
             </span>
 
 
@@ -3037,28 +3412,47 @@ function openProductModal(
     }
 
 
+    /*
+       PRICE
+    */
+
     if (
         modalProductPrice
     ) {
 
         modalProductPrice.textContent =
-            `$${product.price.toFixed(2)}`;
+            `$${Number(
+                product.price
+            ).toFixed(2)}`;
 
     }
 
+
+    /*
+       DESCRIPTION
+    */
 
     if (
         modalProductDescription
     ) {
 
         modalProductDescription.textContent =
-            product.description;
+            product.description ||
+            "No description available.";
 
     }
 
 
+    /*
+       QUANTITY
+    */
+
     updateModalQuantity();
 
+
+    /*
+       SHOW
+    */
 
     productModal.classList.add(
         "show"
@@ -3078,7 +3472,9 @@ function openProductModal(
 
 function closeProductModalWindow() {
 
-    if (!productModal) {
+    if (
+        !productModal
+    ) {
         return;
     }
 
@@ -3117,140 +3513,6 @@ function updateModalQuantity() {
             modalQuantity;
 
     }
-
-}
-
-
-/* =========================================================
-   COUNTDOWN
-========================================================= */
-
-function startCountdown() {
-
-    const countdown =
-        document.getElementById(
-            "countdown"
-        );
-
-
-    if (!countdown) {
-        return;
-    }
-
-
-    let totalSeconds =
-        (
-            2 * 24 * 60 * 60
-        )
-        +
-        (
-            15 * 60 * 60
-        )
-        +
-        (
-            30 * 60
-        )
-        +
-        45;
-
-
-    function updateCountdown() {
-
-        const days =
-            Math.floor(
-                totalSeconds /
-                86400
-            );
-
-
-        const hours =
-            Math.floor(
-                (
-                    totalSeconds %
-                    86400
-                ) / 3600
-            );
-
-
-        const minutes =
-            Math.floor(
-                (
-                    totalSeconds %
-                    3600
-                ) / 60
-            );
-
-
-        const seconds =
-            totalSeconds %
-            60;
-
-
-        countdown.textContent =
-
-            `${String(
-                days
-            ).padStart(2, "0")} : ` +
-
-            `${String(
-                hours
-            ).padStart(2, "0")} : ` +
-
-            `${String(
-                minutes
-            ).padStart(2, "0")} : ` +
-
-            `${String(
-                seconds
-            ).padStart(2, "0")}`;
-
-
-        if (
-            totalSeconds > 0
-        ) {
-
-            totalSeconds--;
-
-        }
-
-    }
-
-
-    updateCountdown();
-
-
-    setInterval(
-        updateCountdown,
-        1000
-    );
-
-}
-
-
-/* =========================================================
-   CHECKOUT
-========================================================= */
-
-function checkout() {
-
-    if (
-        cart.length === 0
-    ) {
-
-        showToast(
-            "Your cart is empty",
-            "cart-shopping"
-        );
-
-        return;
-
-    }
-
-
-    showToast(
-        "Checkout feature coming soon",
-        "credit-card"
-    );
 
 }
 
@@ -3338,6 +3600,155 @@ function showToast(
 
 
 /* =========================================================
+   CHECKOUT
+========================================================= */
+
+function checkout() {
+
+    if (
+        cart.length === 0
+    ) {
+
+        showToast(
+            "Your cart is empty",
+            "cart-shopping"
+        );
+
+
+        return;
+
+    }
+
+
+    showToast(
+        "Checkout feature coming soon",
+        "credit-card"
+    );
+
+}
+
+
+/* =========================================================
+   COUNTDOWN
+========================================================= */
+
+function startCountdown() {
+
+    const countdown =
+        document.getElementById(
+            "countdown"
+        );
+
+
+    if (!countdown) {
+        return;
+    }
+
+
+    let totalSeconds =
+        (
+            2 * 24 * 60 * 60
+        )
+        +
+        (
+            15 * 60 * 60
+        )
+        +
+        (
+            30 * 60
+        )
+        +
+        45;
+
+
+    function updateCountdown() {
+
+        const days =
+            Math.floor(
+                totalSeconds /
+                86400
+            );
+
+
+        const hours =
+            Math.floor(
+                (
+                    totalSeconds %
+                    86400
+                ) /
+                3600
+            );
+
+
+        const minutes =
+            Math.floor(
+                (
+                    totalSeconds %
+                    3600
+                ) /
+                60
+            );
+
+
+        const seconds =
+            totalSeconds %
+            60;
+
+
+        countdown.textContent =
+
+            `${String(
+                days
+            ).padStart(
+                2,
+                "0"
+            )} : ` +
+
+            `${String(
+                hours
+            ).padStart(
+                2,
+                "0"
+            )} : ` +
+
+            `${String(
+                minutes
+            ).padStart(
+                2,
+                "0"
+            )} : ` +
+
+            `${String(
+                seconds
+            ).padStart(
+                2,
+                "0"
+            )}`;
+
+
+        if (
+            totalSeconds > 0
+        ) {
+
+            totalSeconds--;
+
+        }
+
+    }
+
+
+    updateCountdown();
+
+
+    setInterval(
+        updateCountdown,
+        1000
+    );
+
+}
+
+
+/* =========================================================
    HELPERS
 ========================================================= */
 
@@ -3365,6 +3776,10 @@ function formatCategory(
 
 }
 
+
+/* =========================================================
+   EMPTY PRODUCT STATE
+========================================================= */
 
 function noProductsHTML() {
 
@@ -3412,6 +3827,10 @@ function noProductsHTML() {
 
 }
 
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
 
 function escapeHTML(
     value
@@ -3487,3 +3906,12 @@ window.openProductModal =
 
 window.closeProductModalWindow =
     closeProductModalWindow;
+
+
+window.clearRecentlyViewed =
+    clearRecentlyViewed;
+
+
+/* =========================================================
+   END SHOPMAX
+========================================================= */

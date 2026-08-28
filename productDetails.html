@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Product Details | ShopMax</title>
+
+
+    <!-- Font Awesome -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+
+
+     <!-- product Details CSS -->
+    <link rel="stylesheet" href="assets/css/productDetails.css">
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         TOP BAR
+    ====================================================== -->
+
+    <div class="top-bar">
+
+        <div class="container top-bar-inner">
+
+            <div class="top-sale">
+
+                <i
+                    class="fa-solid fa-fire"
+                ></i>
+
+                <span>
+                    Hot Deals
+                </span>
+
+                <span>
+                    Summer Sale For All Products - Up To 50% Off
+                </span>
+
+            </div>
+
+
+            <div class="top-links">
+
+                <a href="#">
+                    Track Order
+                </a>
+
+                <a href="#">
+                    Help Center
+                </a>
+
+                <button type="button">
+                    English
+                    <i
+                        class="fa-solid fa-chevron-down"
+                    ></i>
+                </button>
+
+                <button type="button">
+                    USD
+                    <i
+                        class="fa-solid fa-chevron-down"
+                    ></i>
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <header class="header">
+
+        <div class="container header-main">
+
+
+            <!-- LOGO -->
+
+            <a
+                href="index.html"
+                class="logo"
+            >
+
+                <span class="logo-icon">
+
+                    <i
+                        class="fa-solid fa-bag-shopping"
+                    ></i>
+
+                </span>
+
+
+                <span>
+                    Shop<span>Max</span>
+                </span>
+
+            </a>
+
+
+
+            <!-- SEARCH -->
+
+            <div class="search-box">
+
+                <select
+                    id="productSearchCategory"
+                >
+
+                    <option value="all">
+                        All Categories
+                    </option>
+
+                    <option value="electronics">
+                        Electronics
+                    </option>
+
+                    <option value="jewelery">
+                        Jewelry
+                    </option>
+
+                    <option value="men's clothing">
+                        Men's Clothing
+                    </option>
+
+                    <option value="women's clothing">
+                        Women's Clothing
+                    </option>
+
+                </select>
+
+
+                <input
+                    type="search"
+                    id="productSearchInput"
+                    placeholder="Search for products..."
+                >
+
+
+                <button
+                    type="button"
+                    id="productSearchBtn"
+                    aria-label="Search"
+                >
+
+                    <i
+                        class="fa-solid fa-magnifying-glass"
+                    ></i>
+
+                </button>
+
+            </div>
+
+
+
+            <!-- HEADER ACTIONS -->
+
+            <div class="header-actions">
+
+
+                <!-- WISHLIST -->
+
+                <button
+                    type="button"
+                    class="header-action"
+                    id="productWishlistHeader"
+                >
+
+                    <span
+                        class="wishlist-icon-wrap"
+                    >
+
+                        <i
+                            class="fa-regular fa-heart"
+                        ></i>
+
+                        <b
+                            id="productWishlistCount"
+                        >
+                            0
+                        </b>
+
+                    </span>
+
+
+                    <span>
+                        Wishlist
+                    </span>
+
+                </button>
+
+
+
+                <!-- ACCOUNT -->
+
+                <button
+                    type="button"
+                    class="header-action"
+                >
+
+                    <i
+                        class="fa-regular fa-user"
+                    ></i>
+
+                    <span>
+                        Account
+                    </span>
+
+                </button>
+
+
+
+                <!-- CART -->
+
+                <button
+                    type="button"
+                    class="header-action"
+                    id="productCartBtn"
+                >
+
+                    <span
+                        class="cart-icon-wrap"
+                    >
+
+                        <i
+                            class="fa-solid fa-cart-shopping"
+                        ></i>
+
+                        <b
+                            id="productCartCount"
+                        >
+                            0
+                        </b>
+
+                    </span>
+
+
+                    <span>
+                        Cart
+                    </span>
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         NAVIGATION
+    ====================================================== -->
+
+    <nav class="navigation">
+
+        <div class="container navigation-inner">
+
+
+            <div class="categories-wrapper">
+
+                <button
+                    type="button"
+                    class="categories-btn"
+                    id="productCategoriesBtn"
+                >
+
+                    <i
+                        class="fa-solid fa-bars"
+                    ></i>
+
+                    <span>
+                        All Categories
+                    </span>
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-chevron-down
+                            arrow
+                        "
+                    ></i>
+
+                </button>
+
+
+                <!-- CATEGORY MENU -->
+
+                <div
+                    class="category-dropdown"
+                    id="productCategoryDropdown"
+                >
+
+                    <div
+                        class="category-dropdown-title"
+                    >
+
+                        <i
+                            class="fa-solid fa-layer-group"
+                        ></i>
+
+                        Shop By Category
+
+                    </div>
+
+
+                    <div class="category-item">
+
+                        <button
+                            type="button"
+                            data-category="electronics"
+                        >
+
+                            <span>
+
+                                <i
+                                    class="fa-solid fa-laptop"
+                                ></i>
+
+                                Electronics
+
+                            </span>
+
+                        </button>
+
+                    </div>
+
+
+                    <div class="category-item">
+
+                        <button
+                            type="button"
+                            data-category="jewelery"
+                        >
+
+                            <span>
+
+                                <i
+                                    class="fa-solid fa-gem"
+                                ></i>
+
+                                Jewelry
+
+                            </span>
+
+                        </button>
+
+                    </div>
+
+
+                    <div class="category-item">
+
+                        <button
+                            type="button"
+                            data-category="men's clothing"
+                        >
+
+                            <span>
+
+                                <i
+                                    class="fa-solid fa-shirt"
+                                ></i>
+
+                                Men's Clothing
+
+                            </span>
+
+                        </button>
+
+                    </div>
+
+
+                    <div class="category-item">
+
+                        <button
+                            type="button"
+                            data-category="women's clothing"
+                        >
+
+                            <span>
+
+                                <i
+                                    class="fa-solid fa-person-dress"
+                                ></i>
+
+                                Women's Clothing
+
+                            </span>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="nav-links">
+
+                <a href="index.html">
+                    Home
+                </a>
+
+                <a href="shop.html">
+                    Shop
+                </a>
+
+                <a href="#">
+                    Deals
+                </a>
+
+                <a href="#">
+                    Pages
+                </a>
+
+                <a href="#">
+                    Blog
+                </a>
+
+                <a href="#">
+                    Contact
+                </a>
+
+            </div>
+
+
+            <div class="hotline">
+
+                <i
+                    class="fa-solid fa-headset"
+                ></i>
+
+                Hotline:
+                <strong>
+                    (800) 123-4567
+                </strong>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+
+    <!-- =====================================================
+         PRODUCT DETAILS
+    ====================================================== -->
+
+    <main class="product-details-page">
+
+
+        <!-- BREADCRUMB -->
+
+        <section class="product-breadcrumb-section">
+
+            <div class="container">
+
+                <div
+                    class="product-breadcrumb"
+                >
+
+                    <a href="index.html">
+                        Home
+                    </a>
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-chevron-right
+                        "
+                    ></i>
+
+                    <a href="shop.html">
+                        Shop
+                    </a>
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-chevron-right
+                        "
+                    ></i>
+
+                    <span>
+                        Product Details
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- PRODUCT -->
+
+        <section
+            class="product-details-section"
+        >
+
+            <div class="container">
+
+
+                <!-- LOADING -->
+
+                <div
+                    id="productDetailsLoading"
+                    class="product-details-loading"
+                >
+
+                    <div>
+                        Loading product...
+                    </div>
+
+                </div>
+
+
+
+                <!-- CONTENT -->
+
+                <div
+                    id="productDetailsContent"
+                    class="product-details-content"
+                    hidden
+                >
+
+
+                    <!-- PRODUCT IMAGE -->
+
+                    <div
+                        class="
+                            product-details-gallery
+                        "
+                    >
+
+                        <div
+                            class="
+                                product-details-image
+                            "
+                        >
+
+                            <span
+                                class="
+                                    product-details-badge
+                                "
+                                id="productDetailsBadge"
+                            >
+                                -20%
+                            </span>
+
+
+                            <img
+                                id="productDetailsImage"
+                                src=""
+                                alt=""
+                            >
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- PRODUCT INFO -->
+
+                    <div
+                        class="
+                            product-details-info
+                        "
+                    >
+
+                        <span
+                            class="
+                                product-details-category
+                            "
+                            id="productDetailsCategory"
+                        >
+                            CATEGORY
+                        </span>
+
+
+                        <h1
+                            id="productDetailsTitle"
+                        >
+                            Product Title
+                        </h1>
+
+
+                        <!-- RATING -->
+
+                        <div
+                            class="
+                                product-details-rating
+                            "
+                        >
+
+                            <span
+                                id="productDetailsStars"
+                            >
+                                <i
+                                    class="
+                                        fa-solid
+                                        fa-star
+                                    "
+                                ></i>
+                            </span>
+
+
+                            <strong
+                                id="productDetailsRating"
+                            >
+                                4.5
+                            </strong>
+
+
+                            <span>
+                                (
+                                <span
+                                    id="productDetailsReviewCount"
+                                >
+                                    120
+                                </span>
+                                reviews
+                                )
+                            </span>
+
+                        </div>
+
+
+                        <!-- PRICE -->
+
+                        <div
+                            class="
+                                product-details-price
+                            "
+                        >
+
+                            <strong
+                                id="productDetailsPrice"
+                            >
+                                $99.99
+                            </strong>
+
+
+                            <del
+                                id="productDetailsOldPrice"
+                            >
+                                $129.99
+                            </del>
+
+                        </div>
+
+
+                        <!-- DESCRIPTION -->
+
+                        <p
+                            class="
+                                product-details-description
+                            "
+                            id="productDetailsDescription"
+                        >
+                            Product description goes here.
+                        </p>
+
+
+                        <!-- STOCK -->
+
+                        <div
+                            class="
+                                product-details-stock
+                            "
+                        >
+
+                            <i
+                                class="
+                                    fa-solid
+                                    fa-circle-check
+                                "
+                            ></i>
+
+                            In Stock
+
+                        </div>
+
+
+                        <!-- DIVIDER -->
+
+                        <div
+                            class="
+                                product-details-divider
+                            "
+                        ></div>
+
+
+                        <!-- QUANTITY -->
+
+                        <div
+                            class="
+                                product-details-quantity
+                            "
+                        >
+
+                            <strong>
+                                Quantity
+                            </strong>
+
+
+                            <div
+                                class="
+                                    product-quantity-control
+                                "
+                            >
+
+                                <button
+                                    type="button"
+                                    id="productDetailsDecrease"
+                                >
+
+                                    <i
+                                        class="
+                                            fa-solid
+                                            fa-minus
+                                        "
+                                    ></i>
+
+                                </button>
+
+
+                                <span
+                                    id="productDetailsQuantity"
+                                >
+                                    1
+                                </span>
+
+
+                                <button
+                                    type="button"
+                                    id="productDetailsIncrease"
+                                >
+
+                                    <i
+                                        class="
+                                            fa-solid
+                                            fa-plus
+                                        "
+                                    ></i>
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- ACTIONS -->
+
+                        <div
+                            class="
+                                product-details-actions
+                            "
+                        >
+
+                            <button
+                                type="button"
+                                class="
+                                    product-details-cart-btn
+                                "
+                                id="productDetailsAddToCart"
+                            >
+
+                                <i
+                                    class="
+                                        fa-solid
+                                        fa-cart-plus
+                                    "
+                                ></i>
+
+                                Add To Cart
+
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="
+                                    product-details-wishlist-btn
+                                "
+                                id="productDetailsWishlist"
+                                aria-label="Add to wishlist"
+                            >
+
+                                <i
+                                    class="
+                                        fa-regular
+                                        fa-heart
+                                    "
+                                ></i>
+
+                            </button>
+
+                        </div>
+
+
+                        <!-- BUY NOW -->
+
+                        <button
+                            type="button"
+                            class="
+                                product-details-buy-btn
+                            "
+                            id="productDetailsBuyNow"
+                        >
+
+                            Buy Now
+
+                            <i
+                                class="
+                                    fa-solid
+                                    fa-arrow-right
+                                "
+                            ></i>
+
+                        </button>
+
+
+                        <!-- INFO FEATURES -->
+
+                        <div
+                            class="
+                                product-details-features
+                            "
+                        >
+
+                            <div>
+
+                                <i
+                                    class="
+                                        fa-solid
+                                        fa-truck-fast
+                                    "
+                                ></i>
+
+                                <span>
+                                    Free Shipping
+                                </span>
+
+                            </div>
+
+
+                            <div>
+
+                                <i
+                                    class="
+                                        fa-solid
+                                        fa-rotate-left
+                                    "
+                                ></i>
+
+                                <span>
+                                    30 Days Returns
+                                </span>
+
+                            </div>
+
+
+                            <div>
+
+                                <i
+                                    class="
+                                        fa-solid
+                                        fa-shield-halved
+                                    "
+                                ></i>
+
+                                <span>
+                                    Secure Payment
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ERROR -->
+
+                <div
+                    id="productDetailsError"
+                    class="product-details-error"
+                    hidden
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-circle-exclamation
+                        "
+                    ></i>
+
+
+                    <h2>
+                        Product Not Found
+                    </h2>
+
+
+                    <p>
+                        The product you're looking for
+                        could not be found.
+                    </p>
+
+
+                    <a
+                        href="shop.html"
+                    >
+                        Back To Shop
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             RELATED PRODUCTS
+        ================================================== -->
+
+        <section
+            class="
+                products-section
+                related-products-section
+            "
+        >
+
+            <div class="container">
+
+                <div
+                    class="section-heading"
+                >
+
+                    <h2>
+                        Related Products
+                    </h2>
+
+
+                    <a
+                        href="shop.html"
+                    >
+                        View All
+                        <i
+                            class="
+                                fa-solid
+                                fa-arrow-right
+                            "
+                        ></i>
+                    </a>
+
+                </div>
+
+
+                <div
+                    class="product-grid"
+                    id="relatedProducts"
+                >
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+
+    <!-- =====================================================
+         CART OVERLAY
+    ====================================================== -->
+
+    <div
+        class="drawer-overlay"
+        id="productCartOverlay"
+    ></div>
+
+
+
+    <!-- =====================================================
+         CART DRAWER
+    ====================================================== -->
+
+    <aside
+        class="cart-drawer"
+        id="productCartDrawer"
+    >
+
+        <div class="cart-header">
+
+            <div>
+
+                <i
+                    class="
+                        fa-solid
+                        fa-cart-shopping
+                    "
+                ></i>
+
+                <h2>
+                    Shopping Cart
+                </h2>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="close-btn"
+                id="productCloseCart"
+            >
+
+                <i
+                    class="fa-solid fa-xmark"
+                ></i>
+
+            </button>
+
+        </div>
+
+
+        <div
+            class="cart-items"
+            id="productCartItems"
+        ></div>
+
+
+        <div class="cart-footer">
+
+            <div
+                class="cart-total-row"
+            >
+
+                <span>
+                    Total
+                </span>
+
+                <strong
+                    id="productCartTotal"
+                >
+                    $0.00
+                </strong>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="checkout-btn"
+                id="productCheckoutBtn"
+            >
+
+                Proceed To Checkout
+
+                <i
+                    class="
+                        fa-solid
+                        fa-arrow-right
+                    "
+                ></i>
+
+            </button>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- =====================================================
+         WISHLIST OVERLAY
+    ====================================================== -->
+
+    <div
+        class="wishlist-overlay"
+        id="productWishlistOverlay"
+    ></div>
+
+
+
+    <!-- =====================================================
+         WISHLIST DRAWER
+    ====================================================== -->
+
+    <aside
+        class="wishlist-drawer"
+        id="productWishlistDrawer"
+    >
+
+        <div
+            class="wishlist-header"
+        >
+
+            <div>
+
+                <i
+                    class="
+                        fa-solid
+                        fa-heart
+                    "
+                ></i>
+
+
+                <div>
+
+                    <span>
+                        SAVED PRODUCTS
+                    </span>
+
+                    <h2>
+                        My Wishlist
+                    </h2>
+
+                    <small
+                        id="productWishlistCountText"
+                    >
+                        0 items
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="close-btn"
+                id="productCloseWishlist"
+            >
+
+                <i
+                    class="
+                        fa-solid
+                        fa-xmark
+                    "
+                ></i>
+
+            </button>
+
+        </div>
+
+
+        <div
+            class="wishlist-items"
+            id="productWishlistItems"
+        ></div>
+
+    </aside>
+
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
+    <script
+        src="assets/js/productDetails.js"
+    ></script>
+
+</body>
+
+</html>

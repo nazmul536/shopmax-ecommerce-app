@@ -3520,3 +3520,60 @@ body.modal-open {
         flex-basis: 36px;
     }
 }
+
+
+/* =========================================================
+   SHOP FILTER ARROW - FINAL FIX
+========================================================= */
+
+/* Existing HTML <i class="fa-chevron-down"> hide */
+.shop-toolbar .select-wrap > i {
+    display: none !important;
+}
+
+
+/* CSS arrow */
+.shop-toolbar .select-wrap::after {
+    content: "\f078";
+
+    position: absolute;
+
+    top: 50%;
+    right: 14px;
+
+    transform: translateY(-50%);
+
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+
+    font-size: 10px;
+
+    color: #718096;
+
+    pointer-events: none;
+}
+
+
+/* Select must not show native arrow */
+.shop-toolbar .select-wrap select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+
+/* Chrome / Edge */
+.shop-toolbar .select-wrap select::-ms-expand {
+    display: none;
+}
+
+
+/* Mobile */
+@media (max-width: 600px) {
+
+    .shop-toolbar .select-wrap::after {
+        right: 10px;
+        font-size: 8px;
+    }
+
+}
