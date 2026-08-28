@@ -1,0 +1,1376 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Track your ShopMax order"
+    >
+
+    <title>
+        Track Order | ShopMax
+    </title>
+
+
+    <!-- =====================================================
+         FONT AWESOME
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    >
+
+
+    <!-- =====================================================
+         GLOBAL CSS
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="assets/css/style.css"
+    >
+
+
+    <!-- =====================================================
+         TRACK ORDER CSS
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="assets/css/trackOrder.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     TOP BAR
+========================================================= -->
+
+<div class="top-bar">
+
+    <div class="container top-bar-inner">
+
+        <div class="top-sale">
+
+            <i class="fa-solid fa-fire"></i>
+
+            Hot Deals
+
+            <span>
+                Summer Sale For All Products - Up To 50% Off
+            </span>
+
+        </div>
+
+
+        <div class="top-links">
+
+            <a href="trackOrder.html">
+                Track Order
+            </a>
+
+            <a href="#">
+                Help Center
+            </a>
+
+            <button type="button">
+                English
+                <i class="fa-solid fa-chevron-down"></i>
+            </button>
+
+            <button type="button">
+                USD
+                <i class="fa-solid fa-chevron-down"></i>
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<header class="header">
+
+    <div class="container header-main">
+
+
+        <!-- LOGO -->
+
+        <a
+            href="index.html"
+            class="logo"
+        >
+
+            <span class="logo-icon">
+
+                <i
+                    class="
+                        fa-solid
+                        fa-bag-shopping
+                    "
+                ></i>
+
+            </span>
+
+            <span>
+                Shop<span>Max</span>
+            </span>
+
+        </a>
+
+
+
+        <!-- SEARCH -->
+
+        <div class="search-box">
+
+            <select
+                aria-label="Search category"
+                id="trackSearchCategory"
+            >
+
+                <option value="all">
+                    All Categories
+                </option>
+
+                <option value="electronics">
+                    Electronics
+                </option>
+
+                <option value="jewelery">
+                    Jewelry
+                </option>
+
+                <option value="men's clothing">
+                    Men's Clothing
+                </option>
+
+                <option value="women's clothing">
+                    Women's Clothing
+                </option>
+
+            </select>
+
+
+            <input
+                type="text"
+                id="trackSearch"
+                placeholder="Search for products..."
+                autocomplete="off"
+            >
+
+
+            <button
+                type="button"
+                id="trackSearchBtn"
+                aria-label="Search"
+            >
+
+                <i
+                    class="
+                        fa-solid
+                        fa-magnifying-glass
+                    "
+                ></i>
+
+            </button>
+
+        </div>
+
+
+
+        <!-- HEADER ACTIONS -->
+
+        <div class="header-actions">
+
+
+            <!-- WISHLIST -->
+
+            <button
+                type="button"
+                class="header-action"
+                id="trackWishlistBtn"
+            >
+
+                <span
+                    class="wishlist-icon-wrap"
+                >
+
+                    <i
+                        class="
+                            fa-regular
+                            fa-heart
+                        "
+                    ></i>
+
+                    <b
+                        id="trackWishlistCount"
+                    >
+                        0
+                    </b>
+
+                </span>
+
+
+                <span>
+                    Wishlist
+                </span>
+
+            </button>
+
+
+
+            <!-- ACCOUNT -->
+
+            <button
+                type="button"
+                class="header-action"
+            >
+
+                <i
+                    class="
+                        fa-regular
+                        fa-user
+                    "
+                ></i>
+
+                <span>
+                    Account
+                </span>
+
+            </button>
+
+
+
+            <!-- CART -->
+
+            <button
+                type="button"
+                class="header-action"
+                id="trackCartBtn"
+            >
+
+                <span
+                    class="cart-icon-wrap"
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-cart-shopping
+                        "
+                    ></i>
+
+                    <b
+                        id="trackCartCount"
+                    >
+                        0
+                    </b>
+
+                </span>
+
+
+                <span>
+                    Cart
+                </span>
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         NAVIGATION
+    ====================================================== -->
+
+    <div class="navigation">
+
+        <div class="container navigation-inner">
+
+
+            <!-- ALL CATEGORIES -->
+
+            <div class="categories-wrapper">
+
+                <button
+                    type="button"
+                    class="categories-btn"
+                    id="trackCategoriesBtn"
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-bars
+                        "
+                    ></i>
+
+                    All Categories
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-chevron-down
+                            arrow
+                        "
+                    ></i>
+
+                </button>
+
+            </div>
+
+
+
+            <!-- NAV LINKS -->
+
+            <nav class="nav-links">
+
+                <a href="index.html">
+                    Home
+                </a>
+
+                <a href="shop.html">
+                    Shop
+                </a>
+
+                <a href="#">
+                    Deals
+                </a>
+
+                <a href="#">
+                    Pages
+                </a>
+
+                <a href="#">
+                    Blog
+                </a>
+
+                <a href="#">
+                    Contact
+                </a>
+
+            </nav>
+
+
+
+            <!-- HOTLINE -->
+
+            <div class="hotline">
+
+                <i
+                    class="
+                        fa-solid
+                        fa-headset
+                    "
+                ></i>
+
+                Hotline:
+
+                <strong>
+                    (800) 123-4567
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+
+<!-- =========================================================
+     HERO
+========================================================= -->
+
+<section class="track-order-hero">
+
+    <div class="container">
+
+
+        <!-- BREADCRUMB -->
+
+        <div class="track-order-breadcrumb">
+
+            <a href="index.html">
+                Home
+            </a>
+
+            <i
+                class="
+                    fa-solid
+                    fa-chevron-right
+                "
+            ></i>
+
+            <span>
+                Track Order
+            </span>
+
+        </div>
+
+
+
+        <!-- TITLE -->
+
+        <div class="track-order-heading">
+
+            <span>
+                SHOPMAX ORDER TRACKING
+            </span>
+
+
+            <h1>
+                Track Your Order
+            </h1>
+
+
+            <p>
+                Enter your order number to check your latest order status.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     TRACK ORDER PAGE
+========================================================= -->
+
+<main class="track-order-page">
+
+    <div class="container">
+
+
+        <!-- =================================================
+             SEARCH ORDER
+        ================================================== -->
+
+        <section class="track-search-card">
+
+            <div class="track-search-heading">
+
+                <div class="track-search-icon">
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-box
+                        "
+                    ></i>
+
+                </div>
+
+
+                <div>
+
+                    <h2>
+                        Find Your Order
+                    </h2>
+
+                    <p>
+                        Use the order number from your confirmation.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="order-search-box">
+
+                <div class="order-input-wrap">
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-hashtag
+                        "
+                    ></i>
+
+
+                    <input
+                        type="text"
+                        id="orderTrackingInput"
+                        placeholder="Enter order number "
+                        autocomplete="off"
+                    >
+
+                </div>
+
+                <button
+                    type="button"
+                    id="trackOrderBtn"
+                    class="track-order-btn"
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-location-dot
+                        "
+                    ></i>
+
+                    Track Order
+
+                </button>
+
+            </div>
+
+
+            <small
+                id="trackOrderError"
+                class="track-order-error"
+            ></small>
+
+        </section>
+
+
+
+        <!-- =================================================
+             ORDER RESULT
+        ================================================== -->
+
+        <section
+            class="order-result"
+            id="orderResult"
+        >
+
+
+            <!-- =================================================
+                 ORDER HEADER
+            ================================================== -->
+
+            <div class="order-result-card">
+
+                <div class="order-result-header">
+
+                    <div>
+
+                        <span>
+                            ORDER DETAILS
+                        </span>
+
+
+                        <h2
+                            id="trackedOrderId"
+                        >
+                            Order #SHOP-000000
+                        </h2>
+
+                    </div>
+
+
+                    <div
+                        class="order-status-badge"
+                        id="trackedOrderStatus"
+                    >
+
+                        Order Placed
+
+                    </div>
+
+                </div>
+
+
+                <div class="order-meta">
+
+                    <div>
+
+                        <i
+                            class="
+                                fa-regular
+                                fa-calendar
+                            "
+                        ></i>
+
+                        <div>
+
+                            <small>
+                                Order Date
+                            </small>
+
+                            <strong
+                                id="trackedOrderDate"
+                            >
+                                —
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <i
+                            class="
+                                fa-solid
+                                fa-credit-card
+                            "
+                        ></i>
+
+                        <div>
+
+                            <small>
+                                Payment
+                            </small>
+
+                            <strong
+                                id="trackedPaymentMethod"
+                            >
+                                —
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <i
+                            class="
+                                fa-solid
+                                fa-dollar-sign
+                            "
+                        ></i>
+
+                        <div>
+
+                            <small>
+                                Total
+                            </small>
+
+                            <strong
+                                id="trackedOrderTotal"
+                            >
+                                $0.00
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 STATUS TIMELINE
+            ================================================== -->
+
+            <div class="tracking-card">
+
+                <div class="tracking-card-heading">
+
+                    <div>
+
+                        <span>
+                            ORDER PROGRESS
+                        </span>
+
+
+                        <h2>
+                            Shipment Status
+                        </h2>
+
+                    </div>
+
+
+                    <div
+                        class="tracking-live-badge"
+                    >
+
+                        <span></span>
+
+                        Live Status
+
+                    </div>
+
+                </div>
+
+
+
+                <div
+                    class="tracking-timeline"
+                    id="trackingTimeline"
+                >
+
+
+                    <!-- ORDER PLACED -->
+
+                    <div
+                        class="
+                            tracking-step
+                            completed
+                        "
+                        data-status="placed"
+                    >
+
+                        <div
+                            class="tracking-step-icon"
+                        >
+
+                            <i
+                                class="
+                                    fa-solid
+                                    fa-clipboard-check
+                                "
+                            ></i>
+
+                        </div>
+
+
+                        <div
+                            class="tracking-step-content"
+                        >
+
+                            <h3>
+                                Order Placed
+                            </h3>
+
+                            <p>
+                                We have received your order.
+                            </p>
+
+                            <small>
+                                —
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- PROCESSING -->
+
+                    <div
+                        class="tracking-step"
+                        data-status="processing"
+                    >
+
+                        <div
+                            class="tracking-step-icon"
+                        >
+
+                            <i
+                                class="
+                                    fa-solid
+                                    fa-box-open
+                                "
+                            ></i>
+
+                        </div>
+
+
+                        <div
+                            class="tracking-step-content"
+                        >
+
+                            <h3>
+                                Processing
+                            </h3>
+
+                            <p>
+                                Your order is being prepared.
+                            </p>
+
+                            <small>
+                                —
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- SHIPPED -->
+
+                    <div
+                        class="tracking-step"
+                        data-status="shipped"
+                    >
+
+                        <div
+                            class="tracking-step-icon"
+                        >
+
+                            <i
+                                class="
+                                    fa-solid
+                                    fa-truck-fast
+                                "
+                            ></i>
+
+                        </div>
+
+
+                        <div
+                            class="tracking-step-content"
+                        >
+
+                            <h3>
+                                Shipped
+                            </h3>
+
+                            <p>
+                                Your package is on the way.
+                            </p>
+
+                            <small>
+                                —
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- OUT FOR DELIVERY -->
+
+                    <div
+                        class="tracking-step"
+                        data-status="out-for-delivery"
+                    >
+
+                        <div
+                            class="tracking-step-icon"
+                        >
+
+                            <i
+                                class="
+                                    fa-solid
+                                    fa-truck
+                                "
+                            ></i>
+
+                        </div>
+
+
+                        <div
+                            class="tracking-step-content"
+                        >
+
+                            <h3>
+                                Out for Delivery
+                            </h3>
+
+                            <p>
+                                Your package is arriving soon.
+                            </p>
+
+                            <small>
+                                —
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- DELIVERED -->
+
+                    <div
+                        class="tracking-step"
+                        data-status="delivered"
+                    >
+
+                        <div
+                            class="tracking-step-icon"
+                        >
+
+                            <i
+                                class="
+                                    fa-solid
+                                    fa-house-circle-check
+                                "
+                            ></i>
+
+                        </div>
+
+
+                        <div
+                            class="tracking-step-content"
+                        >
+
+                            <h3>
+                                Delivered
+                            </h3>
+
+                            <p>
+                                Your order has been delivered.
+                            </p>
+
+                            <small>
+                                —
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 ORDER INFORMATION
+            ================================================== -->
+
+            <div class="order-information-grid">
+
+
+                <!-- CUSTOMER -->
+
+                <div class="order-information-card">
+
+                    <div
+                        class="order-information-heading"
+                    >
+
+                        <div
+                            class="order-information-icon"
+                        >
+
+                            <i
+                                class="
+                                    fa-regular
+                                    fa-user
+                                "
+                            ></i>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                CUSTOMER
+                            </span>
+
+                            <h3>
+                                Customer Information
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="order-information-body">
+
+                        <div>
+
+                            <small>
+                                Name
+                            </small>
+
+                            <strong
+                                id="trackedCustomerName"
+                            >
+                                —
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <small>
+                                Email
+                            </small>
+
+                            <strong
+                                id="trackedCustomerEmail"
+                            >
+                                —
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <small>
+                                Phone
+                            </small>
+
+                            <strong
+                                id="trackedCustomerPhone"
+                            >
+                                —
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- SHIPPING -->
+
+                <div class="order-information-card">
+
+                    <div
+                        class="order-information-heading"
+                    >
+
+                        <div
+                            class="order-information-icon"
+                        >
+
+                            <i
+                                class="
+                                    fa-solid
+                                    fa-location-dot
+                                "
+                            ></i>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                DELIVERY
+                            </span>
+
+                            <h3>
+                                Shipping Address
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="order-information-body">
+
+                        <div>
+
+                            <small>
+                                Address
+                            </small>
+
+                            <strong
+                                id="trackedAddress"
+                            >
+                                —
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <small>
+                                City / District
+                            </small>
+
+                            <strong
+                                id="trackedCity"
+                            >
+                                —
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <small>
+                                Postal Code
+                            </small>
+
+                            <strong
+                                id="trackedPostal"
+                            >
+                                —
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <small>
+                                Country
+                            </small>
+
+                            <strong
+                                id="trackedCountry"
+                            >
+                                —
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 ITEMS
+            ================================================== -->
+
+            <div class="tracked-items-card">
+
+                <div class="tracked-items-heading">
+
+                    <div>
+
+                        <span>
+                            ORDER ITEMS
+                        </span>
+
+                        <h2>
+                            Products
+                        </h2>
+
+                    </div>
+
+
+                    <span
+                        id="trackedItemsCount"
+                        class="tracked-items-count"
+                    >
+                        0 items
+                    </span>
+
+                </div>
+
+
+                <div
+                    id="trackedItems"
+                    class="tracked-items"
+                >
+                    <!-- Generated by JS -->
+                </div>
+
+
+                <!-- TOTAL -->
+
+                <div class="tracked-total">
+
+                    <div>
+
+                        <span>
+                            Subtotal
+                        </span>
+
+                        <strong
+                            id="trackedSubtotal"
+                        >
+                            $0.00
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Shipping
+                        </span>
+
+                        <strong
+                            id="trackedShipping"
+                        >
+                            Free
+                        </strong>
+
+                    </div>
+
+
+                    <div
+                        class="tracked-total-final"
+                    >
+
+                        <span>
+                            Total
+                        </span>
+
+                        <strong
+                            id="trackedTotal"
+                        >
+                            $0.00
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             EMPTY / NO ORDER
+        ================================================== -->
+
+        <section
+            class="track-empty"
+            id="trackEmpty"
+        >
+
+            <div class="track-empty-icon">
+
+                <i
+                    class="
+                        fa-solid
+                        fa-box
+                    "
+                ></i>
+
+            </div>
+
+
+            <h2>
+                No Order to Track
+            </h2>
+
+
+            <p>
+                Enter your order number above to see your order status and delivery information.
+            </p>
+
+
+            <a
+                href="shop.html"
+                class="track-empty-btn"
+            >
+
+                Continue Shopping
+
+                <i
+                    class="
+                        fa-solid
+                        fa-arrow-right
+                    "
+                ></i>
+
+            </a>
+
+        </section>
+
+    </div>
+
+</main>
+
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer class="footer">
+
+    <div class="container">
+
+        <div class="footer-logo">
+
+            <i
+                class="
+                    fa-solid
+                    fa-bag-shopping
+                "
+            ></i>
+
+            Shop<span>Max</span>
+
+        </div>
+
+
+        <p>
+            Your one-stop destination for quality products.
+        </p>
+
+
+        <div class="footer-links">
+
+            <a href="#">
+                About Us
+            </a>
+
+            <a href="#">
+                Contact
+            </a>
+
+            <a href="#">
+                Privacy Policy
+            </a>
+
+            <a href="#">
+                Terms & Conditions
+            </a>
+
+        </div>
+
+
+        <small>
+            © 2026 ShopMax. All rights reserved.
+        </small>
+
+    </div>
+
+</footer>
+
+
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
+<script
+    src="assets/js/trackOrder.js"
+></script>
+
+
+</body>
+
+</html>

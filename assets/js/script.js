@@ -3614,16 +3614,12 @@ function checkout() {
             "cart-shopping"
         );
 
-
         return;
 
     }
 
-
-    showToast(
-        "Checkout feature coming soon",
-        "credit-card"
-    );
+    window.location.href =
+        "checkout.html";
 
 }
 

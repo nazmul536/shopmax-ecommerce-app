@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="View all ShopMax orders"
+    >
+
+    <title>
+        My Orders | ShopMax
+    </title>
+
+
+    <!-- =====================================================
+         FONT AWESOME
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    >
+
+
+    <!-- =====================================================
+         GLOBAL CSS
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="assets/css/style.css"
+    >
+
+
+    <!-- =====================================================
+         ORDERS CSS
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="assets/css/orders.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     TOP BAR
+========================================================= -->
+
+<div class="top-bar">
+
+    <div class="container top-bar-inner">
+
+        <div class="top-sale">
+
+            <i class="fa-solid fa-fire"></i>
+
+            Hot Deals
+
+            <span>
+                Summer Sale For All Products - Up To 50% Off
+            </span>
+
+        </div>
+
+
+        <div class="top-links">
+
+            <a href="trackOrder.html">
+                Track Order
+            </a>
+
+
+            <a href="#">
+                Help Center
+            </a>
+
+
+            <button type="button">
+
+                English
+
+                <i
+                    class="fa-solid fa-chevron-down"
+                ></i>
+
+            </button>
+
+
+            <button type="button">
+
+                USD
+
+                <i
+                    class="fa-solid fa-chevron-down"
+                ></i>
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<header class="header">
+
+    <div class="container header-main">
+
+
+        <!-- LOGO -->
+
+        <a
+            href="index.html"
+            class="logo"
+        >
+
+            <span class="logo-icon">
+
+                <i
+                    class="
+                        fa-solid
+                        fa-bag-shopping
+                    "
+                ></i>
+
+            </span>
+
+
+            <span>
+
+                Shop<span>
+                    Max
+                </span>
+
+            </span>
+
+        </a>
+
+
+
+        <!-- SEARCH -->
+
+        <div class="search-box">
+
+            <select
+                aria-label="Search category"
+                id="ordersSearchCategory"
+            >
+
+                <option value="all">
+                    All Categories
+                </option>
+
+                <option value="electronics">
+                    Electronics
+                </option>
+
+                <option value="jewelery">
+                    Jewelry
+                </option>
+
+                <option value="men's clothing">
+                    Men's Clothing
+                </option>
+
+                <option value="women's clothing">
+                    Women's Clothing
+                </option>
+
+            </select>
+
+
+            <input
+                type="text"
+                id="ordersSearch"
+                placeholder="Search for products..."
+                autocomplete="off"
+            >
+
+
+            <button
+                type="button"
+                id="ordersSearchBtn"
+                aria-label="Search"
+            >
+
+                <i
+                    class="
+                        fa-solid
+                        fa-magnifying-glass
+                    "
+                ></i>
+
+            </button>
+
+        </div>
+
+
+
+        <!-- HEADER ACTIONS -->
+
+        <div class="header-actions">
+
+
+            <!-- WISHLIST -->
+
+            <button
+                type="button"
+                class="header-action"
+                id="ordersWishlistBtn"
+            >
+
+                <span
+                    class="wishlist-icon-wrap"
+                >
+
+                    <i
+                        class="
+                            fa-regular
+                            fa-heart
+                        "
+                    ></i>
+
+
+                    <b
+                        id="ordersWishlistCount"
+                    >
+                        0
+                    </b>
+
+                </span>
+
+
+                <span>
+                    Wishlist
+                </span>
+
+            </button>
+
+
+
+            <!-- ACCOUNT -->
+
+            <button
+                type="button"
+                class="header-action"
+            >
+
+                <i
+                    class="
+                        fa-regular
+                        fa-user
+                    "
+                ></i>
+
+
+                <span>
+                    Account
+                </span>
+
+            </button>
+
+
+
+            <!-- CART -->
+
+            <button
+                type="button"
+                class="header-action"
+                id="ordersCartBtn"
+            >
+
+                <span
+                    class="cart-icon-wrap"
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-cart-shopping
+                        "
+                    ></i>
+
+
+                    <b
+                        id="ordersCartCount"
+                    >
+                        0
+                    </b>
+
+                </span>
+
+
+                <span>
+                    Cart
+                </span>
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         NAVIGATION
+    ====================================================== -->
+
+    <div class="navigation">
+
+        <div class="container navigation-inner">
+
+
+            <!-- CATEGORIES -->
+
+            <div class="categories-wrapper">
+
+                <button
+                    type="button"
+                    class="categories-btn"
+                    id="ordersCategoriesBtn"
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-bars
+                        "
+                    ></i>
+
+
+                    All Categories
+
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-chevron-down
+                            arrow
+                        "
+                    ></i>
+
+                </button>
+
+            </div>
+
+
+
+            <!-- NAV -->
+
+            <nav class="nav-links">
+
+                <a href="index.html">
+                    Home
+                </a>
+
+
+                <a href="shop.html">
+                    Shop
+                </a>
+
+
+                <a href="#">
+                    Deals
+                </a>
+
+
+                <a href="#">
+                    Pages
+                </a>
+
+
+                <a href="#">
+                    Blog
+                </a>
+
+
+                <a href="#">
+                    Contact
+                </a>
+
+            </nav>
+
+
+
+            <!-- HOTLINE -->
+
+            <div class="hotline">
+
+                <i
+                    class="
+                        fa-solid
+                        fa-headset
+                    "
+                ></i>
+
+
+                Hotline:
+
+
+                <strong>
+                    (800) 123-4567
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+
+<!-- =========================================================
+     HERO
+========================================================= -->
+
+<section class="orders-hero">
+
+    <div class="container">
+
+
+        <!-- BREADCRUMB -->
+
+        <div class="orders-breadcrumb">
+
+            <a href="index.html">
+                Home
+            </a>
+
+
+            <i
+                class="
+                    fa-solid
+                    fa-chevron-right
+                "
+            ></i>
+
+
+            <span>
+                My Orders
+            </span>
+
+        </div>
+
+
+
+        <!-- LABEL -->
+
+        <span class="orders-label">
+
+            SHOPMAX ORDER HISTORY
+
+        </span>
+
+
+
+        <!-- TITLE -->
+
+        <h1>
+            My Orders
+        </h1>
+
+
+        <p>
+            View your previous orders and track your purchases.
+        </p>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     ORDERS PAGE
+========================================================= -->
+
+<main class="orders-page">
+
+    <div class="container">
+
+
+        <!-- =================================================
+             SUMMARY
+        ================================================== -->
+
+        <section class="orders-summary">
+
+
+            <!-- TOTAL ORDERS -->
+
+            <div class="orders-summary-card">
+
+                <div class="orders-summary-icon">
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-box
+                        "
+                    ></i>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        TOTAL ORDERS
+                    </span>
+
+
+                    <strong
+                        id="totalOrdersCount"
+                    >
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- TOTAL SPENT -->
+
+            <div class="orders-summary-card">
+
+                <div class="orders-summary-icon">
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-dollar-sign
+                        "
+                    ></i>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        TOTAL SPENT
+                    </span>
+
+
+                    <strong
+                        id="totalOrdersSpent"
+                    >
+                        $0.00
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- LATEST ORDER -->
+
+            <div class="orders-summary-card">
+
+                <div class="orders-summary-icon">
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-clock
+                        "
+                    ></i>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        LATEST ORDER
+                    </span>
+
+
+                    <strong
+                        id="latestOrderDate"
+                    >
+                        —
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             ORDERS CARD
+        ================================================== -->
+
+        <section class="orders-card">
+
+
+            <!-- HEADER -->
+
+            <div class="orders-card-header">
+
+                <div>
+
+                    <span>
+                        ORDER HISTORY
+                    </span>
+
+
+                    <h2>
+                        All Orders
+                    </h2>
+
+                </div>
+
+
+                <div
+                    class="orders-header-actions"
+                >
+
+                    <button
+                        type="button"
+                        id="refreshOrdersBtn"
+                        class="orders-refresh-btn"
+                    >
+
+                        <i
+                            class="
+                                fa-solid
+                                fa-rotate
+                            "
+                        ></i>
+
+
+                        Refresh
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 FILTERS
+            ================================================== -->
+
+            <div class="orders-filter">
+
+
+                <!-- SEARCH -->
+
+                <div
+                    class="
+                        orders-filter-input
+                    "
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-magnifying-glass
+                        "
+                    ></i>
+
+
+                    <input
+                        type="text"
+                        id="orderTableSearch"
+                        placeholder="Search by order ID or customer name..."
+                        autocomplete="off"
+                    >
+
+                </div>
+
+
+
+                <!-- STATUS -->
+
+                <select
+                    id="orderStatusFilter"
+                    class="orders-status-filter"
+                >
+
+                    <option value="all">
+                        All Status
+                    </option>
+
+                    <option value="Order Placed">
+                        Order Placed
+                    </option>
+
+                    <option value="Processing">
+                        Processing
+                    </option>
+
+                    <option value="Shipped">
+                        Shipped
+                    </option>
+
+                    <option value="Out for Delivery">
+                        Out for Delivery
+                    </option>
+
+                    <option value="Delivered">
+                        Delivered
+                    </option>
+
+                </select>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 DESKTOP TABLE
+            ================================================== -->
+
+            <div class="orders-table-wrapper">
+
+                <table class="orders-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Order ID
+                            </th>
+
+
+                            <th>
+                                Customer
+                            </th>
+
+
+                            <th>
+                                Date
+                            </th>
+
+
+                            <th>
+                                Items
+                            </th>
+
+
+                            <th>
+                                Total
+                            </th>
+
+
+                            <th>
+                                Status
+                            </th>
+
+
+                            <th>
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody
+                        id="ordersTableBody"
+                    >
+
+                        <!--
+                            Orders generated by
+                            orders.js
+                        -->
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 MOBILE ORDERS
+            ================================================== -->
+
+            <div
+                class="orders-mobile-list"
+                id="ordersMobileList"
+            >
+
+                <!--
+                    Mobile orders generated
+                    by orders.js
+                -->
+
+            </div>
+
+
+
+            <!-- =================================================
+                 EMPTY STATE
+            ================================================== -->
+
+            <div
+                class="orders-empty"
+                id="ordersEmpty"
+            >
+
+                <div class="orders-empty-icon">
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-box-open
+                        "
+                    ></i>
+
+                </div>
+
+
+                <h3>
+                    No Orders Found
+                </h3>
+
+
+                <p>
+                    Your order history will appear here after you place an order.
+                </p>
+
+
+                <a
+                    href="shop.html"
+                    class="orders-shop-btn"
+                >
+
+                    Start Shopping
+
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-arrow-right
+                        "
+                    ></i>
+
+                </a>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</main>
+
+
+
+<!-- =========================================================
+     ORDER DETAILS MODAL
+========================================================= -->
+
+<div
+    class="order-details-modal"
+    id="orderDetailsModal"
+    aria-hidden="true"
+>
+
+
+    <!-- OVERLAY -->
+
+    <div
+        class="order-details-overlay"
+        id="orderDetailsOverlay"
+    ></div>
+
+
+
+    <!-- DIALOG -->
+
+    <div
+        class="order-details-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="orderDetailsTitle"
+    >
+
+
+        <!-- HEADER -->
+
+        <div class="order-details-header">
+
+            <div>
+
+                <span>
+                    ORDER DETAILS
+                </span>
+
+
+                <h2
+                    id="orderDetailsTitle"
+                >
+                    Order #—
+                </h2>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="order-details-close"
+                id="orderDetailsClose"
+                aria-label="Close order details"
+            >
+
+                <i
+                    class="
+                        fa-solid
+                        fa-xmark
+                    "
+                ></i>
+
+            </button>
+
+        </div>
+
+
+
+        <!-- BODY -->
+
+        <div
+            class="order-details-body"
+            id="orderDetailsBody"
+        >
+
+            <!--
+                Full order details are
+                generated by orders.js
+            -->
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer class="footer">
+
+    <div class="container">
+
+        <div class="footer-logo">
+
+            <i
+                class="
+                    fa-solid
+                    fa-bag-shopping
+                "
+            ></i>
+
+
+            Shop<span>
+                Max
+            </span>
+
+        </div>
+
+
+        <p>
+            Your one-stop destination for quality products.
+        </p>
+
+
+        <div class="footer-links">
+
+            <a href="#">
+                About Us
+            </a>
+
+
+            <a href="#">
+                Contact
+            </a>
+
+
+            <a href="#">
+                Privacy Policy
+            </a>
+
+
+            <a href="#">
+                Terms & Conditions
+            </a>
+
+        </div>
+
+
+        <small>
+            © 2026 ShopMax. All rights reserved.
+        </small>
+
+    </div>
+
+</footer>
+
+
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
+<script
+    src="assets/js/orders.js"
+></script>
+
+
+</body>
+
+</html>

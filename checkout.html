@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="ShopMax Checkout"
+    >
+
+    <title>
+        Checkout | ShopMax
+    </title>
+
+
+    <!-- =====================================================
+         FONT AWESOME
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    >
+
+
+    <!-- =====================================================
+         GLOBAL CSS
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="assets/css/style.css"
+    >
+
+
+    <!-- =====================================================
+         CHECKOUT CSS
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="assets/css/checkout.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     TOP BAR
+========================================================= -->
+
+<div class="top-bar">
+
+    <div class="container top-bar-inner">
+
+        <div class="top-sale">
+
+            <i class="fa-solid fa-fire"></i>
+
+            Hot Deals
+
+            <span>
+                Summer Sale For All Products - Up To 50% Off
+            </span>
+
+        </div>
+
+
+        <div class="top-links">
+
+            <a href="#">
+                Track Order
+            </a>
+
+            <a href="#">
+                Help Center
+            </a>
+
+            <button type="button">
+                English
+                <i class="fa-solid fa-chevron-down"></i>
+            </button>
+
+            <button type="button">
+                USD
+                <i class="fa-solid fa-chevron-down"></i>
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<header class="header">
+
+    <div class="container header-main">
+
+
+        <!-- LOGO -->
+
+        <a
+            href="index.html"
+            class="logo"
+        >
+
+            <span class="logo-icon">
+                <i class="fa-solid fa-bag-shopping"></i>
+            </span>
+
+            <span>
+                Shop<span>Max</span>
+            </span>
+
+        </a>
+
+
+
+        <!-- SEARCH -->
+
+        <div class="search-box">
+
+            <select
+                id="checkoutHeaderCategory"
+                aria-label="Search category"
+            >
+
+                <option value="all">
+                    All Categories
+                </option>
+
+                <option value="electronics">
+                    Electronics
+                </option>
+
+                <option value="jewelery">
+                    Jewelry
+                </option>
+
+                <option value="men's clothing">
+                    Men's Clothing
+                </option>
+
+                <option value="women's clothing">
+                    Women's Clothing
+                </option>
+
+            </select>
+
+
+            <input
+                type="text"
+                id="checkoutSearch"
+                placeholder="Search for products..."
+                autocomplete="off"
+            >
+
+
+            <button
+                type="button"
+                id="checkoutSearchBtn"
+                aria-label="Search"
+            >
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+            </button>
+
+        </div>
+
+
+
+        <!-- HEADER ACTIONS -->
+
+        <div class="header-actions">
+
+
+            <!-- WISHLIST -->
+
+            <button
+                type="button"
+                class="header-action"
+                id="checkoutWishlistBtn"
+            >
+
+                <span
+                    class="wishlist-icon-wrap"
+                >
+
+                    <i
+                        class="fa-regular fa-heart"
+                    ></i>
+
+                    <b
+                        id="checkoutWishlistCount"
+                    >
+                        0
+                    </b>
+
+                </span>
+
+
+                <span>
+                    Wishlist
+                </span>
+
+            </button>
+
+
+
+            <!-- ACCOUNT -->
+
+            <button
+                type="button"
+                class="header-action"
+            >
+
+                <i
+                    class="fa-regular fa-user"
+                ></i>
+
+                <span>
+                    Account
+                </span>
+
+            </button>
+
+
+
+            <!-- CART -->
+
+            <button
+                type="button"
+                class="header-action"
+                id="checkoutCartBtn"
+            >
+
+                <span
+                    class="cart-icon-wrap"
+                >
+
+                    <i
+                        class="fa-solid fa-cart-shopping"
+                    ></i>
+
+                    <b
+                        id="checkoutCartCount"
+                    >
+                        0
+                    </b>
+
+                </span>
+
+
+                <span>
+                    Cart
+                </span>
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         NAVIGATION
+    ====================================================== -->
+
+    <div class="navigation">
+
+        <div class="container navigation-inner">
+
+
+            <!-- ALL CATEGORIES -->
+
+            <div
+                class="categories-wrapper"
+            >
+
+                <button
+                    type="button"
+                    class="categories-btn"
+                    id="checkoutCategoriesBtn"
+                >
+
+                    <i class="fa-solid fa-bars"></i>
+
+                    All Categories
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-chevron-down
+                            arrow
+                        "
+                    ></i>
+
+                </button>
+
+            </div>
+
+
+
+            <!-- NAV LINKS -->
+
+            <nav class="nav-links">
+
+                <a href="index.html">
+                    Home
+                </a>
+
+                <a href="shop.html">
+                    Shop
+                </a>
+
+                <a href="#">
+                    Deals
+                </a>
+
+                <a href="#">
+                    Pages
+                </a>
+
+                <a href="#">
+                    Blog
+                </a>
+
+                <a href="#">
+                    Contact
+                </a>
+
+            </nav>
+
+
+
+            <!-- HOTLINE -->
+
+            <div class="hotline">
+
+                <i
+                    class="fa-solid fa-headset"
+                ></i>
+
+                Hotline:
+
+                <strong>
+                    (800) 123-4567
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+
+<!-- =========================================================
+     CHECKOUT HERO / BREADCRUMB
+========================================================= -->
+
+<section class="checkout-hero">
+
+    <div class="container">
+
+        <div class="checkout-breadcrumb">
+
+            <a href="index.html">
+                Home
+            </a>
+
+            <i
+                class="
+                    fa-solid
+                    fa-chevron-right
+                "
+            ></i>
+
+            <a href="shop.html">
+                Shop
+            </a>
+
+            <i
+                class="
+                    fa-solid
+                    fa-chevron-right
+                "
+            ></i>
+
+            <span>
+                Checkout
+            </span>
+
+        </div>
+
+
+        <div class="checkout-title">
+
+            <span>
+                SHOPMAX CHECKOUT
+            </span>
+
+            <h1>
+                Complete Your Order
+            </h1>
+
+            <p>
+                Enter your details and choose your preferred payment method.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     CHECKOUT PAGE
+========================================================= -->
+
+<main class="checkout-page">
+
+    <div class="container checkout-container">
+
+
+        <!-- =================================================
+             LEFT SIDE
+        ================================================== -->
+
+        <section class="checkout-left">
+
+
+            <!-- CUSTOMER INFORMATION -->
+
+            <div class="checkout-card">
+
+                <div class="checkout-card-heading">
+
+                    <div class="checkout-step">
+                        01
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Customer Information
+                        </h2>
+
+                        <p>
+                            Enter your contact details
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="checkout-form-grid">
+
+
+                    <!-- FULL NAME -->
+
+                    <div class="form-group full">
+
+                        <label for="checkoutName">
+                            Full Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="checkoutName"
+                            name="name"
+                            placeholder="Enter your full name"
+                            autocomplete="name"
+                        >
+
+                        <small
+                            class="form-error"
+                            id="checkoutNameError"
+                        ></small>
+
+                    </div>
+
+
+
+                    <!-- EMAIL -->
+
+                    <div class="form-group">
+
+                        <label for="checkoutEmail">
+                            Email Address
+                        </label>
+
+                        <input
+                            type="email"
+                            id="checkoutEmail"
+                            name="email"
+                            placeholder="you@example.com"
+                            autocomplete="email"
+                        >
+
+                        <small
+                            class="form-error"
+                            id="checkoutEmailError"
+                        ></small>
+
+                    </div>
+
+
+
+                    <!-- PHONE -->
+
+                    <div class="form-group">
+
+                        <label for="checkoutPhone">
+                            Phone Number
+                        </label>
+
+                        <input
+                            type="tel"
+                            id="checkoutPhone"
+                            name="phone"
+                            placeholder="+880 1XXXXXXXXX"
+                            autocomplete="tel"
+                        >
+
+                        <small
+                            class="form-error"
+                            id="checkoutPhoneError"
+                        ></small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- SHIPPING ADDRESS -->
+
+            <div class="checkout-card">
+
+                <div class="checkout-card-heading">
+
+                    <div class="checkout-step">
+                        02
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Shipping Address
+                        </h2>
+
+                        <p>
+                            Where should we deliver your order?
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="checkout-form-grid">
+
+
+                    <!-- ADDRESS -->
+
+                    <div class="form-group full">
+
+                        <label for="checkoutAddress">
+                            Street Address
+                        </label>
+
+                        <input
+                            type="text"
+                            id="checkoutAddress"
+                            name="address"
+                            placeholder="House, road, area"
+                            autocomplete="street-address"
+                        >
+
+                        <small
+                            class="form-error"
+                            id="checkoutAddressError"
+                        ></small>
+
+                    </div>
+
+
+
+                    <!-- CITY -->
+
+                    <div class="form-group">
+
+                        <label for="checkoutCity">
+                            City
+                        </label>
+
+                        <input
+                            type="text"
+                            id="checkoutCity"
+                            name="city"
+                            placeholder="Enter your city"
+                            autocomplete="address-level2"
+                        >
+
+                        <small
+                            class="form-error"
+                            id="checkoutCityError"
+                        ></small>
+
+                    </div>
+
+
+
+                    <!-- POSTAL -->
+
+                    <div class="form-group">
+
+                        <label for="checkoutPostal">
+                            Postal Code
+                        </label>
+
+                        <input
+                            type="text"
+                            id="checkoutPostal"
+                            name="postal"
+                            placeholder="Postal code"
+                            autocomplete="postal-code"
+                        >
+
+                        <small
+                            class="form-error"
+                            id="checkoutPostalError"
+                        ></small>
+
+                    </div>
+
+
+
+                    <!-- COUNTRY -->
+
+                    <div class="form-group full">
+
+                        <label for="checkoutCountry">
+                            Country
+                        </label>
+
+                        <select
+                            id="checkoutCountry"
+                            name="country"
+                            autocomplete="country-name"
+                        >
+
+                            <option value="">
+                                Select Country
+                            </option>
+
+                            <option value="Bangladesh">
+                                Bangladesh
+                            </option>
+
+                            <option value="India">
+                                India
+                            </option>
+
+                            <option value="Pakistan">
+                                Pakistan
+                            </option>
+
+                            <option value="United States">
+                                United States
+                            </option>
+
+                            <option value="United Kingdom">
+                                United Kingdom
+                            </option>
+
+                        </select>
+
+                        <small
+                            class="form-error"
+                            id="checkoutCountryError"
+                        ></small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- PAYMENT -->
+
+            <div class="checkout-card">
+
+                <div class="checkout-card-heading">
+
+                    <div class="checkout-step">
+                        03
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Payment Method
+                        </h2>
+
+                        <p>
+                            Choose how you want to pay
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <div
+                    class="payment-methods"
+                    id="paymentMethods"
+                >
+
+
+                    <!-- CASH ON DELIVERY -->
+
+                    <label
+                        class="payment-option active"
+                    >
+
+                        <input
+                            type="radio"
+                            name="payment"
+                            value="cod"
+                            checked
+                        >
+
+                        <span
+                            class="payment-icon"
+                        >
+
+                            <i
+                                class="
+                                    fa-solid
+                                    fa-money-bill-wave
+                                "
+                            ></i>
+
+                        </span>
+
+
+                        <span
+                            class="payment-content"
+                        >
+
+                            <strong>
+                                Cash on Delivery
+                            </strong>
+
+                            <small>
+                                Pay when your order arrives
+                            </small>
+
+                        </span>
+
+
+                        <span
+                            class="payment-check"
+                        >
+
+                            <i
+                                class="
+                                    fa-solid
+                                    fa-check
+                                "
+                            ></i>
+
+                        </span>
+
+                    </label>
+
+
+
+                    <!-- CARD -->
+
+                    <label
+                        class="payment-option"
+                    >
+
+                        <input
+                            type="radio"
+                            name="payment"
+                            value="card"
+                        >
+
+                        <span
+                            class="payment-icon"
+                        >
+
+                            <i
+                                class="
+                                    fa-regular
+                                    fa-credit-card
+                                "
+                            ></i>
+
+                        </span>
+
+
+                        <span
+                            class="payment-content"
+                        >
+
+                            <strong>
+                                Card Payment
+                            </strong>
+
+                            <small>
+                                Visa, Mastercard and other cards
+                            </small>
+
+                        </span>
+
+
+                        <span
+                            class="payment-check"
+                        >
+
+                            <i
+                                class="
+                                    fa-solid
+                                    fa-check
+                                "
+                            ></i>
+
+                        </span>
+
+                    </label>
+
+                </div>
+
+
+
+                <!-- CARD FIELDS -->
+
+                <div
+                    class="card-payment-fields"
+                    id="cardPaymentFields"
+                    hidden
+                >
+
+                    <div class="form-group">
+
+                        <label for="cardNumber">
+                            Card Number
+                        </label>
+
+                        <input
+                            type="text"
+                            id="cardNumber"
+                            inputmode="numeric"
+                            autocomplete="cc-number"
+                            placeholder="1234 5678 9012 3456"
+                        >
+
+                    </div>
+
+
+                    <div class="checkout-form-grid">
+
+                        <div class="form-group">
+
+                            <label for="cardExpiry">
+                                Expiry Date
+                            </label>
+
+                            <input
+                                type="text"
+                                id="cardExpiry"
+                                inputmode="numeric"
+                                autocomplete="cc-exp"
+                                placeholder="MM/YY"
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="cardCvv">
+                                CVV
+                            </label>
+
+                            <input
+                                type="password"
+                                id="cardCvv"
+                                inputmode="numeric"
+                                autocomplete="cc-csc"
+                                placeholder="123"
+                            >
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- PLACE ORDER -->
+
+            <div class="checkout-place-order">
+
+                <div class="secure-checkout">
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-shield-halved
+                        "
+                    ></i>
+
+                    <span>
+                        Secure checkout
+                    </span>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="placeOrderBtn"
+                    class="place-order-btn"
+                >
+
+                    <span>
+                        Place Order
+                    </span>
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-arrow-right
+                        "
+                    ></i>
+
+                </button>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             RIGHT SIDE
+        ================================================== -->
+
+        <aside class="checkout-right">
+
+
+            <!-- ORDER SUMMARY -->
+
+            <div class="checkout-summary-card">
+
+                <div class="summary-heading">
+
+                    <div>
+
+                        <span>
+                            YOUR ORDER
+                        </span>
+
+                        <h2>
+                            Order Summary
+                        </h2>
+
+                    </div>
+
+                    <span
+                        id="checkoutSummaryCount"
+                        class="summary-count"
+                    >
+                        0 items
+                    </span>
+
+                </div>
+
+
+
+                <!-- SUMMARY ITEMS -->
+
+                <div
+                    class="checkout-summary-items"
+                    id="checkoutSummaryItems"
+                >
+                    <!-- Generated by checkout.js -->
+                </div>
+
+
+
+                <!-- SUMMARY TOTALS -->
+
+                <div class="summary-totals">
+
+                    <div class="summary-row">
+
+                        <span>
+                            Subtotal
+                        </span>
+
+                        <strong
+                            id="checkoutSubtotal"
+                        >
+                            $0.00
+                        </strong>
+
+                    </div>
+
+
+                    <div class="summary-row">
+
+                        <span>
+                            Shipping
+                        </span>
+
+                        <strong
+                            id="checkoutShipping"
+                        >
+                            Free
+                        </strong>
+
+                    </div>
+
+
+                    <div class="summary-divider"></div>
+
+
+                    <div
+                        class="
+                            summary-row
+                            summary-total
+                        "
+                    >
+
+                        <span>
+                            Total
+                        </span>
+
+                        <strong
+                            id="checkoutTotal"
+                        >
+                            $0.00
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- HELP CARD -->
+
+            <div class="checkout-help-card">
+
+                <div class="help-icon">
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-headset
+                        "
+                    ></i>
+
+                </div>
+
+                <div>
+
+                    <strong>
+                        Need help?
+                    </strong>
+
+                    <p>
+                        Our support team is here for you.
+                    </p>
+
+                    <a href="#">
+                        Contact Support
+                    </a>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- TRUST FEATURES -->
+
+            <div class="checkout-trust">
+
+                <div>
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-truck-fast
+                        "
+                    ></i>
+
+                    <span>
+                        Fast Delivery
+                    </span>
+
+                </div>
+
+
+                <div>
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-shield-halved
+                        "
+                    ></i>
+
+                    <span>
+                        Secure Payment
+                    </span>
+
+                </div>
+
+
+                <div>
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-rotate-left
+                        "
+                    ></i>
+
+                    <span>
+                        Easy Returns
+                    </span>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+    </div>
+
+</main>
+
+
+
+<!-- =========================================================
+     SUCCESS MODAL
+========================================================= -->
+
+<div
+    class="order-success-modal"
+    id="orderSuccessModal"
+    aria-hidden="true"
+>
+
+    <div
+        class="order-success-overlay"
+        id="orderSuccessOverlay"
+    ></div>
+
+
+    <div class="order-success-content">
+
+        <div class="success-icon">
+
+            <i
+                class="
+                    fa-solid
+                    fa-check
+                "
+            ></i>
+
+        </div>
+
+
+        <h2>
+            Order Placed Successfully!
+        </h2>
+
+
+        <p>
+            Thank you for shopping with ShopMax.
+        </p>
+
+
+        <strong
+            id="orderNumber"
+        >
+            Order #SHOP-000001
+        </strong>
+
+
+        <button
+            type="button"
+            id="continueShoppingBtn"
+        >
+
+            Continue Shopping
+
+            <i
+                class="
+                    fa-solid
+                    fa-arrow-right
+                "
+            ></i>
+
+        </button>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
+<script
+    src="assets/js/checkout.js"
+></script>
+
+
+</body>
+
+</html>
