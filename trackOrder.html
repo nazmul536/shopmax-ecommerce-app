@@ -12,7 +12,7 @@
 
     <meta
         name="description"
-        content="Track your ShopMax order"
+        content="Track your ShopMax orders by order ID or phone number"
     >
 
     <title>
@@ -87,13 +87,19 @@
             </a>
 
             <button type="button">
+
                 English
+
                 <i class="fa-solid fa-chevron-down"></i>
+
             </button>
 
             <button type="button">
+
                 USD
+
                 <i class="fa-solid fa-chevron-down"></i>
+
             </button>
 
         </div>
@@ -449,7 +455,7 @@
 
 
             <p>
-                Enter your order number to check your latest order status.
+                Search by your order ID or phone number to view your order status.
             </p>
 
         </div>
@@ -475,6 +481,9 @@
 
         <section class="track-search-card">
 
+
+            <!-- SEARCH HEADING -->
+
             <div class="track-search-heading">
 
                 <div class="track-search-icon">
@@ -496,13 +505,16 @@
                     </h2>
 
                     <p>
-                        Use the order number from your confirmation.
+                        Enter an Order ID or the phone number used during checkout.
                     </p>
 
                 </div>
 
             </div>
 
+
+
+            <!-- SEARCH AREA -->
 
             <div class="order-search-box">
 
@@ -511,7 +523,7 @@
                     <i
                         class="
                             fa-solid
-                            fa-hashtag
+                            fa-magnifying-glass
                         "
                     ></i>
 
@@ -519,11 +531,14 @@
                     <input
                         type="text"
                         id="orderTrackingInput"
-                        placeholder="Enter order number "
+                        placeholder="Order ID or phone number"
                         autocomplete="off"
+                        inputmode="text"
+                        aria-label="Order ID or phone number"
                     >
 
                 </div>
+
 
                 <button
                     type="button"
@@ -545,6 +560,37 @@
             </div>
 
 
+
+            <!-- SEARCH HINT -->
+
+            <div
+                class="track-search-hint"
+                id="trackSearchHint"
+            >
+
+                <i
+                    class="
+                        fa-solid
+                        fa-circle-info
+                    "
+                ></i>
+
+
+                You can search with
+                <strong>
+                    SHOP-642328
+                </strong>
+                or
+                <strong>
+                    01700000000
+                </strong>
+
+            </div>
+
+
+
+            <!-- ERROR -->
+
             <small
                 id="trackOrderError"
                 class="track-order-error"
@@ -555,7 +601,122 @@
 
 
         <!-- =================================================
-             ORDER RESULT
+             MULTIPLE ORDER RESULT
+        ================================================== -->
+
+        <section
+            class="multiple-orders-result"
+            id="multipleOrdersResult"
+        >
+
+            <!-- =================================================
+                 RESULT SUMMARY
+            ================================================== -->
+
+            <div
+                class="multiple-orders-summary-card"
+            >
+
+                <div>
+
+                    <span>
+                        ORDER HISTORY
+                    </span>
+
+
+                    <h2
+                        id="multipleOrdersTitle"
+                    >
+                        Your Orders
+                    </h2>
+
+
+                    <p
+                        id="multipleOrdersSubtitle"
+                    >
+                        Orders associated with this phone number.
+                    </p>
+
+                </div>
+
+
+
+                <div
+                    class="multiple-orders-summary"
+                >
+
+                    <div>
+
+                        <strong
+                            id="multipleOrdersCount"
+                        >
+                            0
+                        </strong>
+
+                        <span>
+                            Total Orders
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong
+                            id="activeOrdersCount"
+                        >
+                            0
+                        </strong>
+
+                        <span>
+                            Active
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong
+                            id="deliveredOrdersCount"
+                        >
+                            0
+                        </strong>
+
+                        <span>
+                            Delivered
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 ORDER LIST
+            ================================================== -->
+
+            <div
+                class="multiple-orders-list"
+                id="multipleOrdersList"
+            >
+
+                <!--
+                    Multiple orders generated
+                    by trackOrder.js
+                -->
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             SINGLE ORDER RESULT
         ================================================== -->
 
         <section
@@ -931,10 +1092,6 @@
                                 Delivered
                             </h3>
 
-                            <p>
-                                Your order has been delivered.
-                            </p>
-
                             <small>
                                 —
                             </small>
@@ -993,7 +1150,9 @@
                     </div>
 
 
-                    <div class="order-information-body">
+                    <div
+                        class="order-information-body"
+                    >
 
                         <div>
 
@@ -1082,7 +1241,9 @@
                     </div>
 
 
-                    <div class="order-information-body">
+                    <div
+                        class="order-information-body"
+                    >
 
                         <div>
 
@@ -1186,8 +1347,11 @@
                     id="trackedItems"
                     class="tracked-items"
                 >
+
                     <!-- Generated by JS -->
+
                 </div>
+
 
 
                 <!-- TOTAL -->
@@ -1225,7 +1389,9 @@
 
 
                     <div
-                        class="tracked-total-final"
+                        class="
+                            tracked-total-final
+                        "
                     >
 
                         <span>
@@ -1250,7 +1416,7 @@
 
 
         <!-- =================================================
-             EMPTY / NO ORDER
+             EMPTY STATE
         ================================================== -->
 
         <section
@@ -1276,7 +1442,7 @@
 
 
             <p>
-                Enter your order number above to see your order status and delivery information.
+                Enter your order ID or phone number above to see your order status and delivery information.
             </p>
 
 
