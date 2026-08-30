@@ -1,22 +1,9 @@
+"use strict";
+
 /* =========================================================
    SHOPMAX
-   ORDERS / ORDER HISTORY PAGE JAVASCRIPT
-
-   Features:
-   - Read all orders from LocalStorage
-   - Show total orders
-   - Show total spent
-   - Show latest order date
-   - Render desktop table
-   - Render mobile order cards
-   - Search orders
-   - Filter by status
-   - Refresh orders
-   - Track specific order
-   - View full order details in modal
-   - Reset filters on page load / restore
+   ORDERS PAGE
 ========================================================= */
-
 
 /* =========================================================
    STATE
@@ -29,14 +16,12 @@ let orders =
         )
     ) || [];
 
-
 let cart =
     JSON.parse(
         localStorage.getItem(
             "shopmax-cart"
         )
     ) || [];
-
 
 let wishlist =
     JSON.parse(
@@ -46,36 +31,46 @@ let wishlist =
     ) || [];
 
 
-/* =========================================================
-   NORMALIZE STATE
-========================================================= */
-
 orders =
-    Array.isArray(
-        orders
-    )
+    Array.isArray(orders)
         ? orders
         : [];
 
-
 cart =
-    Array.isArray(
-        cart
-    )
+    Array.isArray(cart)
         ? cart
         : [];
 
-
 wishlist =
-    Array.isArray(
-        wishlist
-    )
+    Array.isArray(wishlist)
         ? wishlist
         : [];
 
 
 /* =========================================================
-   DOM - HEADER
+   STATUS
+========================================================= */
+
+const STATUS = [
+    "Order Placed",
+    "Processing",
+    "Shipped",
+    "Out for Delivery",
+    "Delivered"
+];
+
+const ROLE_KEY =
+    "shopmax-user-role";
+
+const DEFAULT_ROLE =
+    "admin";
+
+let emergencyOrderId =
+    "";
+
+
+/* =========================================================
+   HEADER DOM
 ========================================================= */
 
 const ordersWishlistBtn =
@@ -83,36 +78,30 @@ const ordersWishlistBtn =
         "ordersWishlistBtn"
     );
 
-
 const ordersWishlistCount =
     document.getElementById(
         "ordersWishlistCount"
     );
-
 
 const ordersCartBtn =
     document.getElementById(
         "ordersCartBtn"
     );
 
-
 const ordersCartCount =
     document.getElementById(
         "ordersCartCount"
     );
-
 
 const ordersSearch =
     document.getElementById(
         "ordersSearch"
     );
 
-
 const ordersSearchBtn =
     document.getElementById(
         "ordersSearchBtn"
     );
-
 
 const ordersCategoriesBtn =
     document.getElementById(
@@ -121,7 +110,7 @@ const ordersCategoriesBtn =
 
 
 /* =========================================================
-   DOM - SUMMARY
+   SUMMARY DOM
 ========================================================= */
 
 const totalOrdersCount =
@@ -129,12 +118,10 @@ const totalOrdersCount =
         "totalOrdersCount"
     );
 
-
 const totalOrdersSpent =
     document.getElementById(
         "totalOrdersSpent"
     );
-
 
 const latestOrderDate =
     document.getElementById(
@@ -143,7 +130,7 @@ const latestOrderDate =
 
 
 /* =========================================================
-   DOM - ORDERS
+   ORDERS DOM
 ========================================================= */
 
 const ordersTableBody =
@@ -151,30 +138,25 @@ const ordersTableBody =
         "ordersTableBody"
     );
 
-
 const ordersMobileList =
     document.getElementById(
         "ordersMobileList"
     );
-
 
 const ordersEmpty =
     document.getElementById(
         "ordersEmpty"
     );
 
-
 const orderTableSearch =
     document.getElementById(
         "orderTableSearch"
     );
 
-
 const orderStatusFilter =
     document.getElementById(
         "orderStatusFilter"
     );
-
 
 const refreshOrdersBtn =
     document.getElementById(
@@ -183,7 +165,7 @@ const refreshOrdersBtn =
 
 
 /* =========================================================
-   DOM - ORDER DETAILS MODAL
+   DETAILS MODAL
 ========================================================= */
 
 const orderDetailsModal =
@@ -191,24 +173,20 @@ const orderDetailsModal =
         "orderDetailsModal"
     );
 
-
 const orderDetailsOverlay =
     document.getElementById(
         "orderDetailsOverlay"
     );
-
 
 const orderDetailsClose =
     document.getElementById(
         "orderDetailsClose"
     );
 
-
 const orderDetailsTitle =
     document.getElementById(
         "orderDetailsTitle"
     );
-
 
 const orderDetailsBody =
     document.getElementById(
@@ -217,27 +195,16 @@ const orderDetailsBody =
 
 
 /* =========================================================
-   INITIALIZE
+   INIT
 ========================================================= */
 
 document.addEventListener(
     "DOMContentLoaded",
-    () => {
-
-        initializeOrdersPage();
-
-    }
+    initializeOrdersPage
 );
 
 
-/* =========================================================
-   INITIALIZE PAGE
-========================================================= */
-
 function initializeOrdersPage() {
-
-    resetOrderFilters();
-
 
     refreshOrders();
 
@@ -245,13 +212,11 @@ function initializeOrdersPage() {
 
     refreshWishlist();
 
-
     updateHeaderCounts();
 
     updateSummary();
 
     renderOrders();
-
 
     setupSearch();
 
@@ -261,135 +226,303 @@ function initializeOrdersPage() {
 
     setupHeaderActions();
 
-    setupOrderDetailsModal();
+    setupDetailsModal();
 
 }
 
 
 /* =========================================================
-   RESET FILTERS
+   STORAGE HELPERS
 ========================================================= */
 
-function resetOrderFilters() {
+function readStorageArray(
+    key
+) {
 
-    if (
-        orderTableSearch
-    ) {
+    try {
 
-        orderTableSearch.value =
-            "";
+        const value =
+            JSON.parse(
+                localStorage.getItem(
+                    key
+                )
+            );
 
-    }
 
+        return Array.isArray(
+            value
+        )
+            ? value
+            : [];
 
-    if (
-        orderStatusFilter
-    ) {
+    } catch {
 
-        orderStatusFilter.value =
-            "all";
+        return [];
 
     }
 
 }
 
 
-/* =========================================================
-   PAGE SHOW
-========================================================= */
+function saveOrders() {
 
-window.addEventListener(
-    "pageshow",
-    () => {
+    localStorage.setItem(
+        "shopmax-orders",
+        JSON.stringify(
+            orders
+        )
+    );
 
-        resetOrderFilters();
-
-
-        refreshOrders();
-
-        refreshCart();
-
-        refreshWishlist();
-
-
-        updateHeaderCounts();
-
-        updateSummary();
-
-        renderOrders();
-
-    }
-);
+}
 
 
 /* =========================================================
-   REFRESH ORDERS
+   REFRESH STORAGE
 ========================================================= */
 
 function refreshOrders() {
 
-    const storedOrders =
-        JSON.parse(
-            localStorage.getItem(
-                "shopmax-orders"
-            )
+    orders =
+        readStorageArray(
+            "shopmax-orders"
         );
 
-
-    orders =
-        Array.isArray(
-            storedOrders
-        )
-            ? storedOrders
-            : [];
+    normalizeOrders();
 
 }
 
-
-/* =========================================================
-   REFRESH CART
-========================================================= */
 
 function refreshCart() {
 
-    const storedCart =
-        JSON.parse(
-            localStorage.getItem(
-                "shopmax-cart"
-            )
+    cart =
+        readStorageArray(
+            "shopmax-cart"
         );
 
+}
 
-    cart =
-        Array.isArray(
-            storedCart
-        )
-            ? storedCart
-            : [];
+
+function refreshWishlist() {
+
+    wishlist =
+        readStorageArray(
+            "shopmax-wishlist"
+        );
 
 }
 
 
 /* =========================================================
-   REFRESH WISHLIST
+   NORMALIZE ORDERS
 ========================================================= */
 
-function refreshWishlist() {
+function normalizeOrders() {
 
-    const storedWishlist =
-        JSON.parse(
-            localStorage.getItem(
-                "shopmax-wishlist"
+    let changed =
+        false;
+
+
+    orders =
+        orders
+            .map(
+                order => {
+
+                    if (
+                        !order ||
+                        typeof order !==
+                            "object"
+                    ) {
+
+                        changed =
+                            true;
+
+                        return null;
+
+                    }
+
+
+                    if (
+                        !order.createdAt
+                    ) {
+
+                        order.createdAt =
+                            new Date()
+                                .toISOString();
+
+                        changed =
+                            true;
+
+                    }
+
+
+                    order.status =
+                        formatStatus(
+                            order.status
+                        );
+
+
+                    if (
+                        !Array.isArray(
+                            order.statusHistory
+                        )
+                    ) {
+
+                        order.statusHistory =
+                            [];
+
+                        changed =
+                            true;
+
+                    }
+
+
+                    if (
+                        !Array.isArray(
+                            order.statusAuditLog
+                        )
+                    ) {
+
+                        order.statusAuditLog =
+                            [];
+
+                        changed =
+                            true;
+
+                    }
+
+
+                    ensureHistory(
+                        order
+                    );
+
+
+                    /*
+                       Never delete valid old history.
+                    */
+
+                    order.statusHistory =
+                        order.statusHistory
+                            .filter(
+                                entry =>
+                                    entry &&
+                                    typeof entry ===
+                                        "object" &&
+                                    entry.changedAt &&
+                                    (
+                                        entry.status ||
+                                        entry.type ===
+                                            "correction"
+                                    )
+                            );
+
+
+                    order.statusHistory.sort(
+                        (
+                            a,
+                            b
+                        ) =>
+                            new Date(
+                                a.changedAt
+                            ).getTime()
+                            -
+                            new Date(
+                                b.changedAt
+                            ).getTime()
+                    );
+
+
+                    return order;
+
+                }
             )
+            .filter(
+                Boolean
+            );
+
+
+    if (
+        changed
+    ) {
+
+        saveOrders();
+
+    }
+
+}
+
+
+/* =========================================================
+   INITIAL HISTORY
+========================================================= */
+
+function ensureHistory(
+    order
+) {
+
+    if (
+        !Array.isArray(
+            order.statusHistory
+        )
+    ) {
+
+        order.statusHistory =
+            [];
+
+    }
+
+
+    if (
+        !Array.isArray(
+            order.statusAuditLog
+        )
+    ) {
+
+        order.statusAuditLog =
+            [];
+
+    }
+
+
+    const hasPlaced =
+        order.statusHistory.some(
+            entry =>
+                entry &&
+                entry.type !==
+                    "correction" &&
+                normalizeStatus(
+                    entry.status
+                ) ===
+                    "placed"
         );
 
 
-    wishlist =
-        Array.isArray(
-            storedWishlist
-        )
-            ? storedWishlist
-            : [];
+    if (
+        !hasPlaced
+    ) {
+
+        order.statusHistory.unshift({
+
+            type:
+                "status",
+
+            status:
+                "Order Placed",
+
+            changedAt:
+                order.createdAt,
+
+            changedBy:
+                "System",
+
+            changeType:
+                "initial",
+
+            reason:
+                ""
+
+        });
+
+    }
 
 }
 
@@ -405,19 +538,15 @@ function updateHeaderCounts() {
             (
                 total,
                 item
-            ) => {
-
-                return (
-                    total +
-                    Math.max(
-                        1,
-                        Number(
-                            item?.quantity
-                        ) || 1
-                    )
-                );
-
-            },
+            ) =>
+                total +
+                Math.max(
+                    1,
+                    Number(
+                        item?.quantity
+                    ) ||
+                    1
+                ),
             0
         );
 
@@ -450,8 +579,14 @@ function updateHeaderCounts() {
 
 function updateSummary() {
 
-    const totalOrders =
-        orders.length;
+    if (
+        totalOrdersCount
+    ) {
+
+        totalOrdersCount.textContent =
+            orders.length;
+
+    }
 
 
     const totalSpent =
@@ -459,34 +594,16 @@ function updateSummary() {
             (
                 total,
                 order
-            ) => {
-
-                return (
-                    total +
-                    (
-                        Number(
-                            order?.total
-                        ) || 0
-                    )
-                );
-
-            },
+            ) =>
+                total +
+                (
+                    Number(
+                        order?.total
+                    ) ||
+                    0
+                ),
             0
         );
-
-
-    const latestOrder =
-        getLatestOrder();
-
-
-    if (
-        totalOrdersCount
-    ) {
-
-        totalOrdersCount.textContent =
-            totalOrders;
-
-    }
 
 
     if (
@@ -501,14 +618,32 @@ function updateSummary() {
     }
 
 
+    const latest =
+        [...orders].sort(
+            (
+                a,
+                b
+            ) =>
+                new Date(
+                    b?.createdAt ||
+                    0
+                ).getTime()
+                -
+                new Date(
+                    a?.createdAt ||
+                    0
+                ).getTime()
+        )[0];
+
+
     if (
         latestOrderDate
     ) {
 
         latestOrderDate.textContent =
-            latestOrder
+            latest
                 ? formatShortDate(
-                    latestOrder.createdAt
+                    latest.createdAt
                 )
                 : "—";
 
@@ -518,54 +653,133 @@ function updateSummary() {
 
 
 /* =========================================================
-   GET LATEST ORDER
+   FILTERED ORDERS
 ========================================================= */
 
-function getLatestOrder() {
+function getFilteredOrders() {
 
-    if (
-        orders.length ===
-        0
-    ) {
-
-        return null;
-
-    }
-
-
-    return [...orders].sort(
-        (
-            a,
-            b
-        ) => {
-
-            const dateA =
-                new Date(
-                    a?.createdAt ||
-                    0
-                ).getTime();
+    const query =
+        String(
+            orderTableSearch?.value ||
+            ""
+        )
+            .trim()
+            .toLowerCase();
 
 
-            const dateB =
+    const selectedStatus =
+        orderStatusFilter?.value ||
+        "all";
+
+
+    return [...orders]
+        .filter(
+            order => {
+
+                if (
+                    query
+                ) {
+
+                    const orderId =
+                        String(
+                            order?.orderId ||
+                            ""
+                        ).toLowerCase();
+
+
+                    const customerName =
+                        String(
+                            order?.customer?.name ||
+                            ""
+                        ).toLowerCase();
+
+
+                    const customerEmail =
+                        String(
+                            order?.customer?.email ||
+                            ""
+                        ).toLowerCase();
+
+
+                    const customerPhone =
+                        String(
+                            order?.customer?.phone ||
+                            ""
+                        ).toLowerCase();
+
+
+                    const matches =
+                        orderId.includes(
+                            query
+                        ) ||
+                        customerName.includes(
+                            query
+                        ) ||
+                        customerEmail.includes(
+                            query
+                        ) ||
+                        customerPhone.includes(
+                            query
+                        );
+
+
+                    if (
+                        !matches
+                    ) {
+
+                        return false;
+
+                    }
+
+                }
+
+
+                if (
+                    selectedStatus !==
+                    "all"
+                ) {
+
+                    if (
+                        normalizeStatus(
+                            order?.status
+                        ) !==
+                        normalizeStatus(
+                            selectedStatus
+                        )
+                    ) {
+
+                        return false;
+
+                    }
+
+                }
+
+
+                return true;
+
+            }
+        )
+        .sort(
+            (
+                a,
+                b
+            ) =>
                 new Date(
                     b?.createdAt ||
                     0
-                ).getTime();
-
-
-            return (
-                dateB -
-                dateA
-            );
-
-        }
-    )[0];
+                ).getTime()
+                -
+                new Date(
+                    a?.createdAt ||
+                    0
+                ).getTime()
+        );
 
 }
 
 
 /* =========================================================
-   RENDER ORDERS
+   RENDER
 ========================================================= */
 
 function renderOrders() {
@@ -602,166 +816,6 @@ function renderOrders() {
 
 
 /* =========================================================
-   GET FILTERED ORDERS
-========================================================= */
-
-function getFilteredOrders() {
-
-    const query =
-        (
-            orderTableSearch
-                ?.value ||
-            ""
-        )
-            .trim()
-            .toLowerCase();
-
-
-    const selectedStatus =
-        orderStatusFilter
-            ?.value ||
-        "all";
-
-
-    return orders
-        .filter(
-            order => {
-
-                /*
-                   Search
-                */
-
-                if (
-                    query
-                ) {
-
-                    const orderId =
-                        String(
-                            order?.orderId ||
-                            ""
-                        )
-                            .toLowerCase();
-
-
-                    const customerName =
-                        String(
-                            order?.customer?.name ||
-                            ""
-                        )
-                            .toLowerCase();
-
-
-                    const customerEmail =
-                        String(
-                            order?.customer?.email ||
-                            ""
-                        )
-                            .toLowerCase();
-
-
-                    const customerPhone =
-                        String(
-                            order?.customer?.phone ||
-                            ""
-                        )
-                            .toLowerCase();
-
-
-                    const matchesSearch =
-                        orderId.includes(
-                            query
-                        ) ||
-                        customerName.includes(
-                            query
-                        ) ||
-                        customerEmail.includes(
-                            query
-                        ) ||
-                        customerPhone.includes(
-                            query
-                        );
-
-
-                    if (
-                        !matchesSearch
-                    ) {
-
-                        return false;
-
-                    }
-
-                }
-
-
-                /*
-                   Status
-                */
-
-                if (
-                    selectedStatus !==
-                    "all"
-                ) {
-
-                    const orderStatus =
-                        normalizeStatusText(
-                            order?.status
-                        );
-
-
-                    const filterStatus =
-                        normalizeStatusText(
-                            selectedStatus
-                        );
-
-
-                    if (
-                        orderStatus !==
-                        filterStatus
-                    ) {
-
-                        return false;
-
-                    }
-
-                }
-
-
-                return true;
-
-            }
-        )
-        .sort(
-            (
-                a,
-                b
-            ) => {
-
-                const dateA =
-                    new Date(
-                        a?.createdAt ||
-                        0
-                    ).getTime();
-
-
-                const dateB =
-                    new Date(
-                        b?.createdAt ||
-                        0
-                    ).getTime();
-
-
-                return (
-                    dateB -
-                    dateA
-                );
-
-            }
-        );
-
-}
-
-
-/* =========================================================
    DESKTOP TABLE
 ========================================================= */
 
@@ -790,11 +844,15 @@ function renderDesktopTable(
 
     bindViewButtons();
 
+    bindStatusControls();
+
+    updateStatusControlClasses();
+
 }
 
 
 /* =========================================================
-   CREATE TABLE ROW
+   TABLE ROW
 ========================================================= */
 
 function createTableRow(
@@ -840,14 +898,23 @@ function createTableRow(
 
 
     const status =
-        order?.status ||
-        "Order Placed";
+        formatStatus(
+            order?.status
+        );
 
 
     const statusClass =
         getStatusClass(
             status
         );
+
+
+    const showCorrection =
+        getCurrentRole() ===
+            "admin" &&
+        getStatusIndex(
+            status
+        ) > 0;
 
 
     return `
@@ -868,9 +935,7 @@ function createTableRow(
             <td>
 
                 <div
-                    class="
-                        order-customer
-                    "
+                    class="order-customer"
                 >
 
                     <div
@@ -918,11 +983,7 @@ function createTableRow(
             </td>
 
 
-            <td
-                class="
-                    order-date-cell
-                "
-            >
+            <td>
 
                 ${escapeHTML(
                     date
@@ -932,15 +993,14 @@ function createTableRow(
 
 
             <td
-                class="
-                    order-items-cell
-                "
+                class="order-items-cell"
             >
 
                 ${itemCount}
 
                 ${
-                    itemCount === 1
+                    itemCount ===
+                    1
                         ? "item"
                         : "items"
                 }
@@ -949,9 +1009,7 @@ function createTableRow(
 
 
             <td
-                class="
-                    order-total-cell
-                "
+                class="order-total-cell"
             >
 
                 ${total}
@@ -961,20 +1019,59 @@ function createTableRow(
 
             <td>
 
-                <span
+                <div
                     class="
-                        order-status
-                        ${statusClass}
+                        order-status-control
                     "
                 >
 
-                    ${escapeHTML(
-                        formatStatus(
-                            status
-                        )
-                    )}
+                    <select
+                        class="
+                            order-status-select
+                            ${statusClass}
+                        "
+                        data-status-order="${escapeHTML(
+                            orderId
+                        )}"
+                    >
 
-                </span>
+                        ${createStatusOptions(
+                            status
+                        )}
+
+                    </select>
+
+
+                    ${
+                        showCorrection
+                            ? `
+
+                                <button
+                                    type="button"
+                                    class="
+                                        order-emergency-btn
+                                    "
+                                    data-emergency-order="${escapeHTML(
+                                        orderId
+                                    )}"
+                                    title="Emergency correction"
+                                    aria-label="Emergency correction"
+                                >
+
+                                    <i
+                                        class="
+                                            fa-solid
+                                            fa-shield-halved
+                                        "
+                                    ></i>
+
+                                </button>
+
+                            `
+                            : ""
+                    }
+
+                </div>
 
             </td>
 
@@ -982,13 +1079,8 @@ function createTableRow(
             <td>
 
                 <div
-                    class="
-                        order-actions
-                    "
+                    class="order-actions"
                 >
-
-
-                    <!-- VIEW -->
 
                     <button
                         type="button"
@@ -1011,9 +1103,6 @@ function createTableRow(
 
                     </button>
 
-
-
-                    <!-- TRACK -->
 
                     <button
                         type="button"
@@ -1049,7 +1138,7 @@ function createTableRow(
 
 
 /* =========================================================
-   MOBILE LIST
+   MOBILE
 ========================================================= */
 
 function renderMobileList(
@@ -1077,11 +1166,13 @@ function renderMobileList(
 
     bindViewButtons();
 
+    bindStatusControls();
+
 }
 
 
 /* =========================================================
-   CREATE MOBILE ORDER
+   MOBILE ORDER
 ========================================================= */
 
 function createMobileOrder(
@@ -1114,7 +1205,7 @@ function createMobileOrder(
         );
 
 
-    const itemCount =
+    const items =
         getOrderItemCount(
             order
         );
@@ -1127,8 +1218,9 @@ function createMobileOrder(
 
 
     const status =
-        order?.status ||
-        "Order Placed";
+        formatStatus(
+            order?.status
+        );
 
 
     const statusClass =
@@ -1137,26 +1229,28 @@ function createMobileOrder(
         );
 
 
+    const showCorrection =
+        getCurrentRole() ===
+            "admin" &&
+        getStatusIndex(
+            status
+        ) > 0;
+
+
     return `
 
         <article
-            class="
-                mobile-order-card
-            "
+            class="mobile-order-card"
         >
 
             <div
-                class="
-                    mobile-order-top
-                "
+                class="mobile-order-top"
             >
 
                 <div>
 
                     <div
-                        class="
-                            mobile-order-id
-                        "
+                        class="mobile-order-id"
                     >
 
                         ${escapeHTML(
@@ -1167,9 +1261,7 @@ function createMobileOrder(
 
 
                     <div
-                        class="
-                            mobile-order-date
-                        "
+                        class="mobile-order-date"
                     >
 
                         ${escapeHTML(
@@ -1189,9 +1281,7 @@ function createMobileOrder(
                 >
 
                     ${escapeHTML(
-                        formatStatus(
-                            status
-                        )
+                        status
                     )}
 
                 </span>
@@ -1259,13 +1349,7 @@ function createMobileOrder(
 
                     <strong>
 
-                        ${itemCount}
-
-                        ${
-                            itemCount === 1
-                                ? "item"
-                                : "items"
-                        }
+                        ${items}
 
                     </strong>
 
@@ -1292,12 +1376,76 @@ function createMobileOrder(
 
             <div
                 class="
-                    mobile-order-actions
+                    mobile-order-status-control
                 "
             >
 
+                <small>
+                    ORDER STATUS
+                </small>
 
-                <!-- VIEW -->
+
+                <div
+                    class="
+                        mobile-status-row
+                    "
+                >
+
+                    <select
+                        class="
+                            order-status-select
+                            ${statusClass}
+                        "
+                        data-status-order="${escapeHTML(
+                            orderId
+                        )}"
+                    >
+
+                        ${createStatusOptions(
+                            status
+                        )}
+
+                    </select>
+
+
+                    ${
+                        showCorrection
+                            ? `
+
+                                <button
+                                    type="button"
+                                    class="
+                                        order-emergency-btn
+                                    "
+                                    data-emergency-order="${escapeHTML(
+                                        orderId
+                                    )}"
+                                    title="Emergency correction"
+                                >
+
+                                    <i
+                                        class="
+                                            fa-solid
+                                            fa-shield-halved
+                                        "
+                                    ></i>
+
+                                </button>
+
+                            `
+                            : ""
+                    }
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="
+                    mobile-order-actions
+                "
+            >
 
                 <button
                     type="button"
@@ -1320,9 +1468,6 @@ function createMobileOrder(
 
                 </button>
 
-
-
-                <!-- TRACK -->
 
                 <button
                     type="button"
@@ -1356,39 +1501,1234 @@ function createMobileOrder(
 
 
 /* =========================================================
-   BIND TRACK BUTTONS
+   STATUS OPTIONS
+========================================================= */
+
+function createStatusOptions(
+    currentStatus
+) {
+
+    const currentIndex =
+        getStatusIndex(
+            currentStatus
+        );
+
+
+    return STATUS
+        .map(
+            (
+                status,
+                index
+            ) => {
+
+                const selected =
+                    index ===
+                    currentIndex;
+
+
+                const enabled =
+                    index ===
+                        currentIndex ||
+                    index ===
+                        currentIndex + 1;
+
+
+                return `
+
+                    <option
+                        value="${escapeHTML(
+                            status
+                        )}"
+                        ${
+                            selected
+                                ? "selected"
+                                : ""
+                        }
+                        ${
+                            enabled
+                                ? ""
+                                : "disabled"
+                        }
+                    >
+
+                        ${escapeHTML(
+                            status
+                        )}
+
+                    </option>
+
+                `;
+
+            }
+        )
+        .join("");
+
+}
+
+
+/* =========================================================
+   STATUS CONTROL
+========================================================= */
+
+function bindStatusControls() {
+
+    document
+        .querySelectorAll(
+            "[data-status-order]"
+        )
+        .forEach(
+            select => {
+
+                select.addEventListener(
+                    "change",
+                    handleStatusChange
+                );
+
+            }
+        );
+
+
+    document
+        .querySelectorAll(
+            "[data-emergency-order]"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        openEmergencyStatusModal(
+                            button.getAttribute(
+                                "data-emergency-order"
+                            )
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   NORMAL STATUS CHANGE
+========================================================= */
+
+function handleStatusChange(
+    event
+) {
+
+    const select =
+        event.currentTarget;
+
+
+    const orderId =
+        select.getAttribute(
+            "data-status-order"
+        );
+
+
+    const newStatus =
+        select.value;
+
+
+    refreshOrders();
+
+
+    const order =
+        orders.find(
+            item =>
+                normalizeOrderId(
+                    item?.orderId
+                ) ===
+                normalizeOrderId(
+                    orderId
+                )
+        );
+
+
+    if (
+        !order
+    ) {
+
+        renderOrders();
+
+        showToast(
+            "Order not found.",
+            true
+        );
+
+        return;
+
+    }
+
+
+    const currentIndex =
+        getStatusIndex(
+            order.status
+        );
+
+
+    const targetIndex =
+        getStatusIndex(
+            newStatus
+        );
+
+
+    /*
+       Forward one step only.
+    */
+
+    if (
+        targetIndex !==
+        currentIndex + 1
+    ) {
+
+        renderOrders();
+
+        showToast(
+            "Previous and skipped statuses are locked.",
+            true
+        );
+
+        return;
+
+    }
+
+
+    /*
+       Rider restriction.
+    */
+
+    if (
+        getCurrentRole() ===
+        "rider"
+    ) {
+
+        const allowed =
+            (
+                currentIndex === 2 &&
+                targetIndex === 3
+            ) ||
+            (
+                currentIndex === 3 &&
+                targetIndex === 4
+            );
+
+
+        if (
+            !allowed
+        ) {
+
+            renderOrders();
+
+            showToast(
+                "Rider can update delivery statuses only.",
+                true
+            );
+
+            return;
+
+        }
+
+    }
+
+
+    const now =
+        new Date().toISOString();
+
+
+    ensureHistory(
+        order
+    );
+
+
+    const oldStatus =
+        formatStatus(
+            order.status
+        );
+
+
+    const targetStatus =
+        formatStatus(
+            newStatus
+        );
+
+
+    /*
+       SAVE HISTORY.
+    */
+
+    order.statusHistory.push({
+
+        type:
+            "status",
+
+        status:
+            targetStatus,
+
+        changedAt:
+            now,
+
+        changedBy:
+            getCurrentRole(),
+
+        changeType:
+            "normal",
+
+        reason:
+            ""
+
+    });
+
+
+    /*
+       AUDIT LOG.
+    */
+
+    order.statusAuditLog.push({
+
+        from:
+            oldStatus,
+
+        to:
+            targetStatus,
+
+        changedAt:
+            now,
+
+        changedBy:
+            getCurrentRole(),
+
+        changeType:
+            "normal",
+
+        reason:
+            ""
+
+    });
+
+
+    /*
+       CURRENT STATUS.
+    */
+
+    order.status =
+        targetStatus;
+
+
+    order.updatedAt =
+        now;
+
+
+    saveOrders();
+
+
+    refreshStateAfterStatusChange();
+
+}
+
+
+/* =========================================================
+   SAVE + REFRESH
+========================================================= */
+
+function refreshStateAfterStatusChange() {
+
+    refreshOrders();
+
+    refreshCart();
+
+    refreshWishlist();
+
+    updateHeaderCounts();
+
+    updateSummary();
+
+    renderOrders();
+
+}
+
+
+/* =========================================================
+   EMERGENCY MODAL
+   ---------------------------------------------------------
+   FINAL BUG-FIXED VERSION
+========================================================= */
+
+function createEmergencyModal() {
+
+    /*
+       Remove old modal if one exists.
+    */
+
+    document
+        .getElementById(
+            "emergencyStatusModal"
+        )
+        ?.remove();
+
+
+    const modal =
+        document.createElement(
+            "div"
+        );
+
+
+    /*
+       IMPORTANT:
+       IDs are clean single-line strings.
+    */
+
+    modal.id =
+        "emergencyStatusModal";
+
+
+    modal.className =
+        "emergency-status-modal";
+
+
+    modal.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+
+    modal.innerHTML = `
+
+        <div
+            class="emergency-status-overlay"
+            data-emergency-close
+        ></div>
+
+
+        <div
+            class="emergency-status-dialog"
+            role="dialog"
+            aria-modal="true"
+        >
+
+            <div
+                class="emergency-status-header"
+            >
+
+                <div>
+
+                    <span>
+                        EMERGENCY CORRECTION
+                    </span>
+
+
+                    <h3>
+                        Correct Order Status
+                    </h3>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="emergency-status-close"
+                    data-emergency-close
+                    aria-label="Close"
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-xmark
+                        "
+                    ></i>
+
+                </button>
+
+            </div>
+
+
+            <div
+                class="emergency-warning"
+            >
+
+                <i
+                    class="
+                        fa-solid
+                        fa-triangle-exclamation
+                    "
+                ></i>
+
+
+                <div>
+
+                    <strong>
+                        This is a correction action.
+                    </strong>
+
+
+                    <p>
+                        Previous status history will not
+                        be deleted. The correction will
+                        be recorded in the audit history.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="emergency-status-field"
+            >
+
+                <label>
+                    CURRENT STATUS
+                </label>
+
+
+                <div
+                    id="emergencyCurrentStatus"
+                    class="emergency-current-status"
+                >
+                    —
+                </div>
+
+            </div>
+
+
+            <div
+                class="emergency-status-field"
+            >
+
+                <label
+                    for="emergencyNewStatus"
+                >
+                    CHANGE TO
+                </label>
+
+
+                <select
+                    id="emergencyNewStatus"
+                    class="emergency-status-select"
+                ></select>
+
+            </div>
+
+
+            <div
+                class="emergency-status-field"
+            >
+
+                <label
+                    for="emergencyStatusReason"
+                >
+                    REASON
+                </label>
+
+
+                <textarea
+                    id="emergencyStatusReason"
+                    class="emergency-status-reason"
+                    rows="4"
+                    maxlength="250"
+                    placeholder="Example: Incorrect status update"
+                ></textarea>
+
+            </div>
+
+
+            <div
+                class="emergency-status-footer"
+            >
+
+                <button
+                    type="button"
+                    class="emergency-cancel-btn"
+                    data-emergency-close
+                >
+
+                    Cancel
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="emergency-confirm-btn"
+                    id="emergencyConfirmBtn"
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-shield-halved
+                        "
+                    ></i>
+
+                    Confirm Correction
+
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    document.body.appendChild(
+        modal
+    );
+
+
+    /*
+       Bind close buttons.
+    */
+
+    modal
+        .querySelectorAll(
+            "[data-emergency-close]"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    closeEmergency
+                );
+
+            }
+        );
+
+
+    /*
+       Bind confirm.
+    */
+
+    const confirmButton =
+        modal.querySelector(
+            "#emergencyConfirmBtn"
+        );
+
+
+    if (
+        confirmButton
+    ) {
+
+        confirmButton.addEventListener(
+            "click",
+            confirmEmergency
+        );
+
+    }
+
+
+    return modal;
+
+}
+
+
+/* =========================================================
+   OPEN EMERGENCY
+========================================================= */
+
+function openEmergencyStatusModal(
+    orderId
+) {
+
+    if (
+        getCurrentRole() !==
+        "admin"
+    ) {
+
+        showToast(
+            "Emergency correction is admin only.",
+            true
+        );
+
+        return;
+
+    }
+
+
+    refreshOrders();
+
+
+    const order =
+        orders.find(
+            item =>
+                normalizeOrderId(
+                    item?.orderId
+                ) ===
+                normalizeOrderId(
+                    orderId
+                )
+        );
+
+
+    if (
+        !order
+    ) {
+
+        showToast(
+            "Order not found.",
+            true
+        );
+
+        return;
+
+    }
+
+
+    const currentIndex =
+        getStatusIndex(
+            order.status
+        );
+
+
+    if (
+        currentIndex <=
+        0
+    ) {
+
+        showToast(
+            "No earlier status available.",
+            true
+        );
+
+        return;
+
+    }
+
+
+    emergencyOrderId =
+        order.orderId;
+
+
+    const modal =
+        createEmergencyModal();
+
+
+    /*
+       IMPORTANT:
+       Query INSIDE the fresh modal.
+    */
+
+    const currentStatus =
+        modal.querySelector(
+            "#emergencyCurrentStatus"
+        );
+
+
+    const statusSelect =
+        modal.querySelector(
+            "#emergencyNewStatus"
+        );
+
+
+    const reasonField =
+        modal.querySelector(
+            "#emergencyStatusReason"
+        );
+
+
+    /*
+       Safety guard.
+    */
+
+    if (
+        !currentStatus ||
+        !statusSelect ||
+        !reasonField
+    ) {
+
+        console.error(
+            "Emergency modal elements are missing."
+        );
+
+        return;
+
+    }
+
+
+    currentStatus.textContent =
+        formatStatus(
+            order.status
+        );
+
+
+    /*
+       Previous statuses only.
+    */
+
+    statusSelect.innerHTML =
+        STATUS
+            .slice(
+                0,
+                currentIndex
+            )
+            .map(
+                status => `
+
+                    <option
+                        value="${escapeHTML(
+                            status
+                        )}"
+                    >
+
+                        ${escapeHTML(
+                            status
+                        )}
+
+                    </option>
+
+                `
+            )
+            .join("");
+
+
+    /*
+       Immediate previous status by default.
+    */
+
+    statusSelect.value =
+        STATUS[
+            currentIndex -
+            1
+        ];
+
+
+    reasonField.value =
+        "";
+
+
+    modal.classList.add(
+        "show"
+    );
+
+
+    modal.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+
+    document.body.style.overflow =
+        "hidden";
+
+
+    statusSelect.focus();
+
+}
+
+
+/* =========================================================
+   CONFIRM EMERGENCY
+========================================================= */
+
+function confirmEmergency() {
+
+    const modal =
+        document.getElementById(
+            "emergencyStatusModal"
+        );
+
+
+    if (
+        !modal
+    ) {
+
+        return;
+
+    }
+
+
+    const statusSelect =
+        modal.querySelector(
+            "#emergencyNewStatus"
+        );
+
+
+    const reasonField =
+        modal.querySelector(
+            "#emergencyStatusReason"
+        );
+
+
+    if (
+        !statusSelect ||
+        !reasonField
+    ) {
+
+        console.error(
+            "Emergency form elements are missing."
+        );
+
+        return;
+
+    }
+
+
+    const targetStatus =
+        statusSelect.value.trim();
+
+
+    const reason =
+        reasonField.value.trim();
+
+
+    if (
+        !targetStatus
+    ) {
+
+        showToast(
+            "Please select a status.",
+            true
+        );
+
+        return;
+
+    }
+
+
+    if (
+        !reason
+    ) {
+
+        showToast(
+            "Please enter the correction reason.",
+            true
+        );
+
+        reasonField.focus();
+
+        return;
+
+    }
+
+
+    refreshOrders();
+
+
+    const order =
+        orders.find(
+            item =>
+                normalizeOrderId(
+                    item?.orderId
+                ) ===
+                normalizeOrderId(
+                    emergencyOrderId
+                )
+        );
+
+
+    if (
+        !order
+    ) {
+
+        showToast(
+            "Order not found.",
+            true
+        );
+
+        return;
+
+    }
+
+
+    const currentStatus =
+        formatStatus(
+            order.status
+        );
+
+
+    const currentIndex =
+        getStatusIndex(
+            currentStatus
+        );
+
+
+    const targetIndex =
+        getStatusIndex(
+            targetStatus
+        );
+
+
+    /*
+       Correction MUST go backward.
+    */
+
+    if (
+        targetIndex < 0 ||
+        targetIndex >= currentIndex
+    ) {
+
+        showToast(
+            "Choose an earlier status.",
+            true
+        );
+
+        return;
+
+    }
+
+
+    ensureHistory(
+        order
+    );
+
+
+    const now =
+        new Date().toISOString();
+
+
+    const formattedTarget =
+        formatStatus(
+            targetStatus
+        );
+
+
+    /*
+       IMPORTANT:
+       Old history stays.
+
+       We add ONLY new audit events.
+    */
+
+    order.statusHistory.push({
+
+        type:
+            "correction",
+
+        fromStatus:
+            currentStatus,
+
+        toStatus:
+            formattedTarget,
+
+        status:
+            formattedTarget,
+
+        changedAt:
+            now,
+
+        changedBy:
+            "Admin",
+
+        changeType:
+            "emergency-correction",
+
+        reason:
+            reason
+
+    });
+
+
+    /*
+       New effective status event.
+    */
+
+    order.statusHistory.push({
+
+        type:
+            "status",
+
+        status:
+            formattedTarget,
+
+        changedAt:
+            now,
+
+        changedBy:
+            "Admin",
+
+        changeType:
+            "emergency-correction",
+
+        reason:
+            reason
+
+    });
+
+
+    /*
+       Audit log.
+    */
+
+    order.statusAuditLog.push({
+
+        from:
+            currentStatus,
+
+        to:
+            formattedTarget,
+
+        changedAt:
+            now,
+
+        changedBy:
+            "Admin",
+
+        changeType:
+            "emergency-correction",
+
+        reason:
+            reason
+
+    });
+
+
+    /*
+       Current status.
+    */
+
+    order.status =
+        formattedTarget;
+
+
+    order.updatedAt =
+        now;
+
+
+    /*
+       Keep complete history.
+    */
+
+    order.statusHistory.sort(
+        (
+            a,
+            b
+        ) =>
+            new Date(
+                a?.changedAt ||
+                0
+            ).getTime()
+            -
+            new Date(
+                b?.changedAt ||
+                0
+            ).getTime()
+    );
+
+
+    saveOrders();
+
+
+    closeEmergency();
+
+
+    refreshOrders();
+
+    refreshCart();
+
+    refreshWishlist();
+
+    updateHeaderCounts();
+
+    updateSummary();
+
+    renderOrders();
+
+
+    showToast(
+        `${order.orderId} corrected to ${formattedTarget}`
+    );
+
+}
+
+
+/* =========================================================
+   CLOSE EMERGENCY
+========================================================= */
+
+function closeEmergency() {
+
+    const modal =
+        document.getElementById(
+            "emergencyStatusModal"
+        );
+
+
+    if (
+        modal
+    ) {
+
+        modal.classList.remove(
+            "show"
+        );
+
+
+        modal.setAttribute(
+            "aria-hidden",
+            "true"
+        );
+
+
+        setTimeout(
+            () => {
+
+                if (
+                    modal.parentNode
+                ) {
+
+                    modal.remove();
+
+                }
+
+            },
+            200
+        );
+
+    }
+
+
+    emergencyOrderId =
+        "";
+
+
+    document.body.style.overflow =
+        "";
+
+}
+
+
+/* =========================================================
+   TRACK BUTTONS
 ========================================================= */
 
 function bindTrackButtons() {
 
-    const buttons =
-        document.querySelectorAll(
+    document
+        .querySelectorAll(
             "[data-track-order]"
-        );
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    event => {
+
+                        event.preventDefault();
 
 
-    buttons.forEach(
-        button => {
+                        const orderId =
+                            button.getAttribute(
+                                "data-track-order"
+                            );
 
-            button.addEventListener(
-                "click",
-                () => {
 
-                    const orderId =
-                        button.getAttribute(
-                            "data-track-order"
+                        trackSpecificOrder(
+                            orderId
                         );
 
+                    }
+                );
 
-                    trackSpecificOrder(
-                        orderId
-                    );
-
-                }
-            );
-
-        }
-    );
+            }
+        );
 
 }
 
@@ -1410,6 +2750,10 @@ function trackSpecificOrder(
     }
 
 
+    /*
+       Keep original working flow.
+    */
+
     window.location.href =
         `trackOrder.html?orderId=${encodeURIComponent(
             orderId
@@ -1419,45 +2763,39 @@ function trackSpecificOrder(
 
 
 /* =========================================================
-   BIND VIEW BUTTONS
+   VIEW BUTTONS
 ========================================================= */
 
 function bindViewButtons() {
 
-    const buttons =
-        document.querySelectorAll(
+    document
+        .querySelectorAll(
             "[data-view-order]"
-        );
+        )
+        .forEach(
+            button => {
 
+                button.addEventListener(
+                    "click",
+                    () => {
 
-    buttons.forEach(
-        button => {
-
-            button.addEventListener(
-                "click",
-                () => {
-
-                    const orderId =
-                        button.getAttribute(
-                            "data-view-order"
+                        openOrderDetails(
+                            button.getAttribute(
+                                "data-view-order"
+                            )
                         );
 
+                    }
+                );
 
-                    openOrderDetails(
-                        orderId
-                    );
-
-                }
-            );
-
-        }
-    );
+            }
+        );
 
 }
 
 
 /* =========================================================
-   OPEN ORDER DETAILS
+   ORDER DETAILS
 ========================================================= */
 
 function openOrderDetails(
@@ -1480,105 +2818,8 @@ function openOrderDetails(
 
 
     if (
-        !order
-    ) {
-
-        return;
-
-    }
-
-
-    renderOrderDetailsModal(
-        order
-    );
-
-
-    orderDetailsModal?.classList.add(
-        "show"
-    );
-
-
-    orderDetailsModal?.setAttribute(
-        "aria-hidden",
-        "false"
-    );
-
-
-    document.body.style.overflow =
-        "hidden";
-
-}
-
-
-/* =========================================================
-   CLOSE ORDER DETAILS
-========================================================= */
-
-function closeOrderDetails() {
-
-    orderDetailsModal?.classList.remove(
-        "show"
-    );
-
-
-    orderDetailsModal?.setAttribute(
-        "aria-hidden",
-        "true"
-    );
-
-
-    document.body.style.overflow =
-        "";
-
-}
-
-
-/* =========================================================
-   SETUP ORDER DETAILS MODAL
-========================================================= */
-
-function setupOrderDetailsModal() {
-
-    orderDetailsOverlay?.addEventListener(
-        "click",
-        closeOrderDetails
-    );
-
-
-    orderDetailsClose?.addEventListener(
-        "click",
-        closeOrderDetails
-    );
-
-
-    document.addEventListener(
-        "keydown",
-        event => {
-
-            if (
-                event.key ===
-                "Escape"
-            ) {
-
-                closeOrderDetails();
-
-            }
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   RENDER ORDER DETAILS MODAL
-========================================================= */
-
-function renderOrderDetailsModal(
-    order
-) {
-
-    if (
+        !order ||
+        !orderDetailsModal ||
         !orderDetailsBody
     ) {
 
@@ -1588,18 +2829,13 @@ function renderOrderDetailsModal(
 
 
     const customer =
-        order?.customer ||
-        {};
-
-
-    const addressData =
-        order?.addressData ||
+        order.customer ||
         {};
 
 
     const items =
         Array.isArray(
-            order?.items
+            order.items
         )
             ? order.items
             : [];
@@ -1607,82 +2843,51 @@ function renderOrderDetailsModal(
 
     const subtotal =
         Number(
-            order?.subtotal
-        ) || 0;
+            order.subtotal
+        ) ||
+        0;
 
 
     const shipping =
         Number(
-            order?.shipping
-        ) || 0;
+            order.shipping
+        ) ||
+        0;
 
 
     const total =
         Number(
-            order?.total
+            order.total
         ) ||
         subtotal +
         shipping;
 
 
-    const status =
-        order?.status ||
-        "Order Placed";
-
-
-    /*
-       Address
-    */
-
     const address =
-        addressData.formatted ||
         customer.address ||
+        order?.addressData?.formatted ||
         "—";
 
 
     const city =
-        addressData.city ||
-        addressData.county ||
         customer.city ||
+        order?.addressData?.city ||
+        order?.addressData?.county ||
         "—";
 
 
     const postal =
-        addressData.postcode ||
         customer.postal ||
+        customer.postalCode ||
+        order?.addressData?.postcode ||
         "—";
 
 
-    const country =
-        addressData.country ||
-        customer.country ||
-        "—";
+    orderDetailsTitle.textContent =
+        `Order #${order.orderId}`;
 
-
-    /*
-       Title
-    */
-
-    if (
-        orderDetailsTitle
-    ) {
-
-        orderDetailsTitle.textContent =
-            `Order #${
-                order?.orderId ||
-                "—"
-            }`;
-
-    }
-
-
-    /*
-       Body
-    */
 
     orderDetailsBody.innerHTML = `
-
-        <!-- STATUS -->
 
         <div
             class="
@@ -1694,14 +2899,14 @@ function renderOrderDetailsModal(
                 class="
                     order-status
                     ${getStatusClass(
-                        status
+                        order.status
                     )}
                 "
             >
 
                 ${escapeHTML(
                     formatStatus(
-                        status
+                        order.status
                     )
                 )}
 
@@ -1715,8 +2920,8 @@ function renderOrderDetailsModal(
             >
 
                 ${escapeHTML(
-                    formatFullDate(
-                        order?.createdAt
+                    formatDateTime(
+                        order.createdAt
                     )
                 )}
 
@@ -1725,17 +2930,11 @@ function renderOrderDetailsModal(
         </div>
 
 
-
-        <!-- CUSTOMER + DELIVERY -->
-
         <div
             class="
                 order-detail-grid
             "
         >
-
-
-            <!-- CUSTOMER -->
 
             <section
                 class="
@@ -1840,9 +3039,6 @@ function renderOrderDetailsModal(
             </section>
 
 
-
-            <!-- SHIPPING -->
-
             <section
                 class="
                     order-detail-section
@@ -1921,44 +3117,20 @@ function renderOrderDetailsModal(
                     </div>
 
 
-                    <div
-                        class="two-col"
-                    >
+                    <div>
 
-                        <div>
-
-                            <small>
-                                POSTAL CODE
-                            </small>
+                        <small>
+                            POSTAL CODE
+                        </small>
 
 
-                            <strong>
+                        <strong>
 
-                                ${escapeHTML(
-                                    postal
-                                )}
+                            ${escapeHTML(
+                                postal
+                            )}
 
-                            </strong>
-
-                        </div>
-
-
-                        <div>
-
-                            <small>
-                                COUNTRY
-                            </small>
-
-
-                            <strong>
-
-                                ${escapeHTML(
-                                    country
-                                )}
-
-                            </strong>
-
-                        </div>
+                        </strong>
 
                     </div>
 
@@ -1968,9 +3140,6 @@ function renderOrderDetailsModal(
 
         </div>
 
-
-
-        <!-- PRODUCTS -->
 
         <section
             class="
@@ -2016,20 +3185,115 @@ function renderOrderDetailsModal(
             >
 
                 ${
-                    items.length > 0
+                    items.length
                         ? items
                             .map(
-                                createDetailProduct
+                                item => {
+
+                                    const quantity =
+                                        Math.max(
+                                            1,
+                                            Number(
+                                                item?.quantity
+                                            ) ||
+                                            1
+                                        );
+
+
+                                    const price =
+                                        Number(
+                                            item?.price
+                                        ) ||
+                                        0;
+
+
+                                    return `
+
+                                        <div
+                                            class="
+                                                order-detail-product
+                                            "
+                                        >
+
+                                            <div
+                                                class="
+                                                    order-detail-product-image
+                                                "
+                                            >
+
+                                                <img
+                                                    src="${escapeHTML(
+                                                        item?.image ||
+                                                        ""
+                                                    )}"
+                                                    alt="${escapeHTML(
+                                                        item?.title ||
+                                                        "Product"
+                                                    )}"
+                                                >
+
+                                            </div>
+
+
+                                            <div
+                                                class="
+                                                    order-detail-product-info
+                                                "
+                                            >
+
+                                                <strong>
+
+                                                    ${escapeHTML(
+                                                        item?.title ||
+                                                        "Product"
+                                                    )}
+
+                                                </strong>
+
+
+                                                <span>
+
+                                                    Qty:
+                                                    ${quantity}
+
+                                                </span>
+
+                                            </div>
+
+
+                                            <strong
+                                                class="
+                                                    order-detail-product-price
+                                                "
+                                            >
+
+                                                ${formatMoney(
+                                                    price *
+                                                    quantity
+                                                )}
+
+                                            </strong>
+
+                                        </div>
+
+                                    `;
+
+                                }
                             )
                             .join("")
+
                         : `
+
                             <div
                                 class="
-                                    order-detail-no-items
+                                    orders-inline-empty
                                 "
                             >
+
                                 No products found.
+
                             </div>
+
                         `
                 }
 
@@ -2038,10 +3302,7 @@ function renderOrderDetailsModal(
         </section>
 
 
-
-        <!-- PAYMENT -->
-
-        <section
+        <div
             class="
                 order-detail-payment
             "
@@ -2058,7 +3319,7 @@ function renderOrderDetailsModal(
 
                     ${escapeHTML(
                         formatPayment(
-                            order?.paymentMethod
+                            order.paymentMethod
                         )
                     )}
 
@@ -2066,27 +3327,8 @@ function renderOrderDetailsModal(
 
             </div>
 
+        </div>
 
-            <div
-                class="
-                    order-detail-payment-icon
-                "
-            >
-
-                <i
-                    class="
-                        fa-solid
-                        fa-credit-card
-                    "
-                ></i>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- TOTALS -->
 
         <div
             class="
@@ -2122,7 +3364,8 @@ function renderOrderDetailsModal(
                 <strong>
 
                     ${
-                        shipping === 0
+                        shipping ===
+                        0
                             ? "Free"
                             : formatMoney(
                                 shipping
@@ -2159,170 +3402,78 @@ function renderOrderDetailsModal(
 
     `;
 
-}
 
-
-/* =========================================================
-   CREATE DETAIL PRODUCT
-========================================================= */
-
-function createDetailProduct(
-    item
-) {
-
-    const quantity =
-        Math.max(
-            1,
-            Number(
-                item?.quantity
-            ) || 1
-        );
-
-
-    const price =
-        Number(
-            item?.price
-        ) || 0;
-
-
-    const total =
-        price *
-        quantity;
-
-
-    return `
-
-        <div
-            class="
-                order-detail-product
-            "
-        >
-
-            <div
-                class="
-                    order-detail-product-image
-                "
-            >
-
-                <img
-                    src="${escapeHTML(
-                        item?.image ||
-                        ""
-                    )}"
-                    alt="${escapeHTML(
-                        item?.title ||
-                        "Product"
-                    )}"
-                    loading="lazy"
-                >
-
-            </div>
-
-
-            <div
-                class="
-                    order-detail-product-info
-                "
-            >
-
-                <strong>
-
-                    ${escapeHTML(
-                        item?.title ||
-                        "Product"
-                    )}
-
-                </strong>
-
-
-                <span>
-
-                    Qty: ${quantity}
-
-                </span>
-
-            </div>
-
-
-            <strong
-                class="
-                    order-detail-product-price
-                "
-            >
-
-                ${formatMoney(
-                    total
-                )}
-
-            </strong>
-
-        </div>
-
-    `;
-
-}
-
-
-/* =========================================================
-   NORMALIZE ORDER ID
-========================================================= */
-
-function normalizeOrderId(
-    value
-) {
-
-    return String(
-        value ||
-        ""
-    )
-        .trim()
-        .toUpperCase()
-        .replace(
-            /\s+/g,
-            ""
-        );
-
-}
-
-
-/* =========================================================
-   EMPTY STATE
-========================================================= */
-
-function renderEmptyState() {
-
-    if (
-        ordersTableBody
-    ) {
-
-        ordersTableBody.innerHTML =
-            "";
-
-    }
-
-
-    if (
-        ordersMobileList
-    ) {
-
-        ordersMobileList.innerHTML =
-            "";
-
-    }
-
-
-    ordersEmpty?.classList.add(
+    orderDetailsModal.classList.add(
         "show"
+    );
+
+
+    orderDetailsModal.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+
+    document.body.style.overflow =
+        "hidden";
+
+}
+
+
+/* =========================================================
+   DETAILS MODAL
+========================================================= */
+
+function setupDetailsModal() {
+
+    orderDetailsOverlay?.addEventListener(
+        "click",
+        closeOrderDetails
+    );
+
+
+    orderDetailsClose?.addEventListener(
+        "click",
+        closeOrderDetails
+    );
+
+
+    document.addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key ===
+                "Escape"
+            ) {
+
+                closeOrderDetails();
+
+                closeEmergency();
+
+            }
+
+        }
     );
 
 }
 
 
-function hideEmptyState() {
+function closeOrderDetails() {
 
-    ordersEmpty?.classList.remove(
+    orderDetailsModal?.classList.remove(
         "show"
     );
+
+
+    orderDetailsModal?.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+
+    document.body.style.overflow =
+        "";
 
 }
 
@@ -2335,11 +3486,7 @@ function setupSearch() {
 
     orderTableSearch?.addEventListener(
         "input",
-        () => {
-
-            renderOrders();
-
-        }
+        renderOrders
     );
 
 
@@ -2370,16 +3517,12 @@ function setupSearch() {
 }
 
 
-/* =========================================================
-   HEADER SEARCH
-========================================================= */
-
 function handleHeaderSearch() {
 
     const query =
         ordersSearch
             ?.value
-            .trim();
+            ?.trim();
 
 
     if (
@@ -2403,18 +3546,14 @@ function handleHeaderSearch() {
 
 
 /* =========================================================
-   STATUS FILTER
+   FILTER
 ========================================================= */
 
 function setupFilters() {
 
     orderStatusFilter?.addEventListener(
         "change",
-        () => {
-
-            renderOrders();
-
-        }
+        renderOrders
     );
 
 }
@@ -2430,15 +3569,11 @@ function setupRefresh() {
         "click",
         () => {
 
-            resetOrderFilters();
-
-
             refreshOrders();
 
             refreshCart();
 
             refreshWishlist();
-
 
             updateHeaderCounts();
 
@@ -2447,7 +3582,7 @@ function setupRefresh() {
             renderOrders();
 
 
-            refreshOrdersBtn.classList.add(
+            refreshOrdersBtn?.classList.add(
                 "is-refreshing"
             );
 
@@ -2455,7 +3590,7 @@ function setupRefresh() {
             setTimeout(
                 () => {
 
-                    refreshOrdersBtn.classList.remove(
+                    refreshOrdersBtn?.classList.remove(
                         "is-refreshing"
                     );
 
@@ -2511,7 +3646,256 @@ function setupHeaderActions() {
 
 
 /* =========================================================
-   ITEM COUNT
+   EMPTY STATE
+========================================================= */
+
+function renderEmptyState() {
+
+    if (
+        ordersTableBody
+    ) {
+
+        ordersTableBody.innerHTML =
+            "";
+
+    }
+
+
+    if (
+        ordersMobileList
+    ) {
+
+        ordersMobileList.innerHTML =
+            "";
+
+    }
+
+
+    ordersEmpty?.classList.add(
+        "show"
+    );
+
+}
+
+
+function hideEmptyState() {
+
+    ordersEmpty?.classList.remove(
+        "show"
+    );
+
+}
+
+
+/* =========================================================
+   STATUS CLASSES
+========================================================= */
+
+function updateStatusControlClasses() {
+
+    document
+        .querySelectorAll(
+            ".order-status-select"
+        )
+        .forEach(
+            select => {
+
+                select.classList.remove(
+                    "processing",
+                    "shipped",
+                    "out-for-delivery",
+                    "delivered"
+                );
+
+
+                const className =
+                    getStatusClass(
+                        select.value
+                    );
+
+
+                if (
+                    className
+                ) {
+
+                    select.classList.add(
+                        className
+                    );
+
+                }
+
+            }
+        );
+
+}
+
+
+function getStatusClass(
+    status
+) {
+
+    switch (
+        normalizeStatus(
+            status
+        )
+    ) {
+
+        case "processing":
+            return "processing";
+
+        case "shipped":
+            return "shipped";
+
+        case "out-for-delivery":
+            return "out-for-delivery";
+
+        case "delivered":
+            return "delivered";
+
+        default:
+            return "";
+
+    }
+
+}
+
+
+/* =========================================================
+   STATUS HELPERS
+========================================================= */
+
+function normalizeStatus(
+    value
+) {
+
+    const status =
+        String(
+            value ||
+            ""
+        )
+            .trim()
+            .toLowerCase()
+            .replace(
+                /[-_]+/g,
+                " "
+            )
+            .replace(
+                /\s+/g,
+                " "
+            );
+
+
+    if (
+        status ===
+        "processing"
+    ) {
+
+        return "processing";
+
+    }
+
+
+    if (
+        status ===
+        "shipped"
+    ) {
+
+        return "shipped";
+
+    }
+
+
+    if (
+        status ===
+        "out for delivery"
+    ) {
+
+        return "out-for-delivery";
+
+    }
+
+
+    if (
+        status ===
+        "delivered"
+    ) {
+
+        return "delivered";
+
+    }
+
+
+    return "placed";
+
+}
+
+
+function formatStatus(
+    value
+) {
+
+    switch (
+        normalizeStatus(
+            value
+        )
+    ) {
+
+        case "processing":
+            return "Processing";
+
+        case "shipped":
+            return "Shipped";
+
+        case "out-for-delivery":
+            return "Out for Delivery";
+
+        case "delivered":
+            return "Delivered";
+
+        default:
+            return "Order Placed";
+
+    }
+
+}
+
+
+function getStatusIndex(
+    status
+) {
+
+    return [
+        "placed",
+        "processing",
+        "shipped",
+        "out-for-delivery",
+        "delivered"
+    ]
+        .indexOf(
+            normalizeStatus(
+                status
+            )
+        );
+
+}
+
+
+function getCurrentRole() {
+
+    return String(
+        localStorage.getItem(
+            ROLE_KEY
+        ) ||
+        DEFAULT_ROLE
+    )
+        .trim()
+        .toLowerCase();
+
+}
+
+
+/* =========================================================
+   GENERAL HELPERS
 ========================================================= */
 
 function getOrderItemCount(
@@ -2530,28 +3914,20 @@ function getOrderItemCount(
         (
             total,
             item
-        ) => {
-
-            return (
-                total +
-                Math.max(
-                    1,
-                    Number(
-                        item?.quantity
-                    ) || 1
-                )
-            );
-
-        },
+        ) =>
+            total +
+            Math.max(
+                1,
+                Number(
+                    item?.quantity
+                ) ||
+                1
+            ),
         0
     );
 
 }
 
-
-/* =========================================================
-   INITIALS
-========================================================= */
 
 function getInitials(
     name
@@ -2595,7 +3971,8 @@ function getInitials(
 
     return (
         words[0]
-            .charAt(0) +
+            .charAt(0)
+        +
         words[
             words.length - 1
         ]
@@ -2606,199 +3983,37 @@ function getInitials(
 }
 
 
-/* =========================================================
-   STATUS NORMALIZE
-========================================================= */
-
-function normalizeStatusText(
-    status
-) {
-
-    return String(
-        status ||
-        "Order Placed"
-    )
-        .trim()
-        .toLowerCase()
-        .replace(
-            /[-_]+/g,
-            " "
-        )
-        .replace(
-            /\s+/g,
-            " "
-        );
-
-}
-
-
-/* =========================================================
-   STATUS CLASS
-========================================================= */
-
-function getStatusClass(
-    status
-) {
-
-    const normalized =
-        normalizeStatusText(
-            status
-        );
-
-
-    switch (
-        normalized
-    ) {
-
-        case "processing":
-
-            return "processing";
-
-
-        case "shipped":
-
-            return "shipped";
-
-
-        case "out for delivery":
-
-            return "out-for-delivery";
-
-
-        case "delivered":
-
-            return "delivered";
-
-
-        default:
-
-            return "";
-
-    }
-
-}
-
-
-/* =========================================================
-   FORMAT STATUS
-========================================================= */
-
-function formatStatus(
-    status
-) {
-
-    switch (
-        normalizeStatusText(
-            status
-        )
-    ) {
-
-        case "processing":
-
-            return "Processing";
-
-
-        case "shipped":
-
-            return "Shipped";
-
-
-        case "out for delivery":
-
-            return "Out for Delivery";
-
-
-        case "delivered":
-
-            return "Delivered";
-
-
-        default:
-
-            return "Order Placed";
-
-    }
-
-}
-
-
-/* =========================================================
-   FORMAT PAYMENT
-========================================================= */
-
-function formatPayment(
+function normalizeOrderId(
     value
 ) {
 
-    const method =
-        String(
-            value ||
-            "cod"
-        )
-            .trim()
-            .toLowerCase();
-
-
-    switch (
-        method
-    ) {
-
-        case "card":
-
-            return "Card Payment";
-
-
-        case "card payment":
-
-            return "Card Payment";
-
-
-        case "cash":
-
-            return "Cash on Delivery";
-
-
-        case "cash on delivery":
-
-            return "Cash on Delivery";
-
-
-        case "cod":
-
-            return "Cash on Delivery";
-
-
-        default:
-
-            return "Cash on Delivery";
-
-    }
+    return String(
+        value ||
+        ""
+    )
+        .trim()
+        .toUpperCase()
+        .replace(
+            /\s+/g,
+            ""
+        );
 
 }
 
-
-/* =========================================================
-   FORMAT MONEY
-========================================================= */
 
 function formatMoney(
     value
 ) {
 
-    const amount =
+    return `$${(
         Number(
             value
-        ) || 0;
-
-
-    return `$${amount.toFixed(2)}`;
+        ) ||
+        0
+    ).toFixed(2)}`;
 
 }
 
-
-/* =========================================================
-   SHORT DATE
-========================================================= */
 
 function formatShortDate(
     value
@@ -2833,16 +4048,12 @@ function formatShortDate(
     return new Intl.DateTimeFormat(
         "en-US",
         {
-
             month:
                 "short",
-
             day:
                 "numeric",
-
             year:
                 "numeric"
-
         }
     ).format(
         date
@@ -2851,11 +4062,7 @@ function formatShortDate(
 }
 
 
-/* =========================================================
-   FULL DATE
-========================================================= */
-
-function formatFullDate(
+function formatDateTime(
     value
 ) {
 
@@ -2888,22 +4095,16 @@ function formatFullDate(
     return new Intl.DateTimeFormat(
         "en-US",
         {
-
             month:
                 "short",
-
             day:
                 "numeric",
-
             year:
                 "numeric",
-
             hour:
                 "numeric",
-
             minute:
                 "2-digit"
-
         }
     ).format(
         date
@@ -2912,9 +4113,35 @@ function formatFullDate(
 }
 
 
-/* =========================================================
-   ESCAPE HTML
-========================================================= */
+function formatPayment(
+    value
+) {
+
+    const method =
+        String(
+            value ||
+            ""
+        )
+            .trim()
+            .toLowerCase();
+
+
+    if (
+        method ===
+            "card" ||
+        method ===
+            "card payment"
+    ) {
+
+        return "Card Payment";
+
+    }
+
+
+    return "Cash on Delivery";
+
+}
+
 
 function escapeHTML(
     value
@@ -2924,27 +4151,22 @@ function escapeHTML(
         value ??
         ""
     )
-
         .replace(
             /&/g,
             "&amp;"
         )
-
         .replace(
             /</g,
             "&lt;"
         )
-
         .replace(
             />/g,
             "&gt;"
         )
-
         .replace(
             /"/g,
             "&quot;"
         )
-
         .replace(
             /'/g,
             "&#039;"
@@ -2954,5 +4176,105 @@ function escapeHTML(
 
 
 /* =========================================================
-   END SHOPMAX ORDERS
+   TOAST
 ========================================================= */
+
+function showToast(
+    message,
+    isError = false
+) {
+
+    let toast =
+        document.getElementById(
+            "shopmaxOrderToast"
+        );
+
+
+    if (
+        !toast
+    ) {
+
+        toast =
+            document.createElement(
+                "div"
+            );
+
+
+        toast.id =
+            "shopmaxOrderToast";
+
+
+        toast.className =
+            "order-status-toast";
+
+
+        document.body.appendChild(
+            toast
+        );
+
+    }
+
+
+    toast.textContent =
+        message;
+
+
+    toast.classList.toggle(
+        "error",
+        isError
+    );
+
+
+    toast.classList.add(
+        "show"
+    );
+
+
+    clearTimeout(
+        window.shopmaxToastTimer
+    );
+
+
+    window.shopmaxToastTimer =
+        setTimeout(
+            () => {
+
+                toast.classList.remove(
+                    "show"
+                );
+
+            },
+            2500
+        );
+
+}
+
+
+/* =========================================================
+   STORAGE SYNC
+========================================================= */
+
+window.addEventListener(
+    "storage",
+    event => {
+
+        if (
+            event.key !==
+            "shopmax-orders"
+        ) {
+
+            return;
+
+        }
+
+
+        refreshOrders();
+
+        updateHeaderCounts();
+
+        updateSummary();
+
+        renderOrders();
+
+    }
+);

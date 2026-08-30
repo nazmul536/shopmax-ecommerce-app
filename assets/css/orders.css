@@ -3456,3 +3456,1594 @@ body {
     }
 
 }
+
+/* =========================================================
+   STATUS MANAGEMENT CONTROL
+========================================================= */
+
+.order-status-select {
+
+    min-width: 122px;
+
+    height: 34px;
+
+    padding: 0 28px 0 10px;
+
+    border: 1px solid #dce4ef;
+
+    border-radius: 7px;
+
+    outline: none;
+
+    background-color: #eaf8ef;
+
+    color: var(--orders-green);
+
+    font-family: inherit;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+    appearance: auto;
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease,
+        background-color .2s ease,
+        color .2s ease;
+
+}
+
+
+.order-status-select:hover {
+
+    border-color: #cdd9e8;
+
+}
+
+
+.order-status-select:focus {
+
+    border-color: var(--orders-blue);
+
+    box-shadow:
+        0 0 0 4px
+        rgba(
+            40,
+            100,
+            232,
+            .07
+        );
+
+}
+
+
+.order-status-select.processing {
+
+    background-color: #fff7e8;
+
+    color: var(--orders-orange);
+
+}
+
+
+.order-status-select.shipped {
+
+    background-color: #edf4ff;
+
+    color: var(--orders-blue);
+
+}
+
+
+.order-status-select.out-for-delivery {
+
+    background-color: #f1edff;
+
+    color: #6d4ee8;
+
+}
+
+
+.order-status-select.delivered {
+
+    background-color: #eaf8ef;
+
+    color: var(--orders-green);
+
+}
+
+
+.mobile-status-select {
+
+    min-width: 116px;
+
+    height: 32px;
+
+    font-size: 8px;
+
+}
+
+
+/* =========================================================
+   STATUS TOAST
+========================================================= */
+
+.order-status-toast {
+
+    position: fixed;
+
+    left: 50%;
+
+    bottom: 24px;
+
+    z-index: 10020;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    max-width: min(420px, calc(100vw - 30px));
+
+    padding: 11px 15px;
+
+    border: 1px solid #d8eadf;
+
+    border-radius: 9px;
+
+    background: #ffffff;
+
+    color: var(--orders-dark);
+
+    box-shadow:
+        0 12px 35px
+        rgba(
+            15,
+            23,
+            42,
+            .16
+        );
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
+
+    transform:
+        translate(-50%, 12px);
+
+    transition:
+        opacity .2s ease,
+        visibility .2s ease,
+        transform .2s ease;
+
+}
+
+
+.order-status-toast.show {
+
+    opacity: 1;
+
+    visibility: visible;
+
+    transform:
+        translate(-50%, 0);
+
+}
+
+
+.order-status-toast > i {
+
+    color: var(--orders-green);
+
+    font-size: 13px;
+
+}
+
+
+.order-status-toast strong {
+
+    color: var(--orders-blue);
+
+    font-weight: 800;
+
+}
+
+
+@media (max-width: 900px) {
+
+    .order-status-select {
+
+        min-width: 112px;
+
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    .order-status-toast {
+
+        bottom: 16px;
+
+        width: calc(100vw - 30px);
+
+        justify-content: center;
+
+        text-align: center;
+
+        font-size: 9px;
+
+    }
+
+}
+
+
+/* =========================================================
+   STATUS CONTROL WRAPPER
+========================================================= */
+
+.order-status-control {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        6px;
+
+}
+
+
+.order-status-control .order-status-select {
+
+    min-width:
+        122px;
+
+}
+
+
+/* =========================================================
+   EMERGENCY BUTTON
+========================================================= */
+
+.order-emergency-btn {
+
+    width:
+        34px;
+
+    min-width:
+        34px;
+
+    height:
+        34px;
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        5px;
+
+    padding:
+        0 8px;
+
+    border:
+        1px solid #f0d7b1;
+
+    border-radius:
+        7px;
+
+    background:
+        #fffaf1;
+
+    color:
+        #a45f00;
+
+    font-size:
+        9px;
+
+    font-weight:
+        800;
+
+    cursor:
+        pointer;
+
+    transition:
+        border-color .2s ease,
+        background .2s ease,
+        color .2s ease,
+        transform .2s ease;
+
+}
+
+
+.order-emergency-btn:hover {
+
+    border-color:
+        #e4b873;
+
+    background:
+        #fff4dd;
+
+    color:
+        #8b4f00;
+
+    transform:
+        translateY(-1px);
+
+}
+
+
+.mobile-status-label {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        8px;
+
+    margin-bottom:
+        7px;
+
+}
+
+
+.mobile-status-label small {
+
+    margin:
+        0;
+
+}
+
+
+.mobile-emergency-btn {
+
+    width:
+        auto;
+
+    min-width:
+        auto;
+
+    height:
+        28px;
+
+    padding:
+        0 9px;
+
+    font-size:
+        8px;
+
+}
+
+
+/* =========================================================
+   DISABLED STATUS OPTIONS / SELECT
+========================================================= */
+
+.order-status-select:disabled {
+
+    cursor:
+        not-allowed;
+
+    opacity:
+        .65;
+
+}
+
+
+/* =========================================================
+   EMERGENCY MODAL
+========================================================= */
+
+.emergency-status-modal {
+
+    position:
+        fixed;
+
+    inset:
+        0;
+
+    z-index:
+        11000;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    padding:
+        20px;
+
+    visibility:
+        hidden;
+
+    opacity:
+        0;
+
+    pointer-events:
+        none;
+
+    transition:
+        opacity .2s ease,
+        visibility .2s ease;
+
+}
+
+
+.emergency-status-modal.show {
+
+    visibility:
+        visible;
+
+    opacity:
+        1;
+
+    pointer-events:
+        auto;
+
+}
+
+
+.emergency-status-overlay {
+
+    position:
+        absolute;
+
+    inset:
+        0;
+
+    background:
+        rgba(
+            15,
+            23,
+            42,
+            .62
+        );
+
+    backdrop-filter:
+        blur(5px);
+
+}
+
+
+.emergency-status-dialog {
+
+    position:
+        relative;
+
+    width:
+        min(
+            520px,
+            100%
+        );
+
+    overflow:
+        hidden;
+
+    border:
+        1px solid #e0e7ef;
+
+    border-radius:
+        16px;
+
+    background:
+        #ffffff;
+
+    box-shadow:
+        0 30px 85px
+        rgba(
+            15,
+            23,
+            42,
+            .28
+        );
+
+    transform:
+        translateY(12px)
+        scale(.985);
+
+    transition:
+        transform .2s ease;
+
+}
+
+
+.emergency-status-modal.show
+.emergency-status-dialog {
+
+    transform:
+        translateY(0)
+        scale(1);
+
+}
+
+
+.emergency-status-header {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        18px;
+
+    padding:
+        22px 24px;
+
+    border-bottom:
+        1px solid #e9eef4;
+
+}
+
+
+.emergency-status-header span {
+
+    display:
+        block;
+
+    margin-bottom:
+        5px;
+
+    color:
+        #a45f00;
+
+    font-size:
+        8px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        1.15px;
+
+}
+
+
+.emergency-status-header h3 {
+
+    margin:
+        0;
+
+    color:
+        var(--orders-dark);
+
+    font-size:
+        21px;
+
+    font-weight:
+        800;
+
+}
+
+
+.emergency-status-close {
+
+    width:
+        38px;
+
+    height:
+        38px;
+
+    display:
+        grid;
+
+    place-items:
+        center;
+
+    border:
+        1px solid #e1e8f0;
+
+    border-radius:
+        9px;
+
+    background:
+        #f7f9fc;
+
+    color:
+        #64748b;
+
+    cursor:
+        pointer;
+
+    transition:
+        .2s ease;
+
+}
+
+
+.emergency-status-close:hover {
+
+    background:
+        #eef3f8;
+
+    color:
+        var(--orders-dark);
+
+}
+
+
+.emergency-status-warning {
+
+    display:
+        flex;
+
+    align-items:
+        flex-start;
+
+    gap:
+        11px;
+
+    margin:
+        18px 24px;
+
+    padding:
+        13px;
+
+    border:
+        1px solid #f3dfbd;
+
+    border-radius:
+        10px;
+
+    background:
+        #fffaf1;
+
+}
+
+
+.emergency-status-warning > i {
+
+    margin-top:
+        2px;
+
+    color:
+        #b86a00;
+
+    font-size:
+        14px;
+
+}
+
+
+.emergency-status-warning strong {
+
+    display:
+        block;
+
+    margin-bottom:
+        4px;
+
+    color:
+        #7c4a00;
+
+    font-size:
+        11px;
+
+    font-weight:
+        800;
+
+}
+
+
+.emergency-status-warning p {
+
+    margin:
+        0;
+
+    color:
+        #8b6a3d;
+
+    font-size:
+        9px;
+
+    line-height:
+        1.55;
+
+}
+
+
+.emergency-status-form {
+
+    display:
+        grid;
+
+    gap:
+        8px;
+
+    padding:
+        0 24px 20px;
+
+}
+
+
+.emergency-status-current {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        10px;
+
+    margin-bottom:
+        7px;
+
+    padding:
+        11px 12px;
+
+    border:
+        1px solid #e4eaf1;
+
+    border-radius:
+        9px;
+
+    background:
+        #f8fafc;
+
+}
+
+
+.emergency-status-current small,
+.emergency-status-form > label {
+
+    color:
+        #8997a8;
+
+    font-size:
+        8px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        .8px;
+
+}
+
+
+.emergency-status-current strong {
+
+    color:
+        var(--orders-dark);
+
+    font-size:
+        10px;
+
+}
+
+
+.emergency-status-select,
+.emergency-status-reason {
+
+    width:
+        100%;
+
+    border:
+        1px solid #d7e0eb;
+
+    border-radius:
+        8px;
+
+    outline:
+        none;
+
+    background:
+        #ffffff;
+
+    color:
+        var(--orders-text);
+
+    font-family:
+        inherit;
+
+    font-size:
+        10px;
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease;
+
+}
+
+
+.emergency-status-select {
+
+    height:
+        42px;
+
+    padding:
+        0 11px;
+
+}
+
+
+.emergency-status-reason {
+
+    min-height:
+        82px;
+
+    resize:
+        vertical;
+
+    padding:
+        10px 11px;
+
+    line-height:
+        1.5;
+
+}
+
+
+.emergency-status-select:focus,
+.emergency-status-reason:focus {
+
+    border-color:
+        var(--orders-blue);
+
+    box-shadow:
+        0 0 0 4px
+        rgba(
+            40,
+            100,
+            232,
+            .07
+        );
+
+}
+
+
+.emergency-status-footer {
+
+    display:
+        flex;
+
+    justify-content:
+        flex-end;
+
+    gap:
+        8px;
+
+    padding:
+        16px 24px;
+
+    border-top:
+        1px solid #e9eef4;
+
+    background:
+        #fafbfd;
+
+}
+
+
+.emergency-cancel-btn,
+.emergency-confirm-btn {
+
+    min-height:
+        39px;
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        7px;
+
+    padding:
+        0 14px;
+
+    border-radius:
+        8px;
+
+    font-family:
+        inherit;
+
+    font-size:
+        9px;
+
+    font-weight:
+        800;
+
+    cursor:
+        pointer;
+
+}
+
+
+.emergency-cancel-btn {
+
+    border:
+        1px solid #dbe3ed;
+
+    background:
+        #ffffff;
+
+    color:
+        var(--orders-text);
+
+}
+
+
+.emergency-cancel-btn:hover {
+
+    background:
+        #f7f9fc;
+
+}
+
+
+.emergency-confirm-btn {
+
+    border:
+        1px solid #c98412;
+
+    background:
+        #b96c00;
+
+    color:
+        #ffffff;
+
+}
+
+
+.emergency-confirm-btn:hover {
+
+    background:
+        #9f5c00;
+
+}
+
+
+/* =========================================================
+   ORDER ACTIVITY / AUDIT
+========================================================= */
+
+.order-detail-activity {
+
+    margin-top:
+        16px;
+
+}
+
+
+.order-detail-activity-list {
+
+    display:
+        grid;
+
+    gap:
+        10px;
+
+}
+
+
+.order-detail-activity-item {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        10px
+        minmax(0,1fr);
+
+    gap:
+        9px;
+
+    padding:
+        10px 0;
+
+    border-bottom:
+        1px solid #edf1f5;
+
+}
+
+
+.order-detail-activity-item:last-child {
+
+    border-bottom:
+        0;
+
+    padding-bottom:
+        0;
+
+}
+
+
+.order-detail-activity-dot {
+
+    width:
+        8px;
+
+    height:
+        8px;
+
+    margin-top:
+        5px;
+
+    border-radius:
+        50%;
+
+    background:
+        var(--orders-blue);
+
+}
+
+
+.order-detail-activity-item.is-emergency
+.order-detail-activity-dot {
+
+    background:
+        #b96c00;
+
+}
+
+
+.order-detail-activity-top {
+
+    display:
+        flex;
+
+    align-items:
+        baseline;
+
+    justify-content:
+        space-between;
+
+    gap:
+        12px;
+
+}
+
+
+.order-detail-activity-top strong {
+
+    color:
+        var(--orders-dark);
+
+    font-size:
+        10px;
+
+    font-weight:
+        800;
+
+}
+
+
+.order-detail-activity-top time {
+
+    color:
+        #8e9aaa;
+
+    font-size:
+        8px;
+
+    white-space:
+        nowrap;
+
+}
+
+
+.order-detail-activity-content > span {
+
+    display:
+        block;
+
+    margin-top:
+        3px;
+
+    color:
+        #8e9aaa;
+
+    font-size:
+        8px;
+
+}
+
+
+.order-detail-activity-content p {
+
+    margin:
+        5px 0 0;
+
+    color:
+        #64748b;
+
+    font-size:
+        8px;
+
+    line-height:
+        1.5;
+
+}
+
+
+.order-detail-activity-empty {
+
+    padding:
+        10px 0;
+
+    color:
+        #94a3b8;
+
+    font-size:
+        9px;
+
+}
+
+
+/* =========================================================
+   MOBILE EMERGENCY MODAL
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .emergency-status-modal {
+
+        align-items:
+            flex-end;
+
+        padding:
+            10px;
+
+    }
+
+
+    .emergency-status-dialog {
+
+        width:
+            100%;
+
+        border-radius:
+            14px;
+
+        max-height:
+            92vh;
+
+        overflow-y:
+            auto;
+
+    }
+
+
+    .emergency-status-header {
+
+        padding:
+            18px 18px;
+
+    }
+
+
+    .emergency-status-warning {
+
+        margin:
+            14px 18px;
+
+    }
+
+
+    .emergency-status-form {
+
+        padding:
+            0 18px 16px;
+
+    }
+
+
+    .emergency-status-footer {
+
+        padding:
+            13px 18px;
+
+    }
+
+
+    .emergency-cancel-btn,
+    .emergency-confirm-btn {
+
+        flex:
+            1;
+
+    }
+
+
+    .order-status-control {
+
+        width:
+            100%;
+
+    }
+
+
+    .order-status-control .order-status-select {
+
+        flex:
+            1;
+
+        min-width:
+            0;
+
+    }
+
+
+    .order-emergency-btn {
+
+        flex:
+            0 0 auto;
+
+    }
+
+
+    .order-detail-activity-top {
+
+        display:
+            grid;
+
+        gap:
+            3px;
+
+    }
+
+
+    .order-detail-activity-top time {
+
+        white-space:
+            normal;
+
+    }
+
+}
+
+/* =========================================================
+   EMERGENCY MODAL - JS CLASS COMPATIBILITY FIX
+========================================================= */
+
+.emergency-warning {
+
+    display:
+        flex;
+
+    align-items:
+        flex-start;
+
+    gap:
+        11px;
+
+    margin:
+        18px 24px;
+
+    padding:
+        13px;
+
+    border:
+        1px solid #f3dfbd;
+
+    border-radius:
+        10px;
+
+    background:
+        #fffaf1;
+
+}
+
+
+.emergency-warning > i {
+
+    margin-top:
+        2px;
+
+    color:
+        #b86a00;
+
+    font-size:
+        14px;
+
+}
+
+
+.emergency-warning strong {
+
+    display:
+        block;
+
+    margin-bottom:
+        4px;
+
+    color:
+        #7c4a00;
+
+    font-size:
+        11px;
+
+    font-weight:
+        800;
+
+}
+
+
+.emergency-warning p {
+
+    margin:
+        0;
+
+    color:
+        #8b6a3d;
+
+    font-size:
+        9px;
+
+    line-height:
+        1.55;
+
+}
+
+
+/* Field wrapper used by JS */
+
+.emergency-status-field {
+
+    display:
+        grid;
+
+    gap:
+        7px;
+
+    padding:
+        0 24px;
+
+}
+
+
+.emergency-status-field + .emergency-status-field {
+
+    margin-top:
+        14px;
+
+}
+
+
+.emergency-status-field label {
+
+    color:
+        #8997a8;
+
+    font-size:
+        8px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        .8px;
+
+}
+
+
+/* Current status used by JS */
+
+.emergency-current-status {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    min-height:
+        42px;
+
+    padding:
+        0 12px;
+
+    border:
+        1px solid #dfe7ef;
+
+    border-radius:
+        8px;
+
+    background:
+        #f8fafc;
+
+    color:
+        var(--orders-dark);
+
+    font-size:
+        10px;
+
+    font-weight:
+        800;
+
+}
+
+
+/* Reason */
+
+.emergency-status-reason {
+
+    width:
+        100%;
+
+    min-height:
+        82px;
+
+    padding:
+        10px 11px;
+
+    border:
+        1px solid #d7e0eb;
+
+    border-radius:
+        8px;
+
+    outline:
+        none;
+
+    background:
+        #ffffff;
+
+    color:
+        var(--orders-text);
+
+    font-family:
+        inherit;
+
+    font-size:
+        10px;
+
+    line-height:
+        1.5;
+
+    resize:
+        vertical;
+
+}
+
+
+.emergency-status-reason:focus {
+
+    border-color:
+        var(--orders-blue);
+
+    box-shadow:
+        0 0 0 4px
+        rgba(
+            40,
+            100,
+            232,
+            .07
+        );
+
+}
+
+
+/* New status */
+
+.emergency-status-select {
+
+    width:
+        100%;
+
+    height:
+        42px;
+
+    padding:
+        0 11px;
+
+    border:
+        1px solid #d7e0eb;
+
+    border-radius:
+        8px;
+
+    outline:
+        none;
+
+    background:
+        #ffffff;
+
+    color:
+        var(--orders-text);
+
+    font-family:
+        inherit;
+
+    font-size:
+        10px;
+
+    cursor:
+        pointer;
+
+}
+
+
+.emergency-status-select:focus {
+
+    border-color:
+        var(--orders-blue);
+
+    box-shadow:
+        0 0 0 4px
+        rgba(
+            40,
+            100,
+            232,
+            .07
+        );
+
+}
+
+
+/* Footer spacing */
+
+.emergency-status-footer {
+
+    margin-top:
+        20px;
+
+}
+
+
+/* Mobile */
+
+@media (max-width: 700px) {
+
+    .emergency-warning {
+
+        margin:
+            14px 18px;
+
+    }
+
+
+    .emergency-status-field {
+
+        padding:
+            0 18px;
+
+    }
+
+}

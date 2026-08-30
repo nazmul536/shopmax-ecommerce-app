@@ -1,258 +1,296 @@
+"use strict";
+
 /* =========================================================
    SHOPMAX
-   TRACK ORDER PAGE JAVASCRIPT
-
-   Features:
-   - Read orders from LocalStorage
-   - Search by Order ID
-   - Search by Phone Number
-   - Show multiple orders for same phone
-   - Show active / delivered counts
-   - Track specific order
-   - Auto-load Order ID from URL
-   - Show customer information
-   - Show shipping information
-   - Show payment method
-   - Show products
-   - Show totals
-   - Show tracking timeline
+   TRACK ORDER PAGE
 ========================================================= */
+
+let orders = [];
+let cart = [];
+let wishlist = [];
 
 
 /* =========================================================
-   STATE
+   FLOW
 ========================================================= */
 
-let orders =
-    JSON.parse(
-        localStorage.getItem("shopmax-orders")
-    ) || [];
-
-
-let cart =
-    JSON.parse(
-        localStorage.getItem("shopmax-cart")
-    ) || [];
-
-
-let wishlist =
-    JSON.parse(
-        localStorage.getItem("shopmax-wishlist")
-    ) || [];
+const FLOW = [
+    "placed",
+    "processing",
+    "shipped",
+    "out-for-delivery",
+    "delivered"
+];
 
 
 /* =========================================================
-   NORMALIZE STATE
+   STORAGE KEY
 ========================================================= */
 
-orders =
-    Array.isArray(orders)
-        ? orders
-        : [];
-
-
-cart =
-    Array.isArray(cart)
-        ? cart
-        : [];
-
-
-wishlist =
-    Array.isArray(wishlist)
-        ? wishlist
-        : [];
+const SELECTED_ORDER_KEY =
+    "shopmax-selected-order-id";
 
 
 /* =========================================================
-   DOM - HEADER
+   DOM HELPER
+========================================================= */
+
+const ids =
+    name =>
+        document.getElementById(
+            name
+        );
+
+
+/* =========================================================
+   HEADER
 ========================================================= */
 
 const trackWishlistBtn =
-    document.getElementById("trackWishlistBtn");
+    ids(
+        "trackWishlistBtn"
+    );
 
 const trackWishlistCount =
-    document.getElementById("trackWishlistCount");
+    ids(
+        "trackWishlistCount"
+    );
 
 const trackCartBtn =
-    document.getElementById("trackCartBtn");
+    ids(
+        "trackCartBtn"
+    );
 
 const trackCartCount =
-    document.getElementById("trackCartCount");
+    ids(
+        "trackCartCount"
+    );
 
 const trackSearch =
-    document.getElementById("trackSearch");
+    ids(
+        "trackSearch"
+    );
 
 const trackSearchBtn =
-    document.getElementById("trackSearchBtn");
+    ids(
+        "trackSearchBtn"
+    );
 
 const trackCategoriesBtn =
-    document.getElementById("trackCategoriesBtn");
+    ids(
+        "trackCategoriesBtn"
+    );
 
 
 /* =========================================================
-   DOM - ORDER SEARCH
+   SEARCH
 ========================================================= */
 
 const orderTrackingInput =
-    document.getElementById("orderTrackingInput");
+    ids(
+        "orderTrackingInput"
+    );
 
 const trackOrderBtn =
-    document.getElementById("trackOrderBtn");
+    ids(
+        "trackOrderBtn"
+    );
 
 const trackOrderError =
-    document.getElementById("trackOrderError");
-
-const trackSearchHint =
-    document.getElementById("trackSearchHint");
+    ids(
+        "trackOrderError"
+    );
 
 
 /* =========================================================
-   DOM - MULTIPLE ORDERS
+   MULTIPLE ORDERS
 ========================================================= */
 
 const multipleOrdersResult =
-    document.getElementById("multipleOrdersResult");
+    ids(
+        "multipleOrdersResult"
+    );
 
 const multipleOrdersTitle =
-    document.getElementById("multipleOrdersTitle");
+    ids(
+        "multipleOrdersTitle"
+    );
 
 const multipleOrdersSubtitle =
-    document.getElementById("multipleOrdersSubtitle");
+    ids(
+        "multipleOrdersSubtitle"
+    );
 
 const multipleOrdersCount =
-    document.getElementById("multipleOrdersCount");
+    ids(
+        "multipleOrdersCount"
+    );
 
 const activeOrdersCount =
-    document.getElementById("activeOrdersCount");
+    ids(
+        "activeOrdersCount"
+    );
 
 const deliveredOrdersCount =
-    document.getElementById("deliveredOrdersCount");
+    ids(
+        "deliveredOrdersCount"
+    );
 
 const multipleOrdersList =
-    document.getElementById("multipleOrdersList");
+    ids(
+        "multipleOrdersList"
+    );
 
 
 /* =========================================================
-   DOM - SINGLE RESULT
+   SINGLE ORDER
 ========================================================= */
 
 const orderResult =
-    document.getElementById("orderResult");
+    ids(
+        "orderResult"
+    );
 
 const trackEmpty =
-    document.getElementById("trackEmpty");
+    ids(
+        "trackEmpty"
+    );
 
 
 /* =========================================================
-   DOM - ORDER HEADER
+   ORDER HEADER
 ========================================================= */
 
 const trackedOrderId =
-    document.getElementById("trackedOrderId");
+    ids(
+        "trackedOrderId"
+    );
 
 const trackedOrderStatus =
-    document.getElementById("trackedOrderStatus");
+    ids(
+        "trackedOrderStatus"
+    );
 
 const trackedOrderDate =
-    document.getElementById("trackedOrderDate");
+    ids(
+        "trackedOrderDate"
+    );
 
 const trackedPaymentMethod =
-    document.getElementById("trackedPaymentMethod");
+    ids(
+        "trackedPaymentMethod"
+    );
 
 const trackedOrderTotal =
-    document.getElementById("trackedOrderTotal");
+    ids(
+        "trackedOrderTotal"
+    );
 
 
 /* =========================================================
-   DOM - TIMELINE
-========================================================= */
-
-const trackingTimeline =
-    document.getElementById("trackingTimeline");
-
-
-/* =========================================================
-   DOM - CUSTOMER
+   CUSTOMER
 ========================================================= */
 
 const trackedCustomerName =
-    document.getElementById("trackedCustomerName");
+    ids(
+        "trackedCustomerName"
+    );
 
 const trackedCustomerEmail =
-    document.getElementById("trackedCustomerEmail");
+    ids(
+        "trackedCustomerEmail"
+    );
 
 const trackedCustomerPhone =
-    document.getElementById("trackedCustomerPhone");
+    ids(
+        "trackedCustomerPhone"
+    );
 
 
 /* =========================================================
-   DOM - SHIPPING
+   SHIPPING
 ========================================================= */
 
 const trackedAddress =
-    document.getElementById("trackedAddress");
+    ids(
+        "trackedAddress"
+    );
 
 const trackedCity =
-    document.getElementById("trackedCity");
+    ids(
+        "trackedCity"
+    );
 
 const trackedPostal =
-    document.getElementById("trackedPostal");
+    ids(
+        "trackedPostal"
+    );
 
 const trackedCountry =
-    document.getElementById("trackedCountry");
+    ids(
+        "trackedCountry"
+    );
 
 
 /* =========================================================
-   DOM - ITEMS
+   PRODUCTS
 ========================================================= */
 
 const trackedItems =
-    document.getElementById("trackedItems");
+    ids(
+        "trackedItems"
+    );
 
 const trackedItemsCount =
-    document.getElementById("trackedItemsCount");
+    ids(
+        "trackedItemsCount"
+    );
 
 const trackedSubtotal =
-    document.getElementById("trackedSubtotal");
+    ids(
+        "trackedSubtotal"
+    );
 
 const trackedShipping =
-    document.getElementById("trackedShipping");
+    ids(
+        "trackedShipping"
+    );
 
 const trackedTotal =
-    document.getElementById("trackedTotal");
+    ids(
+        "trackedTotal"
+    );
 
 
 /* =========================================================
-   INITIALIZE
+   TIMELINE
+========================================================= */
+
+const trackingTimeline =
+    ids(
+        "trackingTimeline"
+    );
+
+
+/* =========================================================
+   INIT
 ========================================================= */
 
 document.addEventListener(
     "DOMContentLoaded",
-    () => {
-
-        initializeTracking();
-
-    }
+    initializeTracking
 );
 
 
-/* =========================================================
-   INITIALIZE
-========================================================= */
-
 function initializeTracking() {
 
-    refreshOrders();
-
-    refreshCart();
-
-    refreshWishlist();
+    refreshAll();
 
     updateHeaderCounts();
 
-    setupSearch();
+    setupHeaderSearch();
 
-    setupOrderTracking();
+    setupOrderSearch();
 
     setupHeaderActions();
 
@@ -263,37 +301,63 @@ function initializeTracking() {
         );
 
 
-    const orderId =
-        params.get("orderId");
+    /*
+       URL orderId is the PRIMARY source.
+    */
+
+    let orderId =
+        params.get(
+            "orderId"
+        );
 
 
-    if (orderId) {
+    /*
+       Fallback for selected order.
+    */
 
-        const decodedOrderId =
-            decodeURIComponent(orderId);
+    if (
+        !orderId
+    ) {
+
+        orderId =
+            localStorage.getItem(
+                SELECTED_ORDER_KEY
+            );
+
+    }
 
 
-        if (orderTrackingInput) {
+    if (
+        orderId
+    ) {
+
+        try {
+
+            orderId =
+                decodeURIComponent(
+                    orderId
+                );
+
+        } catch {}
+
+
+        if (
+            orderTrackingInput
+        ) {
 
             orderTrackingInput.value =
-                decodedOrderId;
+                orderId;
 
         }
 
 
-        handleTrackOrder();
+        trackOrderById(
+            orderId
+        );
 
     }
 
     else {
-
-        if (orderTrackingInput) {
-
-            orderTrackingInput.value =
-                "";
-
-        }
-
 
         showEmptyState();
 
@@ -303,73 +367,56 @@ function initializeTracking() {
 
 
 /* =========================================================
-   REFRESH ORDERS
+   STORAGE
 ========================================================= */
 
-function refreshOrders() {
+function readArray(
+    key
+) {
 
-    const storedOrders =
-        JSON.parse(
-            localStorage.getItem(
-                "shopmax-orders"
-            )
-        );
+    try {
+
+        const value =
+            JSON.parse(
+                localStorage.getItem(
+                    key
+                )
+            );
 
 
-    orders =
-        Array.isArray(
-            storedOrders
+        return Array.isArray(
+            value
         )
-            ? storedOrders
+            ? value
             : [];
+
+    } catch {
+
+        return [];
+
+    }
 
 }
 
 
-/* =========================================================
-   REFRESH CART
-========================================================= */
+function refreshAll() {
 
-function refreshCart() {
-
-    const storedCart =
-        JSON.parse(
-            localStorage.getItem(
-                "shopmax-cart"
-            )
+    orders =
+        readArray(
+            "shopmax-orders"
         );
 
 
     cart =
-        Array.isArray(
-            storedCart
-        )
-            ? storedCart
-            : [];
-
-}
-
-
-/* =========================================================
-   REFRESH WISHLIST
-========================================================= */
-
-function refreshWishlist() {
-
-    const storedWishlist =
-        JSON.parse(
-            localStorage.getItem(
-                "shopmax-wishlist"
-            )
+        readArray(
+            "shopmax-cart"
         );
 
 
     wishlist =
-        Array.isArray(
-            storedWishlist
-        )
-            ? storedWishlist
-            : [];
+        readArray(
+            "shopmax-wishlist"
+        );
 
 }
 
@@ -385,24 +432,22 @@ function updateHeaderCounts() {
             (
                 total,
                 item
-            ) => {
-
-                return (
-                    total +
-                    Math.max(
-                        1,
-                        Number(
-                            item?.quantity
-                        ) || 1
-                    )
-                );
-
-            },
+            ) =>
+                total +
+                Math.max(
+                    1,
+                    Number(
+                        item?.quantity
+                    ) ||
+                    1
+                ),
             0
         );
 
 
-    if (trackCartCount) {
+    if (
+        trackCartCount
+    ) {
 
         trackCartCount.textContent =
             cartCount;
@@ -410,7 +455,9 @@ function updateHeaderCounts() {
     }
 
 
-    if (trackWishlistCount) {
+    if (
+        trackWishlistCount
+    ) {
 
         trackWishlistCount.textContent =
             wishlist.length;
@@ -421,14 +468,14 @@ function updateHeaderCounts() {
 
 
 /* =========================================================
-   PRODUCT SEARCH
+   HEADER SEARCH
 ========================================================= */
 
-function setupSearch() {
+function setupHeaderSearch() {
 
     trackSearchBtn?.addEventListener(
         "click",
-        handleProductSearch
+        searchProducts
     );
 
 
@@ -437,12 +484,13 @@ function setupSearch() {
         event => {
 
             if (
-                event.key === "Enter"
+                event.key ===
+                "Enter"
             ) {
 
                 event.preventDefault();
 
-                handleProductSearch();
+                searchProducts();
 
             }
 
@@ -452,19 +500,17 @@ function setupSearch() {
 }
 
 
-/* =========================================================
-   PRODUCT SEARCH HANDLER
-========================================================= */
-
-function handleProductSearch() {
+function searchProducts() {
 
     const query =
         trackSearch
             ?.value
-            .trim();
+            ?.trim();
 
 
-    if (!query) {
+    if (
+        !query
+    ) {
 
         window.location.href =
             "shop.html";
@@ -483,10 +529,10 @@ function handleProductSearch() {
 
 
 /* =========================================================
-   ORDER SEARCH SETUP
+   ORDER SEARCH
 ========================================================= */
 
-function setupOrderTracking() {
+function setupOrderSearch() {
 
     trackOrderBtn?.addEventListener(
         "click",
@@ -499,7 +545,8 @@ function setupOrderTracking() {
         event => {
 
             if (
-                event.key === "Enter"
+                event.key ===
+                "Enter"
             ) {
 
                 event.preventDefault();
@@ -514,32 +561,32 @@ function setupOrderTracking() {
 
     orderTrackingInput?.addEventListener(
         "input",
-        () => {
-
-            clearTrackingError();
-
-        }
+        clearTrackingError
     );
 
 }
 
 
 /* =========================================================
-   MAIN TRACK HANDLER
+   HANDLE SEARCH
 ========================================================= */
 
 function handleTrackOrder() {
 
     clearTrackingError();
 
+    refreshAll();
 
-    const enteredValue =
+
+    const input =
         orderTrackingInput
             ?.value
-            .trim();
+            ?.trim();
 
 
-    if (!enteredValue) {
+    if (
+        !input
+    ) {
 
         showTrackingError(
             "Please enter an Order ID or phone number."
@@ -553,128 +600,92 @@ function handleTrackOrder() {
     }
 
 
-    refreshOrders();
+    /*
+       Exact Order ID first.
+    */
+
+    const order =
+        findOrderById(
+            input
+        );
 
 
     if (
-        orders.length === 0
+        order
     ) {
 
-        showTrackingError(
-            "No saved orders were found on this device."
+        saveSelectedOrder(
+            order.orderId
         );
 
 
-        showEmptyState();
-
-        return;
-
-    }
-
-
-    /* -----------------------------------------------------
-       FIRST: ORDER ID
-    ----------------------------------------------------- */
-
-    const normalizedOrderId =
-        normalizeOrderId(
-            enteredValue
+        updateUrl(
+            order.orderId
         );
 
-
-    const orderById =
-        orders.find(
-            order =>
-                normalizeOrderId(
-                    order?.orderId
-                ) ===
-                normalizedOrderId
-        );
-
-
-    if (orderById) {
 
         renderTrackedOrder(
-            orderById
+            order
         );
+
 
         return;
 
     }
 
 
-    /* -----------------------------------------------------
-       SECOND: PHONE
-    ----------------------------------------------------- */
+    /*
+       Phone number.
+    */
 
-    const normalizedPhone =
+    const phone =
         normalizePhone(
-            enteredValue
+            input
         );
 
 
     if (
-        normalizedPhone.length >= 7
+        phone.length >=
+        7
     ) {
 
-        const phoneOrders =
+        const matches =
             orders
                 .filter(
-                    order => {
-
-                        const savedPhone =
-                            normalizePhone(
-                                order
-                                    ?.customer
-                                    ?.phone
-                            );
-
-
-                        return (
-                            savedPhone &&
-                            savedPhone ===
-                            normalizedPhone
-                        );
-
-                    }
+                    item =>
+                        normalizePhone(
+                            item
+                                ?.customer
+                                ?.phone
+                        ) ===
+                        phone
                 )
                 .sort(
                     (
                         a,
                         b
-                    ) => {
-
-                        const dateA =
-                            new Date(
-                                a?.createdAt ||
-                                0
-                            ).getTime();
-
-
-                        const dateB =
-                            new Date(
-                                b?.createdAt ||
-                                0
-                            ).getTime();
-
-
-                        return (
-                            dateB -
-                            dateA
-                        );
-
-                    }
+                    ) =>
+                        new Date(
+                            b?.createdAt ||
+                            0
+                        ).getTime()
+                        -
+                        new Date(
+                            a?.createdAt ||
+                            0
+                        ).getTime()
                 );
 
 
         if (
-            phoneOrders.length > 0
+            matches.length
         ) {
 
             renderMultipleOrders(
-                phoneOrders,
-                normalizedPhone
+                matches,
+                phone
             );
+
 
             return;
 
@@ -694,507 +705,85 @@ function handleTrackOrder() {
 
 
 /* =========================================================
-   NORMALIZE ORDER ID
+   TRACK BY ID
 ========================================================= */
 
-function normalizeOrderId(
-    value
+function trackOrderById(
+    orderId
 ) {
 
-    return String(
-        value || ""
-    )
-        .trim()
-        .toUpperCase()
-        .replace(
-            /\s+/g,
-            ""
+    refreshAll();
+
+
+    const order =
+        findOrderById(
+            orderId
         );
 
-}
-
-
-/* =========================================================
-   NORMALIZE PHONE
-========================================================= */
-
-function normalizePhone(
-    value
-) {
-
-    return String(
-        value || ""
-    )
-        .replace(
-            /\D/g,
-            ""
-        );
-
-}
-
-
-/* =========================================================
-   SHOW EMPTY
-========================================================= */
-
-function showEmptyState() {
-
-    orderResult?.classList.remove(
-        "show"
-    );
-
-
-    multipleOrdersResult?.classList.remove(
-        "show"
-    );
-
-
-    if (trackEmpty) {
-
-        trackEmpty.style.display =
-            "";
-
-    }
-
-}
-
-
-/* =========================================================
-   SHOW SINGLE ORDER
-========================================================= */
-
-function showResultState() {
-
-    if (trackEmpty) {
-
-        trackEmpty.style.display =
-            "none";
-
-    }
-
-
-    multipleOrdersResult?.classList.remove(
-        "show"
-    );
-
-
-    orderResult?.classList.add(
-        "show"
-    );
-
-}
-
-
-/* =========================================================
-   SHOW MULTIPLE ORDERS
-========================================================= */
-
-function showMultipleOrdersState() {
-
-    orderResult?.classList.remove(
-        "show"
-    );
-
-
-    if (trackEmpty) {
-
-        trackEmpty.style.display =
-            "none";
-
-    }
-
-
-    multipleOrdersResult?.classList.add(
-        "show"
-    );
-
-}
-
-
-/* =========================================================
-   RENDER MULTIPLE ORDERS
-========================================================= */
-
-function renderMultipleOrders(
-    matchedOrders,
-    phone
-) {
 
     if (
-        !multipleOrdersResult ||
-        !multipleOrdersList
+        !order
     ) {
+
+        showTrackingError(
+            `Order "${orderId}" was not found.`
+        );
+
+
+        showEmptyState();
 
         return;
 
     }
 
 
-    showMultipleOrdersState();
+    saveSelectedOrder(
+        order.orderId
+    );
 
 
-    const total =
-        matchedOrders.length;
+    updateUrl(
+        order.orderId
+    );
 
 
-    const delivered =
-        matchedOrders.filter(
-            order =>
-                normalizeStatus(
-                    order?.status
-                ) ===
-                "delivered"
-        ).length;
-
-
-    const active =
-        total -
-        delivered;
-
-
-    const firstOrder =
-        matchedOrders[0];
-
-
-    const customerName =
-        firstOrder
-            ?.customer
-            ?.name ||
-        "Customer";
-
-
-    if (multipleOrdersTitle) {
-
-        multipleOrdersTitle.textContent =
-            `${customerName}'s Orders`;
-
-    }
-
-
-    if (multipleOrdersSubtitle) {
-
-        multipleOrdersSubtitle.textContent =
-            `Orders associated with ${formatPhoneDisplay(
-                phone
-            )}.`;
-
-    }
-
-
-    if (multipleOrdersCount) {
-
-        multipleOrdersCount.textContent =
-            total;
-
-    }
-
-
-    if (activeOrdersCount) {
-
-        activeOrdersCount.textContent =
-            active;
-
-    }
-
-
-    if (deliveredOrdersCount) {
-
-        deliveredOrdersCount.textContent =
-            delivered;
-
-    }
-
-
-    multipleOrdersList.innerHTML =
-        matchedOrders
-            .map(
-                createMultipleOrderCard
-            )
-            .join("");
-
-
-    bindMultipleOrderTrackButtons();
-
-}
-
-
-/* =========================================================
-   CREATE MULTIPLE ORDER CARD
-========================================================= */
-
-function createMultipleOrderCard(
-    order
-) {
-
-    const orderId =
-        order?.orderId ||
-        "—";
-
-
-    const customer =
-        order?.customer ||
-        {};
-
-
-    const name =
-        customer.name ||
-        "Customer";
-
-
-    const date =
-        formatOrderDate(
-            order?.createdAt
-        );
-
-
-    const total =
-        formatMoney(
-            order?.total
-        );
-
-
-    const status =
-        order?.status ||
-        "Order Placed";
-
-
-    const statusClass =
-        getStatusClass(
-            status
-        );
-
-
-    const itemCount =
-        getOrderItemCount(
-            order
-        );
-
-
-    const itemLabel =
-        itemCount === 1
-            ? "item"
-            : "items";
-
-
-    return `
-
-        <article
-            class="multiple-order-card"
-        >
-
-            <div
-                class="
-                    multiple-order-card-header
-                "
-            >
-
-                <div>
-
-                    <span
-                        class="
-                            multiple-order-id
-                        "
-                    >
-                        ${escapeHTML(
-                            orderId
-                        )}
-                    </span>
-
-
-                    <span
-                        class="
-                            multiple-order-date
-                        "
-                    >
-                        ${escapeHTML(
-                            date
-                        )}
-                    </span>
-
-                </div>
-
-
-                <span
-                    class="
-                        multiple-order-status
-                        ${statusClass}
-                    "
-                >
-                    ${escapeHTML(
-                        formatOrderStatus(
-                            status
-                        )
-                    )}
-                </span>
-
-            </div>
-
-
-            <div
-                class="
-                    multiple-order-card-body
-                "
-            >
-
-                <!-- CUSTOMER -->
-
-                <div
-                    class="
-                        multiple-order-customer
-                    "
-                >
-
-                    <div
-                        class="
-                            multiple-order-avatar
-                        "
-                    >
-
-                        ${escapeHTML(
-                            getInitials(
-                                name
-                            )
-                        )}
-
-                    </div>
-
-
-                    <strong>
-
-                        ${escapeHTML(
-                            name
-                        )}
-
-                    </strong>
-
-                </div>
-
-
-
-                <!-- ORDER DATA -->
-
-                <div
-                    class="
-                        multiple-order-info
-                    "
-                >
-
-                    <div>
-
-                        <small>
-                            ITEMS
-                        </small>
-
-                        <strong>
-
-                            ${itemCount}
-                            ${itemLabel}
-
-                        </strong>
-
-                    </div>
-
-
-                    <div>
-
-                        <small>
-                            TOTAL
-                        </small>
-
-                        <strong>
-
-                            ${total}
-
-                        </strong>
-
-                    </div>
-
-
-                    <!-- TRACK BUTTON -->
-
-                    <div
-                        class="
-                            multiple-order-track-wrap
-                        "
-                    >
-
-                        <button
-                            type="button"
-                            class="
-                                multiple-order-track-btn
-                            "
-                            data-multiple-track-order="${escapeHTML(
-                                orderId
-                            )}"
-                        >
-
-                            <i
-                                class="
-                                    fa-solid
-                                    fa-location-dot
-                                "
-                            ></i>
-
-                            Track Order
-
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </article>
-
-    `;
-
-}
-
-
-/* =========================================================
-   BIND MULTIPLE ORDER TRACK BUTTONS
-========================================================= */
-
-function bindMultipleOrderTrackButtons() {
-
-    const buttons =
-        document.querySelectorAll(
-            "[data-multiple-track-order]"
-        );
-
-
-    buttons.forEach(
-        button => {
-
-            button.addEventListener(
-                "click",
-                () => {
-
-                    const orderId =
-                        button.getAttribute(
-                            "data-multiple-track-order"
-                        );
-
-
-                    openSpecificOrder(
-                        orderId
-                    );
-
-                }
-            );
-
-        }
+    renderTrackedOrder(
+        order
     );
 
 }
 
 
 /* =========================================================
-   OPEN SPECIFIC ORDER
+   FIND ORDER
 ========================================================= */
 
-function openSpecificOrder(
+function findOrderById(
+    orderId
+) {
+
+    const normalized =
+        normalizeOrderId(
+            orderId
+        );
+
+
+    return orders.find(
+        order =>
+            normalizeOrderId(
+                order?.orderId
+            ) ===
+            normalized
+    );
+
+}
+
+
+/* =========================================================
+   SELECTED ORDER
+========================================================= */
+
+function saveSelectedOrder(
     orderId
 ) {
 
@@ -1207,16 +796,54 @@ function openSpecificOrder(
     }
 
 
-    window.location.href =
-        `trackOrder.html?orderId=${encodeURIComponent(
-            orderId
-        )}`;
+    localStorage.setItem(
+        SELECTED_ORDER_KEY,
+        orderId
+    );
 
 }
 
 
 /* =========================================================
-   RENDER SINGLE ORDER
+   URL
+========================================================= */
+
+function updateUrl(
+    orderId
+) {
+
+    if (
+        !orderId
+    ) {
+
+        return;
+
+    }
+
+
+    const url =
+        new URL(
+            window.location.href
+        );
+
+
+    url.searchParams.set(
+        "orderId",
+        orderId
+    );
+
+
+    window.history.replaceState(
+        {},
+        "",
+        url
+    );
+
+}
+
+
+/* =========================================================
+   SINGLE ORDER
 ========================================================= */
 
 function renderTrackedOrder(
@@ -1234,32 +861,19 @@ function renderTrackedOrder(
     }
 
 
-    showResultState();
+    showSingleOrderState();
 
+    renderOrderHeader(order);
 
-    renderOrderHeader(
-        order
-    );
+    renderCustomer(order);
 
+    renderShipping(order);
 
-    renderTimeline(
-        order
-    );
+    renderItems(order);
 
+    renderTimeline(order);
 
-    renderCustomer(
-        order
-    );
-
-
-    renderShipping(
-        order
-    );
-
-
-    renderItems(
-        order
-    );
+    renderStatusHistory(order);
 
 }
 
@@ -1272,58 +886,69 @@ function renderOrderHeader(
     order
 ) {
 
-    if (trackedOrderId) {
+    const status =
+        formatOrderStatus(
+            order.status
+        );
+
+
+    if (
+        trackedOrderId
+    ) {
 
         trackedOrderId.textContent =
-            `Order #${
-                order?.orderId ||
-                "—"
-            }`;
+            `Order #${order.orderId}`;
 
     }
 
 
-    if (trackedOrderStatus) {
+    if (
+        trackedOrderStatus
+    ) {
 
         trackedOrderStatus.textContent =
-            formatOrderStatus(
-                order?.status
-            );
+            status;
 
 
         applyStatusClass(
             trackedOrderStatus,
-            order?.status
+            status
         );
 
     }
 
 
-    if (trackedOrderDate) {
+    if (
+        trackedOrderDate
+    ) {
 
         trackedOrderDate.textContent =
-            formatOrderDate(
-                order?.createdAt
+            formatDateTime(
+                order.createdAt
             );
 
     }
 
 
-    if (trackedPaymentMethod) {
+    if (
+        trackedPaymentMethod
+    ) {
 
         trackedPaymentMethod.textContent =
-            formatPaymentMethod(
-                order?.paymentMethod
+            formatPayment(
+                order.paymentMethod
             );
 
     }
 
 
-    if (trackedOrderTotal) {
+    if (
+        trackedOrderTotal
+    ) {
 
         trackedOrderTotal.textContent =
             formatMoney(
-                order?.total
+                order.total
             );
 
     }
@@ -1340,11 +965,13 @@ function renderCustomer(
 ) {
 
     const customer =
-        order?.customer ||
+        order.customer ||
         {};
 
 
-    if (trackedCustomerName) {
+    if (
+        trackedCustomerName
+    ) {
 
         trackedCustomerName.textContent =
             customer.name ||
@@ -1353,7 +980,9 @@ function renderCustomer(
     }
 
 
-    if (trackedCustomerEmail) {
+    if (
+        trackedCustomerEmail
+    ) {
 
         trackedCustomerEmail.textContent =
             customer.email ||
@@ -1362,7 +991,9 @@ function renderCustomer(
     }
 
 
-    if (trackedCustomerPhone) {
+    if (
+        trackedCustomerPhone
+    ) {
 
         trackedCustomerPhone.textContent =
             customer.phone ||
@@ -1382,69 +1013,61 @@ function renderShipping(
 ) {
 
     const customer =
-        order?.customer ||
+        order.customer ||
         {};
 
 
     const addressData =
-        order?.addressData ||
+        order.addressData ||
         {};
 
 
-    const address =
-        addressData.formatted ||
-        customer.address ||
-        "—";
-
-
-    const city =
-        addressData.city ||
-        addressData.county ||
-        customer.city ||
-        "—";
-
-
-    const postal =
-        addressData.postcode ||
-        customer.postalCode ||
-        customer.postal ||
-        "—";
-
-
-    const country =
-        addressData.country ||
-        customer.country ||
-        "—";
-
-
-    if (trackedAddress) {
+    if (
+        trackedAddress
+    ) {
 
         trackedAddress.textContent =
-            address;
+            customer.address ||
+            addressData.formatted ||
+            "—";
 
     }
 
 
-    if (trackedCity) {
+    if (
+        trackedCity
+    ) {
 
         trackedCity.textContent =
-            city;
+            customer.city ||
+            addressData.city ||
+            addressData.county ||
+            "—";
 
     }
 
 
-    if (trackedPostal) {
+    if (
+        trackedPostal
+    ) {
 
         trackedPostal.textContent =
-            postal;
+            customer.postal ||
+            customer.postalCode ||
+            addressData.postcode ||
+            "—";
 
     }
 
 
-    if (trackedCountry) {
+    if (
+        trackedCountry
+    ) {
 
         trackedCountry.textContent =
-            country;
+            customer.country ||
+            addressData.country ||
+            "—";
 
     }
 
@@ -1452,122 +1075,95 @@ function renderShipping(
 
 
 /* =========================================================
-   ITEMS
+   PRODUCTS
 ========================================================= */
 
 function renderItems(
     order
 ) {
 
-    if (!trackedItems) {
-
-        return;
-
-    }
-
-
     const items =
         Array.isArray(
-            order?.items
+            order.items
         )
             ? order.items
             : [];
 
 
-    const itemCount =
-        items.reduce(
-            (
-                total,
-                item
-            ) => {
-
-                return (
-                    total +
-                    Math.max(
-                        1,
-                        Number(
-                            item?.quantity
-                        ) || 1
-                    )
-                );
-
-            },
-            0
+    const count =
+        getItemCount(
+            order
         );
 
 
-    if (trackedItemsCount) {
+    if (
+        trackedItemsCount
+    ) {
 
         trackedItemsCount.textContent =
-            itemCount === 1
-                ? "1 item"
-                : `${itemCount} items`;
+            `${count} ${
+                count ===
+                1
+                    ? "item"
+                    : "items"
+            }`;
 
     }
 
 
     if (
-        items.length === 0
+        trackedItems
     ) {
 
-        trackedItems.innerHTML = `
-
-            <div
-                class="orders-inline-empty"
-            >
-
-                <i
-                    class="
-                        fa-solid
-                        fa-box-open
-                    "
-                ></i>
-
-                <span>
-                    No products found.
-                </span>
-
-            </div>
-
-        `;
-
-    }
-
-    else {
-
         trackedItems.innerHTML =
-            items
-                .map(
-                    createTrackedItem
-                )
-                .join("");
+            items.length
+                ? items
+                    .map(
+                        createTrackedItem
+                    )
+                    .join("")
+                : `
+
+                    <div
+                        class="
+                            orders-inline-empty
+                        "
+                    >
+
+                        No products found.
+
+                    </div>
+
+                `;
 
     }
 
 
     const subtotal =
         Number(
-            order?.subtotal
-        ) || 0;
+            order.subtotal
+        ) ||
+        0;
 
 
     const shipping =
         Number(
-            order?.shipping
-        ) || 0;
+            order.shipping
+        ) ||
+        0;
 
 
     const total =
         Number(
-            order?.total
+            order.total
         ) ||
-        (
-            subtotal +
-            shipping
-        );
+        subtotal +
+        shipping;
 
 
-    if (trackedSubtotal) {
+    if (
+        trackedSubtotal
+    ) {
 
         trackedSubtotal.textContent =
             formatMoney(
@@ -1577,10 +1173,13 @@ function renderItems(
     }
 
 
-    if (trackedShipping) {
+    if (
+        trackedShipping
+    ) {
 
         trackedShipping.textContent =
-            shipping === 0
+            shipping ===
+            0
                 ? "Free"
                 : formatMoney(
                     shipping
@@ -1589,7 +1188,9 @@ function renderItems(
     }
 
 
-    if (trackedTotal) {
+    if (
+        trackedTotal
+    ) {
 
         trackedTotal.textContent =
             formatMoney(
@@ -1602,7 +1203,7 @@ function renderItems(
 
 
 /* =========================================================
-   CREATE TRACKED ITEM
+   PRODUCT ITEM
 ========================================================= */
 
 function createTrackedItem(
@@ -1614,19 +1215,16 @@ function createTrackedItem(
             1,
             Number(
                 item?.quantity
-            ) || 1
+            ) ||
+            1
         );
 
 
     const price =
         Number(
             item?.price
-        ) || 0;
-
-
-    const total =
-        price *
-        quantity;
+        ) ||
+        0;
 
 
     return `
@@ -1636,9 +1234,7 @@ function createTrackedItem(
         >
 
             <div
-                class="
-                    tracked-item-image
-                "
+                class="tracked-item-image"
             >
 
                 <img
@@ -1657,9 +1253,7 @@ function createTrackedItem(
 
 
             <div
-                class="
-                    tracked-item-info
-                "
+                class="tracked-item-info"
             >
 
                 <h4>
@@ -1674,7 +1268,8 @@ function createTrackedItem(
 
                 <span>
 
-                    Qty: ${quantity}
+                    Qty:
+                    ${quantity}
 
                 </span>
 
@@ -1682,13 +1277,12 @@ function createTrackedItem(
 
 
             <strong
-                class="
-                    tracked-item-price
-                "
+                class="tracked-item-price"
             >
 
                 ${formatMoney(
-                    total
+                    price *
+                    quantity
                 )}
 
             </strong>
@@ -1701,7 +1295,7 @@ function createTrackedItem(
 
 
 /* =========================================================
-   TIMELINE
+   CURRENT SHIPMENT TIMELINE
 ========================================================= */
 
 function renderTimeline(
@@ -1719,7 +1313,7 @@ function renderTimeline(
 
     const currentStatus =
         normalizeStatus(
-            order?.status
+            order.status
         );
 
 
@@ -1729,17 +1323,13 @@ function renderTimeline(
         );
 
 
-    const statuses =
-        [
-            "placed",
-            "processing",
-            "shipped",
-            "out-for-delivery",
-            "delivered"
-        ];
+    const effective =
+        buildEffectiveTimeline(
+            order
+        );
 
 
-    statuses.forEach(
+    FLOW.forEach(
         (
             status,
             index
@@ -1751,7 +1341,9 @@ function renderTimeline(
                 );
 
 
-            if (!step) {
+            if (
+                !step
+            ) {
 
                 return;
 
@@ -1764,17 +1356,39 @@ function renderTimeline(
             );
 
 
+            const dateElement =
+                step.querySelector(
+                    "small"
+                );
+
+
+            /*
+               FUTURE.
+            */
+
             if (
-                index <
+                index >
                 currentIndex
             ) {
 
-                step.classList.add(
-                    "completed"
-                );
+                if (
+                    dateElement
+                ) {
+
+                    dateElement.textContent =
+                        "Pending";
+
+                }
+
+
+                return;
 
             }
 
+
+            /*
+               CURRENT.
+            */
 
             if (
                 index ===
@@ -1787,33 +1401,31 @@ function renderTimeline(
 
             }
 
+            else {
 
-            const dateElement =
-                step.querySelector(
-                    "small"
+                step.classList.add(
+                    "completed"
                 );
 
+            }
 
-            if (dateElement) {
 
-                if (
-                    index <=
-                    currentIndex
-                ) {
+            const event =
+                effective[
+                    status
+                ];
 
-                    dateElement.textContent =
-                        formatOrderDate(
-                            order?.createdAt
-                        );
 
-                }
+            if (
+                dateElement
+            ) {
 
-                else {
-
-                    dateElement.textContent =
-                        "Pending";
-
-                }
+                dateElement.textContent =
+                    event
+                        ? formatDateTime(
+                            event.changedAt
+                        )
+                        : "Pending";
 
             }
 
@@ -1824,450 +1436,1606 @@ function renderTimeline(
 
 
 /* =========================================================
-   STATUS NORMALIZE
+   EFFECTIVE TIMELINE
 ========================================================= */
 
-function normalizeStatus(
-    status
+function buildEffectiveTimeline(
+    order
 ) {
 
-    const value =
-        String(
-            status ||
-            "Order Placed"
+    const history =
+        Array.isArray(
+            order.statusHistory
         )
-            .trim()
-            .toLowerCase();
+            ? [
+                ...order.statusHistory
+            ]
+            : [];
 
 
-    if (
-        value === "processing"
+    history.sort(
+        (
+            a,
+            b
+        ) =>
+            new Date(
+                a?.changedAt ||
+                0
+            ).getTime()
+            -
+            new Date(
+                b?.changedAt ||
+                0
+            ).getTime()
+    );
+
+
+    const effective =
+        {};
+
+
+    let effectiveIndex =
+        -1;
+
+
+    for (
+        const entry of history
     ) {
 
-        return "processing";
+        if (
+            !entry ||
+            !entry.changedAt
+        ) {
 
-    }
+            continue;
 
-
-    if (
-        value === "shipped"
-    ) {
-
-        return "shipped";
-
-    }
+        }
 
 
-    if (
-        value === "out for delivery" ||
-        value === "out-for-delivery"
-    ) {
+        /*
+           Emergency correction.
 
-        return "out-for-delivery";
+           Example:
+           Delivered → Out for Delivery
+        */
 
-    }
+        if (
+            entry.type ===
+            "correction"
+        ) {
 
-
-    if (
-        value === "delivered"
-    ) {
-
-        return "delivered";
-
-    }
-
-
-    return "placed";
-
-}
+            const target =
+                normalizeStatus(
+                    entry.toStatus ||
+                    entry.status
+                );
 
 
-/* =========================================================
-   STATUS INDEX
-========================================================= */
-
-function getStatusIndex(
-    status
-) {
-
-    const statuses =
-        [
-            "placed",
-            "processing",
-            "shipped",
-            "out-for-delivery",
-            "delivered"
-        ];
+            const targetIndex =
+                getStatusIndex(
+                    target
+                );
 
 
-    const index =
-        statuses.indexOf(
+            if (
+                targetIndex < 0
+            ) {
+
+                continue;
+
+            }
+
+
+            FLOW.forEach(
+                (
+                    status,
+                    index
+                ) => {
+
+                    if (
+                        index >
+                        targetIndex
+                    ) {
+
+                        delete effective[
+                            status
+                        ];
+
+                    }
+
+                }
+            );
+
+
+            effectiveIndex =
+                targetIndex;
+
+
+            continue;
+
+        }
+
+
+        const status =
             normalizeStatus(
+                entry.status
+            );
+
+
+        const index =
+            getStatusIndex(
                 status
-            )
+            );
+
+
+        if (
+            index < 0
+        ) {
+
+            continue;
+
+        }
+
+
+        if (
+            effectiveIndex ===
+            -1
+        ) {
+
+            if (
+                index ===
+                0
+            ) {
+
+                effective[
+                    status
+                ] =
+                    entry;
+
+
+                effectiveIndex =
+                    0;
+
+            }
+
+
+            continue;
+
+        }
+
+
+        /*
+           Same status after a correction.
+        */
+
+        if (
+            index ===
+            effectiveIndex
+        ) {
+
+            effective[
+                status
+            ] =
+                entry;
+
+
+            continue;
+
+        }
+
+
+        /*
+           Normal next step.
+        */
+
+        if (
+            index ===
+            effectiveIndex + 1
+        ) {
+
+            effective[
+                status
+            ] =
+                entry;
+
+
+            effectiveIndex =
+                index;
+
+
+            continue;
+
+        }
+
+    }
+
+
+    /*
+       Current order status wins.
+    */
+
+    const current =
+        normalizeStatus(
+            order.status
         );
 
 
-    return index >= 0
-        ? index
-        : 0;
+    const currentIndex =
+        getStatusIndex(
+            current
+        );
+
+
+    FLOW.forEach(
+        (
+            status,
+            index
+        ) => {
+
+            if (
+                index >
+                currentIndex
+            ) {
+
+                delete effective[
+                    status
+                ];
+
+            }
+
+        }
+    );
+
+
+    /*
+       Fallback.
+    */
+
+    if (
+        !effective.placed &&
+        order.createdAt
+    ) {
+
+        effective.placed = {
+
+            type:
+                "status",
+
+            status:
+                "Order Placed",
+
+            changedAt:
+                order.createdAt,
+
+            changedBy:
+                "System"
+
+        };
+
+    }
+
+
+    return effective;
 
 }
 
 
 /* =========================================================
-   STATUS CLASS
+   COMPLETE STATUS HISTORY
+   ---------------------------------------------------------
+   NEVER filters old history.
 ========================================================= */
 
-function applyStatusClass(
-    element,
-    status
+function renderStatusHistory(
+    order
 ) {
 
-    if (!element) {
+    const oldSection =
+        document.getElementById(
+            "trackStatusHistory"
+        );
+
+
+    if (
+        oldSection
+    ) {
+
+        oldSection.remove();
+
+    }
+
+
+    const history =
+        Array.isArray(
+            order.statusHistory
+        )
+            ? [
+                ...order.statusHistory
+            ]
+            : [];
+
+
+    /*
+       Newest first.
+    */
+
+    history.sort(
+        (
+            a,
+            b
+        ) =>
+            new Date(
+                b?.changedAt ||
+                0
+            ).getTime()
+            -
+            new Date(
+                a?.changedAt ||
+                0
+            ).getTime()
+    );
+
+
+    const section =
+        document.createElement(
+            "section"
+        );
+
+
+    section.id =
+        "trackStatusHistory";
+
+
+    section.className =
+        "track-status-history";
+
+
+    section.innerHTML = `
+
+        <div
+            class="track-history-header"
+        >
+
+            <div>
+
+                <span
+                    class="
+                        track-history-eyebrow
+                    "
+                >
+
+                    ORDER ACTIVITY
+
+                </span>
+
+
+                <h3>
+                    Status History
+                </h3>
+
+
+                <p>
+
+                    Complete record of every
+                    status update and correction.
+
+                </p>
+
+            </div>
+
+
+            <span
+                class="
+                    track-history-count
+                "
+            >
+
+                ${history.length}
+
+                ${
+                    history.length ===
+                    1
+                        ? " event"
+                        : " events"
+                }
+
+            </span>
+
+        </div>
+
+
+        <div
+            class="track-history-list"
+        >
+
+            ${
+                history.length
+                    ? history
+                        .map(
+                            createHistoryItem
+                        )
+                        .join("")
+                    : `
+
+                        <div
+                            class="
+                                track-history-empty
+                            "
+                        >
+
+                            No status history available.
+
+                        </div>
+
+                    `
+            }
+
+        </div>
+
+    `;
+
+
+    insertHistorySection(
+        section
+    );
+
+
+    ensureHistoryStyles();
+
+}
+
+
+/* =========================================================
+   HISTORY ITEM
+========================================================= */
+
+function createHistoryItem(
+    entry
+) {
+
+    /*
+       CORRECTION
+    */
+
+    if (
+        entry?.type ===
+        "correction"
+    ) {
+
+        return `
+
+            <div
+                class="
+                    track-history-item
+                    correction
+                "
+            >
+
+                <div
+                    class="
+                        track-history-dot
+                    "
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-rotate-left
+                        "
+                    ></i>
+
+                </div>
+
+
+                <div
+                    class="
+                        track-history-content
+                    "
+                >
+
+                    <div
+                        class="
+                            track-history-top
+                        "
+                    >
+
+                        <div>
+
+                            <strong>
+
+                                Emergency Correction
+
+                            </strong>
+
+
+                            <span
+                                class="
+                                    track-history-change
+                                "
+                            >
+
+                                ${escapeHTML(
+                                    entry.fromStatus ||
+                                    "—"
+                                )}
+
+                                →
+
+                                ${escapeHTML(
+                                    entry.toStatus ||
+                                    "—"
+                                )}
+
+                            </span>
+
+                        </div>
+
+
+                        <time>
+
+                            ${escapeHTML(
+                                formatDateTime(
+                                    entry.changedAt
+                                )
+                            )}
+
+                        </time>
+
+                    </div>
+
+
+                    ${
+                        entry.reason
+                            ? `
+
+                                <div
+                                    class="
+                                        track-history-reason
+                                    "
+                                >
+
+                                    <span>
+                                        REASON
+                                    </span>
+
+
+                                    <p>
+
+                                        ${escapeHTML(
+                                            entry.reason
+                                        )}
+
+                                    </p>
+
+                                </div>
+
+                            `
+                            : ""
+                    }
+
+
+                    <small>
+
+                        Changed by:
+                        ${escapeHTML(
+                            formatActor(
+                                entry.changedBy
+                            )
+                        )}
+
+                    </small>
+
+                </div>
+
+            </div>
+
+        `;
+
+    }
+
+
+    /*
+       NORMAL STATUS
+    */
+
+    return `
+
+        <div
+            class="track-history-item"
+        >
+
+            <div
+                class="track-history-dot"
+            >
+
+                <i
+                    class="
+                        fa-solid
+                        fa-check
+                    "
+                ></i>
+
+            </div>
+
+
+            <div
+                class="
+                    track-history-content
+                "
+            >
+
+                <div
+                    class="
+                        track-history-top
+                    "
+                >
+
+                    <div>
+
+                        <strong>
+
+                            ${escapeHTML(
+                                formatOrderStatus(
+                                    entry?.status
+                                )
+                            )}
+
+                        </strong>
+
+                    </div>
+
+
+                    <time>
+
+                        ${escapeHTML(
+                            formatDateTime(
+                                entry?.changedAt
+                            )
+                        )}
+
+                    </time>
+
+                </div>
+
+
+                <small>
+
+                    Changed by:
+                    ${escapeHTML(
+                        formatActor(
+                            entry?.changedBy
+                        )
+                    )}
+
+                </small>
+
+
+                ${
+                    entry?.reason
+                        ? `
+
+                            <div
+                                class="
+                                    track-history-reason
+                                "
+                            >
+
+                                <span>
+                                    REASON
+                                </span>
+
+
+                                <p>
+
+                                    ${escapeHTML(
+                                        entry.reason
+                                    )}
+
+                                </p>
+
+                            </div>
+
+                        `
+                        : ""
+                }
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   INSERT HISTORY
+========================================================= */
+
+function insertHistorySection(
+    section
+) {
+
+    if (
+        trackingTimeline
+    ) {
+
+        const parent =
+            trackingTimeline.parentElement;
+
+
+        const shipmentSection =
+            parent?.closest(
+                "section"
+            );
+
+
+        if (
+            shipmentSection &&
+            shipmentSection.parentNode
+        ) {
+
+            shipmentSection.parentNode.insertBefore(
+                section,
+                shipmentSection.nextSibling
+            );
+
+
+            return;
+
+        }
+
+    }
+
+
+    if (
+        orderResult
+    ) {
+
+        orderResult.appendChild(
+            section
+        );
 
         return;
 
     }
 
 
-    element.classList.remove(
-        "placed",
-        "processing",
-        "shipped",
-        "out-for-delivery",
-        "delivered"
-    );
-
-
-    element.classList.add(
-        normalizeStatus(
-            status
-        )
+    document.body.appendChild(
+        section
     );
 
 }
 
 
 /* =========================================================
-   STATUS TEXT
+   HISTORY CSS
 ========================================================= */
 
-function formatOrderStatus(
-    status
-) {
-
-    switch (
-        normalizeStatus(
-            status
-        )
-    ) {
-
-        case "processing":
-
-            return "Processing";
-
-
-        case "shipped":
-
-            return "Shipped";
-
-
-        case "out-for-delivery":
-
-            return "Out for Delivery";
-
-
-        case "delivered":
-
-            return "Delivered";
-
-
-        default:
-
-            return "Order Placed";
-
-    }
-
-}
-
-
-/* =========================================================
-   STATUS CLASS FOR MULTIPLE CARD
-========================================================= */
-
-function getStatusClass(
-    status
-) {
-
-    switch (
-        normalizeStatus(
-            status
-        )
-    ) {
-
-        case "processing":
-
-            return "processing";
-
-
-        case "shipped":
-
-            return "shipped";
-
-
-        case "out-for-delivery":
-
-            return "out-for-delivery";
-
-
-        case "delivered":
-
-            return "delivered";
-
-
-        default:
-
-            return "";
-
-    }
-
-}
-
-
-/* =========================================================
-   PAYMENT
-========================================================= */
-
-function formatPaymentMethod(
-    value
-) {
-
-    const method =
-        String(
-            value ||
-            ""
-        )
-            .trim()
-            .toLowerCase();
-
+function ensureHistoryStyles() {
 
     if (
-        method === "card" ||
-        method === "card payment"
+        document.getElementById(
+            "trackHistoryStyles"
+        )
     ) {
 
-        return "Card Payment";
+        return;
 
     }
 
 
-    if (
-        method === "cash" ||
-        method === "cash on delivery" ||
-        method === "cod"
-    ) {
-
-        return "Cash on Delivery";
-
-    }
-
-
-    return "Cash on Delivery";
-
-}
-
-
-/* =========================================================
-   DATE
-========================================================= */
-
-function formatOrderDate(
-    value
-) {
-
-    if (!value) {
-
-        return "—";
-
-    }
-
-
-    const date =
-        new Date(
-            value
+    const style =
+        document.createElement(
+            "style"
         );
 
 
-    if (
-        Number.isNaN(
-            date.getTime()
-        )
-    ) {
-
-        return "—";
-
-    }
+    style.id =
+        "trackHistoryStyles";
 
 
-    return new Intl.DateTimeFormat(
-        "en-US",
-        {
+    style.textContent = `
 
-            month: "short",
+        .track-status-history {
 
-            day: "numeric",
+            width: 100%;
 
-            year: "numeric",
+            margin-top: 24px;
 
-            hour: "numeric",
+            padding: 24px;
 
-            minute: "2-digit"
+            box-sizing: border-box;
+
+            background: #ffffff;
+
+            border: 1px solid #dfe6ef;
+
+            border-radius: 14px;
 
         }
-    ).format(
-        date
+
+
+        .track-history-header {
+
+            display: flex;
+
+            align-items: flex-start;
+
+            justify-content: space-between;
+
+            gap: 20px;
+
+            margin-bottom: 24px;
+
+        }
+
+
+        .track-history-eyebrow {
+
+            display: block;
+
+            margin-bottom: 5px;
+
+            color: #8b98aa;
+
+            font-size: 8px;
+
+            font-weight: 800;
+
+            letter-spacing: 1.1px;
+
+            text-transform: uppercase;
+
+        }
+
+
+        .track-history-header h3 {
+
+            margin: 0 0 5px;
+
+            color: #17233b;
+
+            font-size: 20px;
+
+            font-weight: 800;
+
+        }
+
+
+        .track-history-header p {
+
+            margin: 0;
+
+            color: #8b98aa;
+
+            font-size: 10px;
+
+            line-height: 1.5;
+
+        }
+
+
+        .track-history-count {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            min-height: 30px;
+
+            padding: 0 12px;
+
+            border-radius: 18px;
+
+            background: #edf4ff;
+
+            color: #2864e8;
+
+            font-size: 9px;
+
+            font-weight: 800;
+
+            white-space: nowrap;
+
+        }
+
+
+        .track-history-list {
+
+            display: flex;
+
+            flex-direction: column;
+
+        }
+
+
+        .track-history-item {
+
+            position: relative;
+
+            display: flex;
+
+            gap: 14px;
+
+            padding-bottom: 20px;
+
+        }
+
+
+        .track-history-item:not(:last-child)::after {
+
+            content: "";
+
+            position: absolute;
+
+            top: 26px;
+
+            left: 11px;
+
+            width: 1px;
+
+            height: calc(100% - 5px);
+
+            background: #e2e8f0;
+
+        }
+
+
+        .track-history-dot {
+
+            position: relative;
+
+            z-index: 2;
+
+            width: 24px;
+
+            height: 24px;
+
+            flex: 0 0 24px;
+
+            display: grid;
+
+            place-items: center;
+
+            border-radius: 50%;
+
+            background: #eaf8ef;
+
+            color: #16a34a;
+
+            font-size: 9px;
+
+        }
+
+
+        .track-history-item.correction
+        .track-history-dot {
+
+            background: #fff4df;
+
+            color: #bd7200;
+
+        }
+
+
+        .track-history-content {
+
+            flex: 1;
+
+            min-width: 0;
+
+        }
+
+
+        .track-history-top {
+
+            display: flex;
+
+            align-items: flex-start;
+
+            justify-content: space-between;
+
+            gap: 16px;
+
+        }
+
+
+        .track-history-top strong {
+
+            display: block;
+
+            margin-bottom: 4px;
+
+            color: #17233b;
+
+            font-size: 11px;
+
+            font-weight: 800;
+
+        }
+
+
+        .track-history-change {
+
+            display: block;
+
+            color: #2864e8;
+
+            font-size: 9px;
+
+            font-weight: 700;
+
+        }
+
+
+        .track-history-top time {
+
+            color: #7e8b9d;
+
+            font-size: 9px;
+
+            white-space: nowrap;
+
+        }
+
+
+        .track-history-content > small {
+
+            display: block;
+
+            margin-top: 7px;
+
+            color: #99a5b4;
+
+            font-size: 8px;
+
+        }
+
+
+        .track-history-reason {
+
+            margin-top: 10px;
+
+            padding: 10px 12px;
+
+            background: #fffaf2;
+
+            border: 1px solid #efdfc5;
+
+            border-radius: 8px;
+
+        }
+
+
+        .track-history-reason span {
+
+            display: block;
+
+            margin-bottom: 3px;
+
+            color: #9d6a24;
+
+            font-size: 7px;
+
+            font-weight: 800;
+
+            letter-spacing: .6px;
+
+            text-transform: uppercase;
+
+        }
+
+
+        .track-history-reason p {
+
+            margin: 0;
+
+            color: #7d6548;
+
+            font-size: 9px;
+
+            line-height: 1.55;
+
+            word-break: break-word;
+
+        }
+
+
+        .track-history-empty {
+
+            padding: 30px;
+
+            color: #94a3b8;
+
+            text-align: center;
+
+            font-size: 10px;
+
+        }
+
+
+        @media (max-width: 700px) {
+
+            .track-status-history {
+
+                padding: 18px;
+
+            }
+
+
+            .track-history-header {
+
+                flex-direction: column;
+
+            }
+
+
+            .track-history-top {
+
+                flex-direction: column;
+
+                gap: 5px;
+
+            }
+
+
+            .track-history-top time {
+
+                white-space: normal;
+
+            }
+
+        }
+
+    `;
+
+
+    document.head.appendChild(
+        style
     );
 
 }
 
 
 /* =========================================================
-   MONEY
+   MULTIPLE ORDERS
 ========================================================= */
 
-function formatMoney(
-    value
-) {
-
-    const amount =
-        Number(
-            value
-        ) || 0;
-
-
-    return `$${amount.toFixed(2)}`;
-
-}
-
-
-/* =========================================================
-   ITEM COUNT
-========================================================= */
-
-function getOrderItemCount(
-    order
-) {
-
-    const items =
-        Array.isArray(
-            order?.items
-        )
-            ? order.items
-            : [];
-
-
-    return items.reduce(
-        (
-            total,
-            item
-        ) => {
-
-            return (
-                total +
-                Math.max(
-                    1,
-                    Number(
-                        item?.quantity
-                    ) || 1
-                )
-            );
-
-        },
-        0
-    );
-
-}
-
-
-/* =========================================================
-   INITIALS
-========================================================= */
-
-function getInitials(
-    name
-) {
-
-    const words =
-        String(
-            name ||
-            "Customer"
-        )
-            .trim()
-            .split(
-                /\s+/
-            )
-            .filter(
-                Boolean
-            );
-
-
-    if (
-        words.length === 0
-    ) {
-
-        return "C";
-
-    }
-
-
-    if (
-        words.length === 1
-    ) {
-
-        return words[0]
-            .charAt(0)
-            .toUpperCase();
-
-    }
-
-
-    return (
-        words[0]
-            .charAt(0) +
-        words[
-            words.length - 1
-        ]
-            .charAt(0)
-    )
-        .toUpperCase();
-
-}
-
-
-/* =========================================================
-   PHONE DISPLAY
-========================================================= */
-
-function formatPhoneDisplay(
+function renderMultipleOrders(
+    list,
     phone
 ) {
 
-    const value =
-        String(
-            phone ||
-            ""
-        ).trim();
+    showMultipleOrdersState();
 
 
-    return value ||
-        "this phone number";
+    const total =
+        list.length;
+
+
+    const delivered =
+        list.filter(
+            order =>
+                normalizeStatus(
+                    order.status
+                ) ===
+                "delivered"
+        ).length;
+
+
+    const active =
+        total -
+        delivered;
+
+
+    if (
+        multipleOrdersTitle
+    ) {
+
+        multipleOrdersTitle.textContent =
+            `${
+                list[0]
+                    ?.customer
+                    ?.name ||
+                "Customer"
+            }'s Orders`;
+
+    }
+
+
+    if (
+        multipleOrdersSubtitle
+    ) {
+
+        multipleOrdersSubtitle.textContent =
+            `Orders associated with ${phone}.`;
+
+    }
+
+
+    if (
+        multipleOrdersCount
+    ) {
+
+        multipleOrdersCount.textContent =
+            total;
+
+    }
+
+
+    if (
+        activeOrdersCount
+    ) {
+
+        activeOrdersCount.textContent =
+            active;
+
+    }
+
+
+    if (
+        deliveredOrdersCount
+    ) {
+
+        deliveredOrdersCount.textContent =
+            delivered;
+
+    }
+
+
+    if (
+        multipleOrdersList
+    ) {
+
+        multipleOrdersList.innerHTML =
+            list
+                .map(
+                    createMultipleOrderCard
+                )
+                .join("");
+
+
+        bindMultipleTrackButtons();
+
+    }
 
 }
 
 
 /* =========================================================
-   SHOW ERROR
+   MULTIPLE ORDER CARD
+========================================================= */
+
+function createMultipleOrderCard(
+    order
+) {
+
+    const status =
+        formatOrderStatus(
+            order.status
+        );
+
+
+    const count =
+        getItemCount(
+            order
+        );
+
+
+    return `
+
+        <article
+            class="
+                multiple-order-card
+            "
+        >
+
+            <div
+                class="
+                    multiple-order-card-header
+                "
+            >
+
+                <div>
+
+                    <span
+                        class="
+                            multiple-order-id
+                        "
+                    >
+
+                        ${escapeHTML(
+                            order.orderId
+                        )}
+
+                    </span>
+
+
+                    <span
+                        class="
+                            multiple-order-date
+                        "
+                    >
+
+                        ${escapeHTML(
+                            formatDateTime(
+                                order.createdAt
+                            )
+                        )}
+
+                    </span>
+
+                </div>
+
+
+                <span
+                    class="
+                        multiple-order-status
+                        ${getStatusClass(
+                            status
+                        )}
+                    "
+                >
+
+                    ${escapeHTML(
+                        status
+                    )}
+
+                </span>
+
+            </div>
+
+
+            <div
+                class="
+                    multiple-order-card-body
+                "
+            >
+
+                <div
+                    class="
+                        multiple-order-customer
+                    "
+                >
+
+                    <div
+                        class="
+                            multiple-order-avatar
+                        "
+                    >
+
+                        ${escapeHTML(
+                            getInitials(
+                                order
+                                    ?.customer
+                                    ?.name
+                            )
+                        )}
+
+                    </div>
+
+
+                    <strong>
+
+                        ${escapeHTML(
+                            order
+                                ?.customer
+                                ?.name ||
+                            "Customer"
+                        )}
+
+                    </strong>
+
+                </div>
+
+
+                <div
+                    class="
+                        multiple-order-info
+                    "
+                >
+
+                    <div>
+
+                        <small>
+                            ITEMS
+                        </small>
+
+
+                        <strong>
+                            ${count}
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <small>
+                            TOTAL
+                        </small>
+
+
+                        <strong>
+
+                            ${formatMoney(
+                                order.total
+                            )}
+
+                        </strong>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="
+                            multiple-order-track-btn
+                        "
+                        data-multiple-track-order="${escapeHTML(
+                            order.orderId
+                        )}"
+                    >
+
+                        <i
+                            class="
+                                fa-solid
+                                fa-location-dot
+                            "
+                        ></i>
+
+                        Track Order
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </article>
+
+    `;
+
+}
+
+
+/* =========================================================
+   MULTIPLE TRACK BUTTON
+========================================================= */
+
+function bindMultipleTrackButtons() {
+
+    document
+        .querySelectorAll(
+            "[data-multiple-track-order]"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        const orderId =
+                            button.getAttribute(
+                                "data-multiple-track-order"
+                            );
+
+
+                        saveSelectedOrder(
+                            orderId
+                        );
+
+
+                        window.location.href =
+                            `trackOrder.html?orderId=${encodeURIComponent(
+                                orderId
+                            )}`;
+
+                    }
+                );
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   STATE UI
+========================================================= */
+
+function showEmptyState() {
+
+    orderResult?.classList.remove(
+        "show"
+    );
+
+
+    multipleOrdersResult?.classList.remove(
+        "show"
+    );
+
+
+    document
+        .getElementById(
+            "trackStatusHistory"
+        )
+        ?.remove();
+
+
+    if (
+        trackEmpty
+    ) {
+
+        trackEmpty.style.display =
+            "";
+
+    }
+
+}
+
+
+function showSingleOrderState() {
+
+    if (
+        trackEmpty
+    ) {
+
+        trackEmpty.style.display =
+            "none";
+
+    }
+
+
+    multipleOrdersResult?.classList.remove(
+        "show"
+    );
+
+
+    orderResult?.classList.add(
+        "show"
+    );
+
+}
+
+
+function showMultipleOrdersState() {
+
+    if (
+        trackEmpty
+    ) {
+
+        trackEmpty.style.display =
+            "none";
+
+    }
+
+
+    orderResult?.classList.remove(
+        "show"
+    );
+
+
+    document
+        .getElementById(
+            "trackStatusHistory"
+        )
+        ?.remove();
+
+
+    multipleOrdersResult?.classList.add(
+        "show"
+    );
+
+}
+
+
+/* =========================================================
+   ERROR
 ========================================================= */
 
 function showTrackingError(
@@ -2290,10 +3058,6 @@ function showTrackingError(
 
 }
 
-
-/* =========================================================
-   CLEAR ERROR
-========================================================= */
 
 function clearTrackingError() {
 
@@ -2356,37 +3120,460 @@ function setupHeaderActions() {
 
 
 /* =========================================================
-   ESCAPE HTML
+   HELPERS
 ========================================================= */
+
+function normalizeStatus(
+    value
+) {
+
+    const status =
+        String(
+            value ||
+            ""
+        )
+            .trim()
+            .toLowerCase()
+            .replace(
+                /[-_]+/g,
+                " "
+            )
+            .replace(
+                /\s+/g,
+                " "
+            );
+
+
+    if (
+        status ===
+        "processing"
+    ) {
+
+        return "processing";
+
+    }
+
+
+    if (
+        status ===
+        "shipped"
+    ) {
+
+        return "shipped";
+
+    }
+
+
+    if (
+        status ===
+        "out for delivery"
+    ) {
+
+        return "out-for-delivery";
+
+    }
+
+
+    if (
+        status ===
+        "delivered"
+    ) {
+
+        return "delivered";
+
+    }
+
+
+    return "placed";
+
+}
+
+
+function getStatusIndex(
+    value
+) {
+
+    return FLOW.indexOf(
+        normalizeStatus(
+            value
+        )
+    );
+
+}
+
+
+function formatOrderStatus(
+    value
+) {
+
+    switch (
+        normalizeStatus(
+            value
+        )
+    ) {
+
+        case "processing":
+
+            return "Processing";
+
+        case "shipped":
+
+            return "Shipped";
+
+        case "out-for-delivery":
+
+            return "Out for Delivery";
+
+        case "delivered":
+
+            return "Delivered";
+
+        default:
+
+            return "Order Placed";
+
+    }
+
+}
+
+
+function getStatusClass(
+    value
+) {
+
+    const status =
+        normalizeStatus(
+            value
+        );
+
+
+    return status ===
+        "placed"
+        ? ""
+        : status;
+
+}
+
+
+function applyStatusClass(
+    element,
+    status
+) {
+
+    if (
+        !element
+    ) {
+
+        return;
+
+    }
+
+
+    element.classList.remove(
+        "placed",
+        "processing",
+        "shipped",
+        "out-for-delivery",
+        "delivered"
+    );
+
+
+    element.classList.add(
+        normalizeStatus(
+            status
+        )
+    );
+
+}
+
+
+function normalizeOrderId(
+    value
+) {
+
+    return String(
+        value ||
+        ""
+    )
+        .trim()
+        .toUpperCase()
+        .replace(
+            /\s+/g,
+            ""
+        );
+
+}
+
+
+function normalizePhone(
+    value
+) {
+
+    return String(
+        value ||
+        ""
+    )
+        .replace(
+            /\D/g,
+            ""
+        );
+
+}
+
+
+function getItemCount(
+    order
+) {
+
+    const items =
+        Array.isArray(
+            order?.items
+        )
+            ? order.items
+            : [];
+
+
+    return items.reduce(
+        (
+            total,
+            item
+        ) =>
+            total +
+            Math.max(
+                1,
+                Number(
+                    item?.quantity
+                ) ||
+                1
+            ),
+        0
+    );
+
+}
+
+
+function getInitials(
+    name
+) {
+
+    const parts =
+        String(
+            name ||
+            "Customer"
+        )
+            .trim()
+            .split(
+                /\s+/
+            )
+            .filter(
+                Boolean
+            );
+
+
+    if (
+        !parts.length
+    ) {
+
+        return "C";
+
+    }
+
+
+    if (
+        parts.length ===
+        1
+    ) {
+
+        return parts[0][0]
+            .toUpperCase();
+
+    }
+
+
+    return (
+        parts[0][0] +
+        parts[
+            parts.length - 1
+        ][0]
+    )
+        .toUpperCase();
+
+}
+
+
+function formatMoney(
+    value
+) {
+
+    return `$${(
+        Number(
+            value
+        ) ||
+        0
+    ).toFixed(2)}`;
+
+}
+
+
+function formatDateTime(
+    value
+) {
+
+    if (
+        !value
+    ) {
+
+        return "—";
+
+    }
+
+
+    const date =
+        new Date(
+            value
+        );
+
+
+    if (
+        Number.isNaN(
+            date.getTime()
+        )
+    ) {
+
+        return "—";
+
+    }
+
+
+    return new Intl.DateTimeFormat(
+        "en-US",
+        {
+
+            month:
+                "short",
+
+            day:
+                "numeric",
+
+            year:
+                "numeric",
+
+            hour:
+                "numeric",
+
+            minute:
+                "2-digit"
+
+        }
+    ).format(
+        date
+    );
+
+}
+
+
+function formatPayment(
+    value
+) {
+
+    const method =
+        String(
+            value ||
+            ""
+        )
+            .trim()
+            .toLowerCase();
+
+
+    if (
+        method ===
+            "card" ||
+        method ===
+            "card payment"
+    ) {
+
+        return "Card Payment";
+
+    }
+
+
+    return "Cash on Delivery";
+
+}
+
+
+function formatActor(
+    value
+) {
+
+    const actor =
+        String(
+            value ||
+            ""
+        )
+            .trim()
+            .toLowerCase();
+
+
+    if (
+        actor ===
+        "admin"
+    ) {
+
+        return "Admin";
+
+    }
+
+
+    if (
+        actor ===
+        "rider"
+    ) {
+
+        return "Rider";
+
+    }
+
+
+    if (
+        actor ===
+        "system"
+    ) {
+
+        return "System";
+
+    }
+
+
+    return "Admin";
+
+}
+
 
 function escapeHTML(
     value
 ) {
 
     return String(
-        value ?? ""
+        value ??
+        ""
     )
-
         .replace(
             /&/g,
             "&amp;"
         )
-
         .replace(
             /</g,
             "&lt;"
         )
-
         .replace(
             />/g,
             "&gt;"
         )
-
         .replace(
             /"/g,
             "&quot;"
         )
-
         .replace(
             /'/g,
             "&#039;"
@@ -2396,37 +3583,144 @@ function escapeHTML(
 
 
 /* =========================================================
-   PUBLIC HELPER
+   PAGE RESTORE
 ========================================================= */
 
-window.findShopMaxOrder =
-    function (
-        orderId
-    ) {
+window.addEventListener(
+    "pageshow",
+    () => {
 
-        refreshOrders();
+        refreshAll();
+
+        updateHeaderCounts();
 
 
-        const normalizedId =
-            normalizeOrderId(
-                orderId
+        const params =
+            new URLSearchParams(
+                window.location.search
             );
 
 
-        return (
-            orders.find(
-                order =>
-                    normalizeOrderId(
-                        order?.orderId
-                    ) ===
-                    normalizedId
-            ) ||
-            null
-        );
+        let orderId =
+            params.get(
+                "orderId"
+            );
 
-    };
+
+        if (
+            !orderId
+        ) {
+
+            orderId =
+                localStorage.getItem(
+                    SELECTED_ORDER_KEY
+                );
+
+        }
+
+
+        if (
+            orderId
+        ) {
+
+            try {
+
+                orderId =
+                    decodeURIComponent(
+                        orderId
+                    );
+
+            } catch {}
+
+
+            trackOrderById(
+                orderId
+            );
+
+        }
+
+    }
+);
 
 
 /* =========================================================
-   END SHOPMAX TRACK ORDER
+   LIVE STORAGE SYNC
 ========================================================= */
+
+window.addEventListener(
+    "storage",
+    event => {
+
+        if (
+            event.key !==
+            "shopmax-orders"
+        ) {
+
+            return;
+
+        }
+
+
+        refreshAll();
+
+        updateHeaderCounts();
+
+
+        const params =
+            new URLSearchParams(
+                window.location.search
+            );
+
+
+        let orderId =
+            params.get(
+                "orderId"
+            );
+
+
+        if (
+            !orderId
+        ) {
+
+            orderId =
+                localStorage.getItem(
+                    SELECTED_ORDER_KEY
+                );
+
+        }
+
+
+        if (
+            orderId
+        ) {
+
+            try {
+
+                orderId =
+                    decodeURIComponent(
+                        orderId
+                    );
+
+            } catch {}
+
+
+            const order =
+                findOrderById(
+                    orderId
+                );
+
+
+            if (
+                order
+            ) {
+
+                renderTrackedOrder(
+                    order
+                );
+
+            }
+
+        }
+
+    }
+);
