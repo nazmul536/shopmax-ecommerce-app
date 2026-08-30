@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Archived Customers | ShopMax</title>
+
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="assets/css/archivedCustomers.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         TOP BAR
+    ====================================================== -->
+
+    <div class="topbar">
+
+        <div class="container topbar-inner">
+
+            <div class="hot-deal">
+
+                <i class="fa-solid fa-fire"></i>
+
+                Hot Deals Summer Sale For All Products
+                - Up To 50% Off
+
+            </div>
+
+
+            <div class="top-links">
+
+                <a href="orders.html">
+                    My Orders
+                </a>
+
+                <a href="#">
+                    Help Center
+                </a>
+
+                <span>
+                    English
+                    <i class="fa-solid fa-chevron-down"></i>
+                </span>
+
+                <span>
+                    USD
+                    <i class="fa-solid fa-chevron-down"></i>
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <header class="main-header">
+
+        <div class="container header-inner">
+
+            <a
+                href="index.html"
+                class="brand"
+            >
+
+                <div class="brand-icon">
+
+                    <i
+                        class="fa-solid fa-bag-shopping"
+                    ></i>
+
+                </div>
+
+
+                <span>
+                    Shop<span>Max</span>
+                </span>
+
+            </a>
+
+
+            <div class="header-search">
+
+                <div class="category-select">
+
+                    All Categories
+
+                    <i
+                        class="fa-solid fa-chevron-down"
+                    ></i>
+
+                </div>
+
+
+                <input
+                    type="text"
+                    id="globalSearch"
+                    placeholder="Search for products..."
+                >
+
+
+                <button
+                    type="button"
+                    id="globalSearchBtn"
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-magnifying-glass
+                        "
+                    ></i>
+
+                </button>
+
+            </div>
+
+
+            <div class="header-actions">
+
+                <button
+                    type="button"
+                    onclick="location.href='index.html'"
+                >
+
+                    <i
+                        class="
+                            fa-regular
+                            fa-heart
+                        "
+                    ></i>
+
+                    Wishlist
+
+                </button>
+
+
+                <button
+                    type="button"
+                >
+
+                    <i
+                        class="
+                            fa-regular
+                            fa-user
+                        "
+                    ></i>
+
+                    Account
+
+                </button>
+
+
+                <button
+                    type="button"
+                    onclick="location.href='shop.html'"
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-cart-shopping
+                        "
+                    ></i>
+
+                    Cart
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="nav-row">
+
+            <div class="container nav-inner">
+
+                <div class="categories-link">
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-bars
+                        "
+                    ></i>
+
+                    All Categories
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-chevron-down
+                        "
+                    ></i>
+
+                </div>
+
+
+                <nav>
+
+                    <a href="index.html">
+                        Home
+                    </a>
+
+                    <a href="shop.html">
+                        Shop
+                    </a>
+
+                    <a href="orders.html">
+                        Orders
+                    </a>
+
+                    <a href="customers.html">
+                        Customers
+                    </a>
+
+                    <a
+                        href="archivedCustomers.html"
+                        class="active"
+                    >
+                        Archived Customers
+                    </a>
+
+                    <a href="#">
+                        Pages
+                    </a>
+
+                    <a href="#">
+                        Blog
+                    </a>
+
+                    <a href="#">
+                        Contact
+                    </a>
+
+                </nav>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
+    <main>
+
+        <div class="container">
+
+
+            <div class="breadcrumb">
+
+                <a href="customers.html">
+                    Customers
+                </a>
+
+
+                <i
+                    class="
+                        fa-solid
+                        fa-chevron-right
+                    "
+                ></i>
+
+
+                <span>
+                    Archived Customers
+                </span>
+
+            </div>
+
+
+
+            <section class="page-heading">
+
+                <span class="eyebrow">
+                    SHOPMAX CUSTOMER ARCHIVE
+                </span>
+
+
+                <h1>
+                    Archived Customers
+                </h1>
+
+
+                <p>
+                    Manage customer profiles removed from
+                    the active customer directory.
+                </p>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 STATS
+            ================================================== -->
+
+            <section class="archive-stats">
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+
+                        <i
+                            class="
+                                fa-solid
+                                fa-box-archive
+                            "
+                        ></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            TOTAL ARCHIVED
+                        </span>
+
+
+                        <strong
+                            id="archivedCustomerCount"
+                        >
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+
+                        <i
+                            class="
+                                fa-solid
+                                fa-users
+                            "
+                        ></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            ARCHIVED CUSTOMERS
+                        </span>
+
+
+                        <strong
+                            id="archivedCustomerOrders"
+                        >
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 ARCHIVE PANEL
+            ================================================== -->
+
+            <section class="archive-panel">
+
+                <div class="panel-head">
+
+                    <div>
+
+                        <span class="panel-label">
+                            CUSTOMER ARCHIVE
+                        </span>
+
+
+                        <h2>
+                            All Archived Customers
+                        </h2>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="refresh-btn"
+                        id="refreshArchivedCustomers"
+                    >
+
+                        <i
+                            class="
+                                fa-solid
+                                fa-rotate
+                            "
+                        ></i>
+
+                        Refresh
+
+                    </button>
+
+                </div>
+
+
+
+                <div class="toolbar">
+
+                    <div class="search-box">
+
+                        <i
+                            class="
+                                fa-solid
+                                fa-magnifying-glass
+                            "
+                        ></i>
+
+
+                        <input
+                            type="text"
+                            id="archivedCustomerSearch"
+                            placeholder="Search by name, email or phone..."
+                        >
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     DESKTOP TABLE
+                ================================================== -->
+
+                <div class="table-wrap">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    CUSTOMER
+                                </th>
+
+                                <th>
+                                    PHONE
+                                </th>
+
+                                <th>
+                                    ORDERS
+                                </th>
+
+                                <th>
+                                    TOTAL SPENT
+                                </th>
+
+                                <th>
+                                    LAST ORDER
+                                </th>
+
+                                <th>
+                                    ARCHIVED
+                                </th>
+
+                                <th>
+                                    ACTION
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody
+                            id="archivedCustomersBody"
+                        ></tbody>
+
+                    </table>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     MOBILE
+                ================================================== -->
+
+                <div
+                    class="mobile-list"
+                    id="archivedCustomersMobile"
+                ></div>
+
+
+
+                <!-- =================================================
+                     EMPTY
+                ================================================== -->
+
+                <div
+                    class="empty-state"
+                    id="archivedCustomersEmpty"
+                >
+
+                    <div class="empty-icon">
+
+                        <i
+                            class="
+                                fa-solid
+                                fa-box-open
+                            "
+                        ></i>
+
+                    </div>
+
+
+                    <h3>
+                        No Archived Customers
+                    </h3>
+
+
+                    <p>
+                        Customers archived from the active
+                        directory will appear here.
+                    </p>
+
+
+                    <a
+                        href="customers.html"
+                        class="back-btn"
+                    >
+
+                        Back to Customers
+
+                    </a>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+
+
+    <!-- =====================================================
+         CUSTOMER DETAILS MODAL
+    ====================================================== -->
+
+    <div
+        class="details-modal"
+        id="archivedCustomerDetailsModal"
+        aria-hidden="true"
+    >
+
+        <div
+            class="details-overlay"
+            id="archivedDetailsOverlay"
+        ></div>
+
+
+        <div class="details-dialog">
+
+            <div class="details-header">
+
+                <div>
+
+                    <span>
+                        ARCHIVED CUSTOMER
+                    </span>
+
+
+                    <h3
+                        id="archivedDetailsTitle"
+                    >
+                        Customer
+                    </h3>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    id="archivedDetailsClose"
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-xmark
+                        "
+                    ></i>
+
+                </button>
+
+            </div>
+
+
+            <div
+                class="details-body"
+                id="archivedDetailsBody"
+            ></div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         RESTORE MODAL
+    ====================================================== -->
+
+    <div
+        class="restore-modal"
+        id="restoreCustomerModal"
+        aria-hidden="true"
+    >
+
+        <div
+            class="restore-overlay"
+            data-close-restore
+        ></div>
+
+
+        <div class="restore-dialog">
+
+            <div class="restore-icon">
+
+                <i
+                    class="
+                        fa-solid
+                        fa-rotate-left
+                    "
+                ></i>
+
+            </div>
+
+
+            <h3>
+                Restore Customer?
+            </h3>
+
+
+            <p
+                id="restoreCustomerMessage"
+            >
+                Restore this customer?
+            </p>
+
+
+            <div class="restore-actions">
+
+                <button
+                    type="button"
+                    class="cancel-btn"
+                    data-close-restore
+                >
+                    Cancel
+                </button>
+
+
+                <button
+                    type="button"
+                    class="restore-btn"
+                    id="confirmRestoreCustomer"
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-rotate-left
+                        "
+                    ></i>
+
+                    Restore Customer
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <footer>
+
+        <div class="container footer-inner">
+
+            <div class="footer-logo">
+
+                <i
+                    class="
+                        fa-solid
+                        fa-bag-shopping
+                    "
+                ></i>
+
+                Shop<span>Max</span>
+
+            </div>
+
+
+            <p>
+                Your one-stop destination for quality products.
+            </p>
+
+
+            <div class="footer-links">
+
+                <a href="#">
+                    About Us
+                </a>
+
+                <a href="#">
+                    Contact
+                </a>
+
+                <a href="#">
+                    Privacy Policy
+                </a>
+
+                <a href="#">
+                    Terms & Conditions
+                </a>
+
+            </div>
+
+
+            <small>
+                © 2026 ShopMax. All rights reserved.
+            </small>
+
+        </div>
+
+    </footer>
+
+
+
+    <script src="assets/js/archivedCustomers.js"></script>
+
+</body>
+
+</html>

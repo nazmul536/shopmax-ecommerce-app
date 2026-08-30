@@ -1,57 +1,46 @@
 "use strict";
 
 /* =========================================================
-   SHOPMAX
-   ORDERS PAGE
+   SHOPMAX - ORDERS PAGE
+   =========================================================
+
+   FEATURES
+   ---------------------------------------------------------
+   ✅ Order list
+   ✅ Search
+   ✅ Status filter
+   ✅ Normal status progression
+   ✅ Admin emergency correction
+   ✅ Complete status history
+   ✅ Order details modal
+   ✅ Edit order
+   ✅ Archive/delete order
+   ✅ Track order
+   ✅ LocalStorage persistence
+   ✅ Multiple customer orders remain independent
+   ✅ No WebSocket
 ========================================================= */
+
 
 /* =========================================================
    STATE
 ========================================================= */
 
 let orders =
-    JSON.parse(
-        localStorage.getItem(
-            "shopmax-orders"
-        )
-    ) || [];
+    readArray("shopmax-orders");
 
 let cart =
-    JSON.parse(
-        localStorage.getItem(
-            "shopmax-cart"
-        )
-    ) || [];
+    readArray("shopmax-cart");
 
 let wishlist =
-    JSON.parse(
-        localStorage.getItem(
-            "shopmax-wishlist"
-        )
-    ) || [];
-
-
-orders =
-    Array.isArray(orders)
-        ? orders
-        : [];
-
-cart =
-    Array.isArray(cart)
-        ? cart
-        : [];
-
-wishlist =
-    Array.isArray(wishlist)
-        ? wishlist
-        : [];
+    readArray("shopmax-wishlist");
 
 
 /* =========================================================
-   STATUS
+   CONSTANTS
 ========================================================= */
 
-const STATUS = [
+const ORDER_STATUSES = [
     "Order Placed",
     "Processing",
     "Shipped",
@@ -59,18 +48,21 @@ const STATUS = [
     "Delivered"
 ];
 
+
 const ROLE_KEY =
     "shopmax-user-role";
 
+
 const DEFAULT_ROLE =
     "admin";
+
 
 let emergencyOrderId =
     "";
 
 
 /* =========================================================
-   HEADER DOM
+   DOM - HEADER
 ========================================================= */
 
 const ordersWishlistBtn =
@@ -78,30 +70,36 @@ const ordersWishlistBtn =
         "ordersWishlistBtn"
     );
 
+
 const ordersWishlistCount =
     document.getElementById(
         "ordersWishlistCount"
     );
+
 
 const ordersCartBtn =
     document.getElementById(
         "ordersCartBtn"
     );
 
+
 const ordersCartCount =
     document.getElementById(
         "ordersCartCount"
     );
+
 
 const ordersSearch =
     document.getElementById(
         "ordersSearch"
     );
 
+
 const ordersSearchBtn =
     document.getElementById(
         "ordersSearchBtn"
     );
+
 
 const ordersCategoriesBtn =
     document.getElementById(
@@ -110,7 +108,7 @@ const ordersCategoriesBtn =
 
 
 /* =========================================================
-   SUMMARY DOM
+   DOM - SUMMARY
 ========================================================= */
 
 const totalOrdersCount =
@@ -118,10 +116,12 @@ const totalOrdersCount =
         "totalOrdersCount"
     );
 
+
 const totalOrdersSpent =
     document.getElementById(
         "totalOrdersSpent"
     );
+
 
 const latestOrderDate =
     document.getElementById(
@@ -130,7 +130,7 @@ const latestOrderDate =
 
 
 /* =========================================================
-   ORDERS DOM
+   DOM - ORDERS
 ========================================================= */
 
 const ordersTableBody =
@@ -138,25 +138,30 @@ const ordersTableBody =
         "ordersTableBody"
     );
 
+
 const ordersMobileList =
     document.getElementById(
         "ordersMobileList"
     );
+
 
 const ordersEmpty =
     document.getElementById(
         "ordersEmpty"
     );
 
+
 const orderTableSearch =
     document.getElementById(
         "orderTableSearch"
     );
 
+
 const orderStatusFilter =
     document.getElementById(
         "orderStatusFilter"
     );
+
 
 const refreshOrdersBtn =
     document.getElementById(
@@ -165,7 +170,7 @@ const refreshOrdersBtn =
 
 
 /* =========================================================
-   DETAILS MODAL
+   DOM - ORDER DETAILS MODAL
 ========================================================= */
 
 const orderDetailsModal =
@@ -173,20 +178,24 @@ const orderDetailsModal =
         "orderDetailsModal"
     );
 
+
 const orderDetailsOverlay =
     document.getElementById(
         "orderDetailsOverlay"
     );
+
 
 const orderDetailsClose =
     document.getElementById(
         "orderDetailsClose"
     );
 
+
 const orderDetailsTitle =
     document.getElementById(
         "orderDetailsTitle"
     );
+
 
 const orderDetailsBody =
     document.getElementById(
@@ -206,11 +215,7 @@ document.addEventListener(
 
 function initializeOrdersPage() {
 
-    refreshOrders();
-
-    refreshCart();
-
-    refreshWishlist();
+    refreshState();
 
     updateHeaderCounts();
 
@@ -232,10 +237,10 @@ function initializeOrdersPage() {
 
 
 /* =========================================================
-   STORAGE HELPERS
+   LOCAL STORAGE HELPERS
 ========================================================= */
 
-function readStorageArray(
+function readArray(
     key
 ) {
 
@@ -255,7 +260,14 @@ function readStorageArray(
             ? value
             : [];
 
-    } catch {
+
+    } catch (error) {
+
+        console.error(
+            `Failed to read ${key}`,
+            error
+        );
+
 
         return [];
 
@@ -277,37 +289,30 @@ function saveOrders() {
 
 
 /* =========================================================
-   REFRESH STORAGE
+   REFRESH STATE
 ========================================================= */
 
-function refreshOrders() {
+function refreshState() {
 
     orders =
-        readStorageArray(
+        readArray(
             "shopmax-orders"
         );
 
-    normalizeOrders();
-
-}
-
-
-function refreshCart() {
 
     cart =
-        readStorageArray(
+        readArray(
             "shopmax-cart"
         );
 
-}
-
-
-function refreshWishlist() {
 
     wishlist =
-        readStorageArray(
+        readArray(
             "shopmax-wishlist"
         );
+
+
+    normalizeOrders();
 
 }
 
@@ -323,121 +328,135 @@ function normalizeOrders() {
 
 
     orders =
-        orders
-            .map(
-                order => {
-
-                    if (
-                        !order ||
-                        typeof order !==
-                            "object"
-                    ) {
-
-                        changed =
-                            true;
-
-                        return null;
-
-                    }
+        orders.filter(
+            order =>
+                order &&
+                typeof order ===
+                    "object"
+        );
 
 
-                    if (
-                        !order.createdAt
-                    ) {
+    orders.forEach(
+        order => {
 
-                        order.createdAt =
-                            new Date()
-                                .toISOString();
+            if (
+                !order.createdAt
+            ) {
 
-                        changed =
-                            true;
+                order.createdAt =
+                    new Date()
+                        .toISOString();
 
-                    }
+                changed =
+                    true;
 
-
-                    order.status =
-                        formatStatus(
-                            order.status
-                        );
+            }
 
 
-                    if (
-                        !Array.isArray(
-                            order.statusHistory
-                        )
-                    ) {
-
-                        order.statusHistory =
-                            [];
-
-                        changed =
-                            true;
-
-                    }
+            order.status =
+                formatStatus(
+                    order.status
+                );
 
 
-                    if (
-                        !Array.isArray(
-                            order.statusAuditLog
-                        )
-                    ) {
+            if (
+                !Array.isArray(
+                    order.statusHistory
+                )
+            ) {
 
-                        order.statusAuditLog =
-                            [];
+                order.statusHistory =
+                    [];
 
-                        changed =
-                            true;
+                changed =
+                    true;
 
-                    }
-
-
-                    ensureHistory(
-                        order
-                    );
+            }
 
 
-                    /*
-                       Never delete valid old history.
-                    */
+            if (
+                !Array.isArray(
+                    order.statusAuditLog
+                )
+            ) {
 
-                    order.statusHistory =
-                        order.statusHistory
-                            .filter(
-                                entry =>
-                                    entry &&
-                                    typeof entry ===
-                                        "object" &&
-                                    entry.changedAt &&
-                                    (
-                                        entry.status ||
-                                        entry.type ===
-                                            "correction"
-                                    )
+                order.statusAuditLog =
+                    [];
+
+                changed =
+                    true;
+
+            }
+
+
+            ensureHistory(
+                order
+            );
+
+
+            /*
+               Keep only valid history records.
+               Existing valid history is NEVER deleted.
+            */
+
+            order.statusHistory =
+                order.statusHistory.filter(
+                    entry => {
+
+                        if (
+                            !entry ||
+                            typeof entry !==
+                                "object"
+                        ) {
+
+                            return false;
+
+                        }
+
+
+                        if (
+                            entry.type ===
+                            "correction"
+                        ) {
+
+                            return Boolean(
+                                entry.changedAt
                             );
 
-
-                    order.statusHistory.sort(
-                        (
-                            a,
-                            b
-                        ) =>
-                            new Date(
-                                a.changedAt
-                            ).getTime()
-                            -
-                            new Date(
-                                b.changedAt
-                            ).getTime()
-                    );
+                        }
 
 
-                    return order;
+                        return (
+                            Boolean(
+                                entry.status
+                            ) &&
+                            Boolean(
+                                entry.changedAt
+                            )
+                        );
 
-                }
-            )
-            .filter(
-                Boolean
+                    }
+                );
+
+
+            order.statusHistory.sort(
+                (
+                    a,
+                    b
+                ) =>
+                    new Date(
+                        a.changedAt ||
+                        0
+                    ).getTime()
+                    -
+                    new Date(
+                        b.changedAt ||
+                        0
+                    ).getTime()
             );
+
+        }
+    );
 
 
     if (
@@ -452,7 +471,7 @@ function normalizeOrders() {
 
 
 /* =========================================================
-   INITIAL HISTORY
+   ENSURE INITIAL HISTORY
 ========================================================= */
 
 function ensureHistory(
@@ -538,15 +557,20 @@ function updateHeaderCounts() {
             (
                 total,
                 item
-            ) =>
-                total +
-                Math.max(
-                    1,
-                    Number(
-                        item?.quantity
-                    ) ||
-                    1
-                ),
+            ) => {
+
+                return (
+                    total +
+                    Math.max(
+                        1,
+                        Number(
+                            item?.quantity
+                        ) ||
+                        1
+                    )
+                );
+
+            },
             0
         );
 
@@ -594,14 +618,19 @@ function updateSummary() {
             (
                 total,
                 order
-            ) =>
-                total +
-                (
-                    Number(
-                        order?.total
-                    ) ||
-                    0
-                ),
+            ) => {
+
+                return (
+                    total +
+                    (
+                        Number(
+                            order?.total
+                        ) ||
+                        0
+                    )
+                );
+
+            },
             0
         );
 
@@ -619,21 +648,22 @@ function updateSummary() {
 
 
     const latest =
-        [...orders].sort(
-            (
-                a,
-                b
-            ) =>
-                new Date(
-                    b?.createdAt ||
-                    0
-                ).getTime()
-                -
-                new Date(
-                    a?.createdAt ||
-                    0
-                ).getTime()
-        )[0];
+        [...orders]
+            .sort(
+                (
+                    a,
+                    b
+                ) =>
+                    new Date(
+                        b?.createdAt ||
+                        0
+                    ).getTime()
+                    -
+                    new Date(
+                        a?.createdAt ||
+                        0
+                    ).getTime()
+            )[0];
 
 
     if (
@@ -653,7 +683,7 @@ function updateSummary() {
 
 
 /* =========================================================
-   FILTERED ORDERS
+   FILTER
 ========================================================= */
 
 function getFilteredOrders() {
@@ -684,31 +714,35 @@ function getFilteredOrders() {
                         String(
                             order?.orderId ||
                             ""
-                        ).toLowerCase();
+                        )
+                            .toLowerCase();
 
 
                     const customerName =
                         String(
                             order?.customer?.name ||
                             ""
-                        ).toLowerCase();
+                        )
+                            .toLowerCase();
 
 
                     const customerEmail =
                         String(
                             order?.customer?.email ||
                             ""
-                        ).toLowerCase();
+                        )
+                            .toLowerCase();
 
 
                     const customerPhone =
                         String(
                             order?.customer?.phone ||
                             ""
-                        ).toLowerCase();
+                        )
+                            .toLowerCase();
 
 
-                    const matches =
+                    const matched =
                         orderId.includes(
                             query
                         ) ||
@@ -724,7 +758,7 @@ function getFilteredOrders() {
 
 
                     if (
-                        !matches
+                        !matched
                     ) {
 
                         return false;
@@ -779,17 +813,17 @@ function getFilteredOrders() {
 
 
 /* =========================================================
-   RENDER
+   RENDER ORDERS
 ========================================================= */
 
 function renderOrders() {
 
-    const filteredOrders =
+    const list =
         getFilteredOrders();
 
 
     if (
-        filteredOrders.length ===
+        list.length ===
         0
     ) {
 
@@ -803,50 +837,104 @@ function renderOrders() {
     hideEmptyState();
 
 
-    renderDesktopTable(
-        filteredOrders
-    );
+    if (
+        ordersTableBody
+    ) {
+
+        ordersTableBody.innerHTML =
+            list
+                .map(
+                    createTableRow
+                )
+                .join("");
+
+    }
 
 
-    renderMobileList(
-        filteredOrders
-    );
+    if (
+        ordersMobileList
+    ) {
+
+        ordersMobileList.innerHTML =
+            list
+                .map(
+                    createMobileCard
+                )
+                .join("");
+
+    }
+
+
+    bindOrderEvents();
 
 }
 
 
 /* =========================================================
-   DESKTOP TABLE
+   STATUS OPTIONS
 ========================================================= */
 
-function renderDesktopTable(
-    list
+function createStatusOptions(
+    currentStatus
 ) {
 
-    if (
-        !ordersTableBody
-    ) {
-
-        return;
-
-    }
+    const currentIndex =
+        getStatusIndex(
+            currentStatus
+        );
 
 
-    ordersTableBody.innerHTML =
-        list
-            .map(
-                createTableRow
-            )
-            .join("");
+    return ORDER_STATUSES
+        .map(
+            (
+                status,
+                index
+            ) => {
+
+                const isCurrent =
+                    index ===
+                    currentIndex;
 
 
-    bindTrackButtons();
+                const isNext =
+                    index ===
+                    currentIndex + 1;
 
-    bindViewButtons();
 
-    bindStatusControls();
+                const enabled =
+                    isCurrent ||
+                    isNext;
 
-    updateStatusControlClasses();
+
+                return `
+
+                    <option
+                        value="${escapeHTML(
+                            status
+                        )}"
+                        ${
+                            isCurrent
+                                ? "selected"
+                                : ""
+                        }
+                        ${
+                            enabled
+                                ? ""
+                                : "disabled"
+                        }
+                    >
+
+                        ${escapeHTML(
+                            status
+                        )}
+
+                    </option>
+
+                `;
+
+            }
+        )
+        .join("");
 
 }
 
@@ -879,9 +967,9 @@ function createTableRow(
         "—";
 
 
-    const date =
-        formatShortDate(
-            order?.createdAt
+    const status =
+        formatStatus(
+            order?.status
         );
 
 
@@ -891,25 +979,7 @@ function createTableRow(
         );
 
 
-    const total =
-        formatMoney(
-            order?.total
-        );
-
-
-    const status =
-        formatStatus(
-            order?.status
-        );
-
-
-    const statusClass =
-        getStatusClass(
-            status
-        );
-
-
-    const showCorrection =
+    const showEmergency =
         getCurrentRole() ===
             "admin" &&
         getStatusIndex(
@@ -986,15 +1056,15 @@ function createTableRow(
             <td>
 
                 ${escapeHTML(
-                    date
+                    formatShortDate(
+                        order?.createdAt
+                    )
                 )}
 
             </td>
 
 
-            <td
-                class="order-items-cell"
-            >
+            <td>
 
                 ${itemCount}
 
@@ -1008,11 +1078,11 @@ function createTableRow(
             </td>
 
 
-            <td
-                class="order-total-cell"
-            >
+            <td>
 
-                ${total}
+                ${formatMoney(
+                    order?.total
+                )}
 
             </td>
 
@@ -1028,7 +1098,9 @@ function createTableRow(
                     <select
                         class="
                             order-status-select
-                            ${statusClass}
+                            ${getStatusClass(
+                                status
+                            )}
                         "
                         data-status-order="${escapeHTML(
                             orderId
@@ -1043,7 +1115,7 @@ function createTableRow(
 
 
                     ${
-                        showCorrection
+                        showEmergency
                             ? `
 
                                 <button
@@ -1079,14 +1151,14 @@ function createTableRow(
             <td>
 
                 <div
-                    class="order-actions"
+                    class="
+                        order-actions
+                    "
                 >
 
                     <button
                         type="button"
-                        class="
-                            order-action-btn
-                        "
+                        class="order-action-btn"
                         data-view-order="${escapeHTML(
                             orderId
                         )}"
@@ -1138,44 +1210,10 @@ function createTableRow(
 
 
 /* =========================================================
-   MOBILE
+   MOBILE CARD
 ========================================================= */
 
-function renderMobileList(
-    list
-) {
-
-    if (
-        !ordersMobileList
-    ) {
-
-        return;
-
-    }
-
-
-    ordersMobileList.innerHTML =
-        list
-            .map(
-                createMobileOrder
-            )
-            .join("");
-
-
-    bindTrackButtons();
-
-    bindViewButtons();
-
-    bindStatusControls();
-
-}
-
-
-/* =========================================================
-   MOBILE ORDER
-========================================================= */
-
-function createMobileOrder(
+function createMobileCard(
     order
 ) {
 
@@ -1199,37 +1237,19 @@ function createMobileOrder(
         "—";
 
 
-    const date =
-        formatShortDate(
-            order?.createdAt
-        );
-
-
-    const items =
-        getOrderItemCount(
-            order
-        );
-
-
-    const total =
-        formatMoney(
-            order?.total
-        );
-
-
     const status =
         formatStatus(
             order?.status
         );
 
 
-    const statusClass =
-        getStatusClass(
-            status
+    const itemCount =
+        getOrderItemCount(
+            order
         );
 
 
-    const showCorrection =
+    const showEmergency =
         getCurrentRole() ===
             "admin" &&
         getStatusIndex(
@@ -1244,13 +1264,17 @@ function createMobileOrder(
         >
 
             <div
-                class="mobile-order-top"
+                class="
+                    mobile-order-top
+                "
             >
 
                 <div>
 
                     <div
-                        class="mobile-order-id"
+                        class="
+                            mobile-order-id
+                        "
                     >
 
                         ${escapeHTML(
@@ -1261,11 +1285,15 @@ function createMobileOrder(
 
 
                     <div
-                        class="mobile-order-date"
+                        class="
+                            mobile-order-date
+                        "
                     >
 
                         ${escapeHTML(
-                            date
+                            formatShortDate(
+                                order?.createdAt
+                            )
                         )}
 
                     </div>
@@ -1276,7 +1304,9 @@ function createMobileOrder(
                 <span
                     class="
                         order-status
-                        ${statusClass}
+                        ${getStatusClass(
+                            status
+                        )}
                     "
                 >
 
@@ -1349,7 +1379,7 @@ function createMobileOrder(
 
                     <strong>
 
-                        ${items}
+                        ${itemCount}
 
                     </strong>
 
@@ -1365,7 +1395,9 @@ function createMobileOrder(
 
                     <strong>
 
-                        ${total}
+                        ${formatMoney(
+                            order?.total
+                        )}
 
                     </strong>
 
@@ -1394,7 +1426,9 @@ function createMobileOrder(
                     <select
                         class="
                             order-status-select
-                            ${statusClass}
+                            ${getStatusClass(
+                                status
+                            )}
                         "
                         data-status-order="${escapeHTML(
                             orderId
@@ -1409,7 +1443,7 @@ function createMobileOrder(
 
 
                     ${
-                        showCorrection
+                        showEmergency
                             ? `
 
                                 <button
@@ -1501,76 +1535,14 @@ function createMobileOrder(
 
 
 /* =========================================================
-   STATUS OPTIONS
+   BIND ALL ORDER EVENTS
 ========================================================= */
 
-function createStatusOptions(
-    currentStatus
-) {
+function bindOrderEvents() {
 
-    const currentIndex =
-        getStatusIndex(
-            currentStatus
-        );
-
-
-    return STATUS
-        .map(
-            (
-                status,
-                index
-            ) => {
-
-                const selected =
-                    index ===
-                    currentIndex;
-
-
-                const enabled =
-                    index ===
-                        currentIndex ||
-                    index ===
-                        currentIndex + 1;
-
-
-                return `
-
-                    <option
-                        value="${escapeHTML(
-                            status
-                        )}"
-                        ${
-                            selected
-                                ? "selected"
-                                : ""
-                        }
-                        ${
-                            enabled
-                                ? ""
-                                : "disabled"
-                        }
-                    >
-
-                        ${escapeHTML(
-                            status
-                        )}
-
-                    </option>
-
-                `;
-
-            }
-        )
-        .join("");
-
-}
-
-
-/* =========================================================
-   STATUS CONTROL
-========================================================= */
-
-function bindStatusControls() {
+    /*
+       Status dropdown
+    */
 
     document
         .querySelectorAll(
@@ -1581,12 +1553,16 @@ function bindStatusControls() {
 
                 select.addEventListener(
                     "change",
-                    handleStatusChange
+                    handleNormalStatusChange
                 );
 
             }
         );
 
+
+    /*
+       Emergency buttons
+    */
 
     document
         .querySelectorAll(
@@ -1611,6 +1587,79 @@ function bindStatusControls() {
             }
         );
 
+
+    /*
+       View buttons
+    */
+
+    document
+        .querySelectorAll(
+            "[data-view-order]"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        openOrderDetails(
+                            button.getAttribute(
+                                "data-view-order"
+                            )
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+    /*
+       Track buttons
+    */
+
+    document
+        .querySelectorAll(
+            "[data-track-order]"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    event => {
+
+                        event.preventDefault();
+
+
+                        const orderId =
+                            button.getAttribute(
+                                "data-track-order"
+                            );
+
+
+                        if (
+                            !orderId
+                        ) {
+
+                            return;
+
+                        }
+
+
+                        window.location.href =
+                            `trackOrder.html?orderId=${encodeURIComponent(
+                                orderId
+                            )}`;
+
+                    }
+                );
+
+            }
+        );
+
 }
 
 
@@ -1618,7 +1667,7 @@ function bindStatusControls() {
    NORMAL STATUS CHANGE
 ========================================================= */
 
-function handleStatusChange(
+function handleNormalStatusChange(
     event
 ) {
 
@@ -1632,11 +1681,11 @@ function handleStatusChange(
         );
 
 
-    const newStatus =
+    const requestedStatus =
         select.value;
 
 
-    refreshOrders();
+    refreshState();
 
 
     const order =
@@ -1651,9 +1700,7 @@ function handleStatusChange(
         );
 
 
-    if (
-        !order
-    ) {
+    if (!order) {
 
         renderOrders();
 
@@ -1667,20 +1714,26 @@ function handleStatusChange(
     }
 
 
+    const currentStatus =
+        formatStatus(
+            order.status
+        );
+
+
     const currentIndex =
         getStatusIndex(
-            order.status
+            currentStatus
         );
 
 
     const targetIndex =
         getStatusIndex(
-            newStatus
+            requestedStatus
         );
 
 
     /*
-       Forward one step only.
+       Forward exactly one step.
     */
 
     if (
@@ -1701,7 +1754,8 @@ function handleStatusChange(
 
 
     /*
-       Rider restriction.
+       Rider can only perform
+       delivery-side status updates.
     */
 
     if (
@@ -1742,25 +1796,19 @@ function handleStatusChange(
         new Date().toISOString();
 
 
+    const nextStatus =
+        formatStatus(
+            requestedStatus
+        );
+
+
     ensureHistory(
         order
     );
 
 
-    const oldStatus =
-        formatStatus(
-            order.status
-        );
-
-
-    const targetStatus =
-        formatStatus(
-            newStatus
-        );
-
-
     /*
-       SAVE HISTORY.
+       STATUS HISTORY
     */
 
     order.statusHistory.push({
@@ -1769,7 +1817,7 @@ function handleStatusChange(
             "status",
 
         status:
-            targetStatus,
+            nextStatus,
 
         changedAt:
             now,
@@ -1787,16 +1835,19 @@ function handleStatusChange(
 
 
     /*
-       AUDIT LOG.
+       AUDIT LOG
     */
 
     order.statusAuditLog.push({
 
+        type:
+            "status-change",
+
         from:
-            oldStatus,
+            currentStatus,
 
         to:
-            targetStatus,
+            nextStatus,
 
         changedAt:
             now,
@@ -1814,11 +1865,11 @@ function handleStatusChange(
 
 
     /*
-       CURRENT STATUS.
+       CURRENT STATUS
     */
 
     order.status =
-        targetStatus;
+        nextStatus;
 
 
     order.updatedAt =
@@ -1828,22 +1879,7 @@ function handleStatusChange(
     saveOrders();
 
 
-    refreshStateAfterStatusChange();
-
-}
-
-
-/* =========================================================
-   SAVE + REFRESH
-========================================================= */
-
-function refreshStateAfterStatusChange() {
-
-    refreshOrders();
-
-    refreshCart();
-
-    refreshWishlist();
+    refreshState();
 
     updateHeaderCounts();
 
@@ -1851,38 +1887,40 @@ function refreshStateAfterStatusChange() {
 
     renderOrders();
 
+
+    showToast(
+        `${order.orderId} → ${nextStatus}`
+    );
+
 }
 
 
 /* =========================================================
    EMERGENCY MODAL
-   ---------------------------------------------------------
-   FINAL BUG-FIXED VERSION
 ========================================================= */
 
-function createEmergencyModal() {
+function ensureEmergencyStatusModal() {
 
-    /*
-       Remove old modal if one exists.
-    */
-
-    document
-        .getElementById(
+    let modal =
+        document.getElementById(
             "emergencyStatusModal"
-        )
-        ?.remove();
+        );
 
 
-    const modal =
+    if (
+        modal
+    ) {
+
+        return modal;
+
+    }
+
+
+    modal =
         document.createElement(
             "div"
         );
 
-
-    /*
-       IMPORTANT:
-       IDs are clean single-line strings.
-    */
 
     modal.id =
         "emergencyStatusModal";
@@ -1901,19 +1939,26 @@ function createEmergencyModal() {
     modal.innerHTML = `
 
         <div
-            class="emergency-status-overlay"
+            class="
+                emergency-status-overlay
+            "
             data-emergency-close
         ></div>
 
 
         <div
-            class="emergency-status-dialog"
+            class="
+                emergency-status-dialog
+            "
             role="dialog"
             aria-modal="true"
+            aria-labelledby="emergencyStatusTitle"
         >
 
             <div
-                class="emergency-status-header"
+                class="
+                    emergency-status-header
+                "
             >
 
                 <div>
@@ -1923,7 +1968,9 @@ function createEmergencyModal() {
                     </span>
 
 
-                    <h3>
+                    <h3
+                        id="emergencyStatusTitle"
+                    >
                         Correct Order Status
                     </h3>
 
@@ -1932,7 +1979,9 @@ function createEmergencyModal() {
 
                 <button
                     type="button"
-                    class="emergency-status-close"
+                    class="
+                        emergency-status-close
+                    "
                     data-emergency-close
                     aria-label="Close"
                 >
@@ -1950,7 +1999,9 @@ function createEmergencyModal() {
 
 
             <div
-                class="emergency-warning"
+                class="
+                    emergency-status-warning
+                "
             >
 
                 <i
@@ -1969,9 +2020,11 @@ function createEmergencyModal() {
 
 
                     <p>
+
                         Previous status history will not
-                        be deleted. The correction will
-                        be recorded in the audit history.
+                        be deleted. The correction will be
+                        recorded in the audit history.
+
                     </p>
 
                 </div>
@@ -1980,27 +2033,30 @@ function createEmergencyModal() {
 
 
             <div
-                class="emergency-status-field"
+                class="
+                    emergency-status-form
+                "
             >
-
-                <label>
-                    CURRENT STATUS
-                </label>
-
 
                 <div
-                    id="emergencyCurrentStatus"
-                    class="emergency-current-status"
+                    class="
+                        emergency-status-current
+                    "
                 >
-                    —
+
+                    <small>
+                        CURRENT STATUS
+                    </small>
+
+
+                    <strong
+                        id="emergencyCurrentStatus"
+                    >
+                        —
+                    </strong>
+
                 </div>
 
-            </div>
-
-
-            <div
-                class="emergency-status-field"
-            >
 
                 <label
                     for="emergencyNewStatus"
@@ -2011,15 +2067,11 @@ function createEmergencyModal() {
 
                 <select
                     id="emergencyNewStatus"
-                    class="emergency-status-select"
+                    class="
+                        emergency-status-select
+                    "
                 ></select>
 
-            </div>
-
-
-            <div
-                class="emergency-status-field"
-            >
 
                 <label
                     for="emergencyStatusReason"
@@ -2030,9 +2082,11 @@ function createEmergencyModal() {
 
                 <textarea
                     id="emergencyStatusReason"
-                    class="emergency-status-reason"
+                    class="
+                        emergency-status-reason
+                    "
                     rows="4"
-                    maxlength="250"
+                    maxlength="240"
                     placeholder="Example: Incorrect status update"
                 ></textarea>
 
@@ -2040,12 +2094,16 @@ function createEmergencyModal() {
 
 
             <div
-                class="emergency-status-footer"
+                class="
+                    emergency-status-footer
+                "
             >
 
                 <button
                     type="button"
-                    class="emergency-cancel-btn"
+                    class="
+                        emergency-cancel-btn
+                    "
                     data-emergency-close
                 >
 
@@ -2056,7 +2114,9 @@ function createEmergencyModal() {
 
                 <button
                     type="button"
-                    class="emergency-confirm-btn"
+                    class="
+                        emergency-confirm-btn
+                    "
                     id="emergencyConfirmBtn"
                 >
 
@@ -2083,46 +2143,30 @@ function createEmergencyModal() {
     );
 
 
-    /*
-       Bind close buttons.
-    */
-
     modal
         .querySelectorAll(
             "[data-emergency-close]"
         )
         .forEach(
-            button => {
+            element => {
 
-                button.addEventListener(
+                element.addEventListener(
                     "click",
-                    closeEmergency
+                    closeEmergencyStatusModal
                 );
 
             }
         );
 
 
-    /*
-       Bind confirm.
-    */
-
-    const confirmButton =
-        modal.querySelector(
+    modal
+        .querySelector(
             "#emergencyConfirmBtn"
-        );
-
-
-    if (
-        confirmButton
-    ) {
-
-        confirmButton.addEventListener(
+        )
+        ?.addEventListener(
             "click",
-            confirmEmergency
+            confirmEmergencyStatusChange
         );
-
-    }
 
 
     return modal;
@@ -2131,7 +2175,7 @@ function createEmergencyModal() {
 
 
 /* =========================================================
-   OPEN EMERGENCY
+   OPEN EMERGENCY MODAL
 ========================================================= */
 
 function openEmergencyStatusModal(
@@ -2144,7 +2188,7 @@ function openEmergencyStatusModal(
     ) {
 
         showToast(
-            "Emergency correction is admin only.",
+            "Emergency correction is available to admin only.",
             true
         );
 
@@ -2153,7 +2197,7 @@ function openEmergencyStatusModal(
     }
 
 
-    refreshOrders();
+    refreshState();
 
 
     const order =
@@ -2168,9 +2212,7 @@ function openEmergencyStatusModal(
         );
 
 
-    if (
-        !order
-    ) {
+    if (!order) {
 
         showToast(
             "Order not found.",
@@ -2194,7 +2236,7 @@ function openEmergencyStatusModal(
     ) {
 
         showToast(
-            "No earlier status available.",
+            "There is no previous status to correct.",
             true
         );
 
@@ -2208,13 +2250,8 @@ function openEmergencyStatusModal(
 
 
     const modal =
-        createEmergencyModal();
+        ensureEmergencyStatusModal();
 
-
-    /*
-       IMPORTANT:
-       Query INSIDE the fresh modal.
-    */
 
     const currentStatus =
         modal.querySelector(
@@ -2233,10 +2270,6 @@ function openEmergencyStatusModal(
             "#emergencyStatusReason"
         );
 
-
-    /*
-       Safety guard.
-    */
 
     if (
         !currentStatus ||
@@ -2260,41 +2293,54 @@ function openEmergencyStatusModal(
 
 
     /*
-       Previous statuses only.
+       Only previous statuses.
     */
 
     statusSelect.innerHTML =
-        STATUS
-            .slice(
-                0,
-                currentIndex
-            )
+        ORDER_STATUSES
             .map(
-                status => `
+                (
+                    status,
+                    index
+                ) => {
 
-                    <option
-                        value="${escapeHTML(
-                            status
-                        )}"
-                    >
+                    if (
+                        index >=
+                        currentIndex
+                    ) {
 
-                        ${escapeHTML(
-                            status
-                        )}
+                        return "";
 
-                    </option>
+                    }
 
-                `
+
+                    return `
+
+                        <option
+                            value="${escapeHTML(
+                                status
+                            )}"
+                        >
+
+                            ${escapeHTML(
+                                status
+                            )}
+
+                        </option>
+
+                    `;
+
+                }
             )
             .join("");
 
 
     /*
-       Immediate previous status by default.
+       Immediate previous status selected.
     */
 
     statusSelect.value =
-        STATUS[
+        ORDER_STATUSES[
             currentIndex -
             1
         ];
@@ -2328,7 +2374,16 @@ function openEmergencyStatusModal(
    CONFIRM EMERGENCY
 ========================================================= */
 
-function confirmEmergency() {
+function confirmEmergencyStatusChange() {
+
+    if (
+        !emergencyOrderId
+    ) {
+
+        return;
+
+    }
+
 
     const modal =
         document.getElementById(
@@ -2336,9 +2391,7 @@ function confirmEmergency() {
         );
 
 
-    if (
-        !modal
-    ) {
+    if (!modal) {
 
         return;
 
@@ -2371,7 +2424,7 @@ function confirmEmergency() {
     }
 
 
-    const targetStatus =
+    const newStatus =
         statusSelect.value.trim();
 
 
@@ -2379,12 +2432,10 @@ function confirmEmergency() {
         reasonField.value.trim();
 
 
-    if (
-        !targetStatus
-    ) {
+    if (!newStatus) {
 
         showToast(
-            "Please select a status.",
+            "Please select a new status.",
             true
         );
 
@@ -2393,9 +2444,7 @@ function confirmEmergency() {
     }
 
 
-    if (
-        !reason
-    ) {
+    if (!reason) {
 
         showToast(
             "Please enter the correction reason.",
@@ -2409,7 +2458,7 @@ function confirmEmergency() {
     }
 
 
-    refreshOrders();
+    refreshState();
 
 
     const order =
@@ -2424,9 +2473,7 @@ function confirmEmergency() {
         );
 
 
-    if (
-        !order
-    ) {
+    if (!order) {
 
         showToast(
             "Order not found.",
@@ -2450,6 +2497,12 @@ function confirmEmergency() {
         );
 
 
+    const targetStatus =
+        formatStatus(
+            newStatus
+        );
+
+
     const targetIndex =
         getStatusIndex(
             targetStatus
@@ -2457,16 +2510,18 @@ function confirmEmergency() {
 
 
     /*
-       Correction MUST go backward.
+       Emergency correction must move backward.
     */
 
     if (
-        targetIndex < 0 ||
-        targetIndex >= currentIndex
+        targetIndex <
+            0 ||
+        targetIndex >=
+            currentIndex
     ) {
 
         showToast(
-            "Choose an earlier status.",
+            "Emergency correction must select an earlier status.",
             true
         );
 
@@ -2475,26 +2530,17 @@ function confirmEmergency() {
     }
 
 
+    const now =
+        new Date().toISOString();
+
+
     ensureHistory(
         order
     );
 
 
-    const now =
-        new Date().toISOString();
-
-
-    const formattedTarget =
-        formatStatus(
-            targetStatus
-        );
-
-
     /*
-       IMPORTANT:
-       Old history stays.
-
-       We add ONLY new audit events.
+       CORRECTION EVENT
     */
 
     order.statusHistory.push({
@@ -2506,10 +2552,10 @@ function confirmEmergency() {
             currentStatus,
 
         toStatus:
-            formattedTarget,
+            targetStatus,
 
         status:
-            formattedTarget,
+            targetStatus,
 
         changedAt:
             now,
@@ -2527,7 +2573,7 @@ function confirmEmergency() {
 
 
     /*
-       New effective status event.
+       NEW EFFECTIVE STATUS
     */
 
     order.statusHistory.push({
@@ -2536,7 +2582,7 @@ function confirmEmergency() {
             "status",
 
         status:
-            formattedTarget,
+            targetStatus,
 
         changedAt:
             now,
@@ -2554,16 +2600,19 @@ function confirmEmergency() {
 
 
     /*
-       Audit log.
+       AUDIT
     */
 
     order.statusAuditLog.push({
+
+        type:
+            "status-correction",
 
         from:
             currentStatus,
 
         to:
-            formattedTarget,
+            targetStatus,
 
         changedAt:
             now,
@@ -2581,11 +2630,11 @@ function confirmEmergency() {
 
 
     /*
-       Current status.
+       CURRENT STATUS
     */
 
     order.status =
-        formattedTarget;
+        targetStatus;
 
 
     order.updatedAt =
@@ -2593,7 +2642,7 @@ function confirmEmergency() {
 
 
     /*
-       Keep complete history.
+       Keep chronological history.
     */
 
     order.statusHistory.sort(
@@ -2616,14 +2665,10 @@ function confirmEmergency() {
     saveOrders();
 
 
-    closeEmergency();
+    closeEmergencyStatusModal();
 
 
-    refreshOrders();
-
-    refreshCart();
-
-    refreshWishlist();
+    refreshState();
 
     updateHeaderCounts();
 
@@ -2633,7 +2678,7 @@ function confirmEmergency() {
 
 
     showToast(
-        `${order.orderId} corrected to ${formattedTarget}`
+        `${order.orderId} corrected to ${targetStatus}`
     );
 
 }
@@ -2643,7 +2688,7 @@ function confirmEmergency() {
    CLOSE EMERGENCY
 ========================================================= */
 
-function closeEmergency() {
+function closeEmergencyStatusModal() {
 
     const modal =
         document.getElementById(
@@ -2665,22 +2710,6 @@ function closeEmergency() {
             "true"
         );
 
-
-        setTimeout(
-            () => {
-
-                if (
-                    modal.parentNode
-                ) {
-
-                    modal.remove();
-
-                }
-
-            },
-            200
-        );
-
     }
 
 
@@ -2695,114 +2724,14 @@ function closeEmergency() {
 
 
 /* =========================================================
-   TRACK BUTTONS
-========================================================= */
-
-function bindTrackButtons() {
-
-    document
-        .querySelectorAll(
-            "[data-track-order]"
-        )
-        .forEach(
-            button => {
-
-                button.addEventListener(
-                    "click",
-                    event => {
-
-                        event.preventDefault();
-
-
-                        const orderId =
-                            button.getAttribute(
-                                "data-track-order"
-                            );
-
-
-                        trackSpecificOrder(
-                            orderId
-                        );
-
-                    }
-                );
-
-            }
-        );
-
-}
-
-
-/* =========================================================
-   TRACK SPECIFIC ORDER
-========================================================= */
-
-function trackSpecificOrder(
-    orderId
-) {
-
-    if (
-        !orderId
-    ) {
-
-        return;
-
-    }
-
-
-    /*
-       Keep original working flow.
-    */
-
-    window.location.href =
-        `trackOrder.html?orderId=${encodeURIComponent(
-            orderId
-        )}`;
-
-}
-
-
-/* =========================================================
-   VIEW BUTTONS
-========================================================= */
-
-function bindViewButtons() {
-
-    document
-        .querySelectorAll(
-            "[data-view-order]"
-        )
-        .forEach(
-            button => {
-
-                button.addEventListener(
-                    "click",
-                    () => {
-
-                        openOrderDetails(
-                            button.getAttribute(
-                                "data-view-order"
-                            )
-                        );
-
-                    }
-                );
-
-            }
-        );
-
-}
-
-
-/* =========================================================
-   ORDER DETAILS
+   ORDER DETAILS MODAL
 ========================================================= */
 
 function openOrderDetails(
     orderId
 ) {
 
-    refreshOrders();
+    refreshState();
 
 
     const order =
@@ -2828,8 +2757,18 @@ function openOrderDetails(
     }
 
 
+    ensureHistory(
+        order
+    );
+
+
     const customer =
         order.customer ||
+        {};
+
+
+    const addressData =
+        order.addressData ||
         {};
 
 
@@ -2863,72 +2802,401 @@ function openOrderDetails(
         shipping;
 
 
+    const status =
+        formatStatus(
+            order.status
+        );
+
+
     const address =
         customer.address ||
-        order?.addressData?.formatted ||
+        addressData.formatted ||
         "—";
 
 
     const city =
         customer.city ||
-        order?.addressData?.city ||
-        order?.addressData?.county ||
+        addressData.city ||
+        addressData.county ||
         "—";
 
 
     const postal =
         customer.postal ||
         customer.postalCode ||
-        order?.addressData?.postcode ||
+        addressData.postcode ||
         "—";
 
 
-    orderDetailsTitle.textContent =
-        `Order #${order.orderId}`;
+    const country =
+        customer.country ||
+        addressData.country ||
+        "—";
+
+
+    /*
+       Complete saved history.
+       Newest first.
+    */
+
+    const history =
+        [...order.statusHistory]
+            .filter(
+                entry =>
+                    entry &&
+                    entry.changedAt &&
+                    (
+                        entry.status ||
+                        entry.type ===
+                            "correction"
+                    )
+            )
+            .sort(
+                (
+                    a,
+                    b
+                ) =>
+                    new Date(
+                        b.changedAt
+                    ).getTime()
+                    -
+                    new Date(
+                        a.changedAt
+                    ).getTime()
+            );
+
+
+    if (
+        orderDetailsTitle
+    ) {
+
+        orderDetailsTitle.textContent =
+            `Order #${order.orderId}`;
+
+    }
 
 
     orderDetailsBody.innerHTML = `
 
-        <div
+        <!-- =================================================
+             ORDER SUMMARY
+        ================================================== -->
+
+        <section
             class="
-                order-detail-status-row
+                order-detail-hero
             "
         >
 
-            <span
+            <div
                 class="
-                    order-status
-                    ${getStatusClass(
-                        order.status
-                    )}
+                    order-detail-hero-main
                 "
             >
 
-                ${escapeHTML(
-                    formatStatus(
-                        order.status
-                    )
-                )}
+                <div
+                    class="
+                        order-detail-hero-status
+                    "
+                >
 
-            </span>
+                    <span
+                        class="
+                            order-status
+                            ${getStatusClass(
+                                status
+                            )}
+                        "
+                    >
+
+                        ${escapeHTML(
+                            status
+                        )}
+
+                    </span>
 
 
-            <span
+                    <span
+                        class="
+                            order-detail-last-updated
+                        "
+                    >
+
+                        Last updated:
+                        ${escapeHTML(
+                            formatDateTime(
+                                order.updatedAt ||
+                                order.createdAt
+                            )
+                        )}
+
+                    </span>
+
+                </div>
+
+
+                <p>
+
+                    Complete overview of this order,
+                    including customer, delivery,
+                    products and status activity.
+
+                </p>
+
+            </div>
+
+
+            <div
                 class="
-                    order-detail-date
+                    order-detail-hero-badge
                 "
             >
 
-                ${escapeHTML(
-                    formatDateTime(
-                        order.createdAt
-                    )
-                )}
+                <i
+                    class="
+                        fa-solid
+                        fa-receipt
+                    "
+                ></i>
 
-            </span>
 
-        </div>
+                <div>
 
+                    <span>
+                        ORDER DATE
+                    </span>
+
+
+                    <strong>
+
+                        ${escapeHTML(
+                            formatDateTime(
+                                order.createdAt
+                            )
+                        )}
+
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             ADMIN ACTIONS
+        ================================================== -->
+
+        ${
+            getCurrentRole() ===
+            "admin"
+
+                ? `
+
+                    <div
+                        class="
+                            order-detail-admin-actions
+                        "
+                    >
+
+                        <button
+                            type="button"
+                            class="
+                                order-detail-admin-btn
+                                edit
+                            "
+                            data-edit-order="${escapeHTML(
+                                order.orderId
+                            )}"
+                        >
+
+                            <i
+                                class="
+                                    fa-solid
+                                    fa-pen
+                                "
+                            ></i>
+
+                            Edit Order
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="
+                                order-detail-admin-btn
+                                delete
+                            "
+                            data-delete-order="${escapeHTML(
+                                order.orderId
+                            )}"
+                        >
+
+                            <i
+                                class="
+                                    fa-solid
+                                    fa-trash
+                                "
+                            ></i>
+
+                            Archive Order
+
+                        </button>
+
+                    </div>
+
+                `
+
+                : ""
+        }
+
+
+        <!-- =================================================
+             QUICK STATS
+        ================================================== -->
+
+        <section
+            class="
+                order-detail-stat-grid
+            "
+        >
+
+            <div
+                class="
+                    order-detail-stat-card
+                "
+            >
+
+                <div
+                    class="
+                        order-detail-stat-icon
+                    "
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-box
+                        "
+                    ></i>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        ITEMS
+                    </span>
+
+
+                    <strong>
+
+                        ${getOrderItemCount(
+                            order
+                        )}
+
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="
+                    order-detail-stat-card
+                "
+            >
+
+                <div
+                    class="
+                        order-detail-stat-icon
+                    "
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-credit-card
+                        "
+                    ></i>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        PAYMENT
+                    </span>
+
+
+                    <strong>
+
+                        ${escapeHTML(
+                            formatPayment(
+                                order.paymentMethod
+                            )
+                        )}
+
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="
+                    order-detail-stat-card
+                    total
+                "
+            >
+
+                <div
+                    class="
+                        order-detail-stat-icon
+                    "
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-dollar-sign
+                        "
+                    ></i>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        ORDER TOTAL
+                    </span>
+
+
+                    <strong>
+
+                        ${formatMoney(
+                            total
+                        )}
+
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             CUSTOMER + DELIVERY
+        ================================================== -->
 
         <div
             class="
@@ -3134,12 +3402,126 @@ function openOrderDetails(
 
                     </div>
 
+
+                    <div>
+
+                        <small>
+                            COUNTRY
+                        </small>
+
+
+                        <strong>
+
+                            ${escapeHTML(
+                                country
+                            )}
+
+                        </strong>
+
+                    </div>
+
                 </div>
 
             </section>
 
         </div>
 
+
+        <!-- =================================================
+             STATUS HISTORY
+        ================================================== -->
+
+        <section
+            class="
+                order-detail-section
+                order-detail-history-section
+            "
+        >
+
+            <div
+                class="
+                    order-detail-section-title
+                "
+            >
+
+                <i
+                    class="
+                        fa-solid
+                        fa-clock-rotate-left
+                    "
+                ></i>
+
+
+                <div>
+
+                    <span>
+                        ORDER ACTIVITY
+                    </span>
+
+
+                    <h3>
+                        Status History
+                    </h3>
+
+                </div>
+
+
+                <span
+                    class="
+                        order-detail-history-count
+                    "
+                >
+
+                    ${history.length}
+
+                    ${
+                        history.length ===
+                        1
+                            ? " event"
+                            : " events"
+                    }
+
+                </span>
+
+            </div>
+
+
+            <div
+                class="
+                    order-detail-history
+                "
+            >
+
+                ${
+                    history.length
+                        ? history
+                            .map(
+                                createOrderHistoryEntry
+                            )
+                            .join("")
+                        : `
+
+                            <div
+                                class="
+                                    order-detail-history-empty
+                                "
+                            >
+
+                                No status history available.
+
+                            </div>
+
+                        `
+                }
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             PRODUCTS
+        ================================================== -->
 
         <section
             class="
@@ -3157,7 +3539,7 @@ function openOrderDetails(
                 <i
                     class="
                         fa-solid
-                        fa-box
+                        fa-box-open
                     "
                 ></i>
 
@@ -3230,6 +3612,7 @@ function openOrderDetails(
                                                         item?.title ||
                                                         "Product"
                                                     )}"
+                                                    loading="lazy"
                                                 >
 
                                             </div>
@@ -3281,7 +3664,6 @@ function openOrderDetails(
                                 }
                             )
                             .join("")
-
                         : `
 
                             <div
@@ -3302,99 +3684,127 @@ function openOrderDetails(
         </section>
 
 
-        <div
-            class="
-                order-detail-payment
-            "
-        >
-
-            <div>
-
-                <small>
-                    PAYMENT METHOD
-                </small>
-
-
-                <strong>
-
-                    ${escapeHTML(
-                        formatPayment(
-                            order.paymentMethod
-                        )
-                    )}
-
-                </strong>
-
-            </div>
-
-        </div>
-
+        <!-- =================================================
+             PAYMENT + TOTALS
+        ================================================== -->
 
         <div
             class="
-                order-detail-totals
+                order-detail-bottom-grid
             "
         >
 
-            <div>
+            <div
+                class="
+                    order-detail-payment
+                "
+            >
 
-                <span>
-                    Subtotal
-                </span>
+                <div>
 
-
-                <strong>
-
-                    ${formatMoney(
-                        subtotal
-                    )}
-
-                </strong>
-
-            </div>
+                    <small>
+                        PAYMENT METHOD
+                    </small>
 
 
-            <div>
+                    <strong>
 
-                <span>
-                    Shipping
-                </span>
-
-
-                <strong>
-
-                    ${
-                        shipping ===
-                        0
-                            ? "Free"
-                            : formatMoney(
-                                shipping
+                        ${escapeHTML(
+                            formatPayment(
+                                order.paymentMethod
                             )
-                    }
+                        )}
 
-                </strong>
+                    </strong>
+
+                </div>
+
+
+                <div
+                    class="
+                        order-detail-payment-icon
+                    "
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-wallet
+                        "
+                    ></i>
+
+                </div>
 
             </div>
 
 
             <div
                 class="
-                    grand-total
+                    order-detail-totals
                 "
             >
 
-                <span>
-                    Total
-                </span>
+                <div>
+
+                    <span>
+                        Subtotal
+                    </span>
 
 
-                <strong>
+                    <strong>
 
-                    ${formatMoney(
-                        total
-                    )}
+                        ${formatMoney(
+                            subtotal
+                        )}
 
-                </strong>
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Shipping
+                    </span>
+
+
+                    <strong>
+
+                        ${
+                            shipping ===
+                            0
+                                ? "Free"
+                                : formatMoney(
+                                    shipping
+                                )
+                        }
+
+                    </strong>
+
+                </div>
+
+
+                <div
+                    class="
+                        grand-total
+                    "
+                >
+
+                    <span>
+                        Total
+                    </span>
+
+
+                    <strong>
+
+                        ${formatMoney(
+                            total
+                        )}
+
+                    </strong>
+
+                </div>
 
             </div>
 
@@ -3417,11 +3827,1699 @@ function openOrderDetails(
     document.body.style.overflow =
         "hidden";
 
+
+    orderDetailsBody.scrollTop =
+        0;
+
+
+    /*
+       Bind Edit + Archive buttons
+       AFTER dynamic HTML is created.
+    */
+
+    bindOrderDetailsAdminActions();
+
 }
 
 
 /* =========================================================
-   DETAILS MODAL
+   DETAILS - HISTORY ENTRY
+========================================================= */
+
+function createOrderHistoryEntry(
+    entry
+) {
+
+    /*
+       EMERGENCY CORRECTION
+    */
+
+    if (
+        entry?.type ===
+        "correction"
+    ) {
+
+        return `
+
+            <div
+                class="
+                    order-detail-history-item
+                    correction
+                "
+            >
+
+                <div
+                    class="
+                        order-detail-history-icon
+                    "
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-rotate-left
+                        "
+                    ></i>
+
+                </div>
+
+
+                <div
+                    class="
+                        order-detail-history-content
+                    "
+                >
+
+                    <div
+                        class="
+                            order-detail-history-top
+                        "
+                    >
+
+                        <div>
+
+                            <strong>
+                                Emergency Correction
+                            </strong>
+
+
+                            <span>
+
+                                ${escapeHTML(
+                                    entry.fromStatus ||
+                                    "—"
+                                )}
+
+                                →
+
+                                ${escapeHTML(
+                                    entry.toStatus ||
+                                    entry.status ||
+                                    "—"
+                                )}
+
+                            </span>
+
+                        </div>
+
+
+                        <time>
+
+                            ${escapeHTML(
+                                formatDateTime(
+                                    entry.changedAt
+                                )
+                            )}
+
+                        </time>
+
+                    </div>
+
+
+                    ${
+                        entry.reason
+                            ? `
+
+                                <div
+                                    class="
+                                        order-detail-history-reason
+                                    "
+                                >
+
+                                    <small>
+                                        REASON
+                                    </small>
+
+
+                                    <p>
+
+                                        ${escapeHTML(
+                                            entry.reason
+                                        )}
+
+                                    </p>
+
+                                </div>
+
+                            `
+                            : ""
+                    }
+
+
+                    <small
+                        class="
+                            order-detail-history-by
+                        "
+                    >
+
+                        Changed by:
+                        ${escapeHTML(
+                            formatActor(
+                                entry.changedBy
+                            )
+                        )}
+
+                    </small>
+
+                </div>
+
+            </div>
+
+        `;
+
+    }
+
+
+    /*
+       NORMAL STATUS
+    */
+
+    return `
+
+        <div
+            class="
+                order-detail-history-item
+            "
+        >
+
+            <div
+                class="
+                    order-detail-history-icon
+                "
+            >
+
+                <i
+                    class="
+                        fa-solid
+                        fa-check
+                    "
+                ></i>
+
+            </div>
+
+
+            <div
+                class="
+                    order-detail-history-content
+                "
+            >
+
+                <div
+                    class="
+                        order-detail-history-top
+                    "
+                >
+
+                    <div>
+
+                        <strong>
+
+                            ${escapeHTML(
+                                formatStatus(
+                                    entry?.status
+                                )
+                            )}
+
+                        </strong>
+
+                    </div>
+
+
+                    <time>
+
+                        ${escapeHTML(
+                            formatDateTime(
+                                entry?.changedAt
+                            )
+                        )}
+
+                    </time>
+
+                </div>
+
+
+                <small
+                    class="
+                        order-detail-history-by
+                    "
+                >
+
+                    Changed by:
+                    ${escapeHTML(
+                        formatActor(
+                            entry?.changedBy
+                        )
+                    )}
+
+                </small>
+
+
+                ${
+                    entry?.reason
+                        ? `
+
+                            <div
+                                class="
+                                    order-detail-history-reason
+                                "
+                            >
+
+                                <small>
+                                    REASON
+                                </small>
+
+
+                                <p>
+
+                                    ${escapeHTML(
+                                        entry.reason
+                                    )}
+
+                                </p>
+
+                            </div>
+
+                        `
+                        : ""
+                }
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   DETAILS ADMIN ACTIONS
+========================================================= */
+
+function bindOrderDetailsAdminActions() {
+
+    const editButton =
+        orderDetailsBody?.querySelector(
+            "[data-edit-order]"
+        );
+
+
+    const deleteButton =
+        orderDetailsBody?.querySelector(
+            "[data-delete-order]"
+        );
+
+
+    editButton?.addEventListener(
+        "click",
+        () => {
+
+            openEditOrderModal(
+                editButton.getAttribute(
+                    "data-edit-order"
+                )
+            );
+
+        }
+    );
+
+
+    deleteButton?.addEventListener(
+        "click",
+        () => {
+
+            openDeleteOrderModal(
+                deleteButton.getAttribute(
+                    "data-delete-order"
+                )
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   EDIT ORDER MODAL
+========================================================= */
+
+function openEditOrderModal(
+    orderId
+) {
+
+    if (
+        getCurrentRole() !==
+        "admin"
+    ) {
+
+        showToast(
+            "Only admin can edit orders.",
+            true
+        );
+
+        return;
+
+    }
+
+
+    refreshState();
+
+
+    const order =
+        orders.find(
+            item =>
+                normalizeOrderId(
+                    item?.orderId
+                ) ===
+                normalizeOrderId(
+                    orderId
+                )
+        );
+
+
+    if (!order) {
+
+        showToast(
+            "Order not found.",
+            true
+        );
+
+        return;
+
+    }
+
+
+    document
+        .getElementById(
+            "shopmaxEditOrderModal"
+        )
+        ?.remove();
+
+
+    const customer =
+        order.customer ||
+        {};
+
+
+    const addressData =
+        order.addressData ||
+        {};
+
+
+    const name =
+        customer.name ||
+        "";
+
+
+    const email =
+        customer.email ||
+        "";
+
+
+    const phone =
+        customer.phone ||
+        "";
+
+
+    const address =
+        customer.address ||
+        addressData.formatted ||
+        "";
+
+
+    const city =
+        customer.city ||
+        addressData.city ||
+        addressData.county ||
+        "";
+
+
+    const postal =
+        customer.postal ||
+        customer.postalCode ||
+        addressData.postcode ||
+        "";
+
+
+    const modal =
+        document.createElement(
+            "div"
+        );
+
+
+    modal.id =
+        "shopmaxEditOrderModal";
+
+
+    modal.className =
+        "order-edit-modal";
+
+
+    modal.innerHTML = `
+
+        <div
+            class="
+                order-edit-overlay
+            "
+            data-edit-close
+        ></div>
+
+
+        <div
+            class="
+                order-edit-dialog
+            "
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="editOrderTitle"
+        >
+
+            <div
+                class="
+                    order-edit-header
+                "
+            >
+
+                <div>
+
+                    <span>
+                        ORDER MANAGEMENT
+                    </span>
+
+
+                    <h3
+                        id="editOrderTitle"
+                    >
+                        Edit Order
+                    </h3>
+
+
+                    <p>
+
+                        #${escapeHTML(
+                            order.orderId
+                        )}
+
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="
+                        order-edit-close
+                    "
+                    data-edit-close
+                    aria-label="Close"
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-xmark
+                        "
+                    ></i>
+
+                </button>
+
+            </div>
+
+
+            <form
+                id="shopmaxEditOrderForm"
+            >
+
+                <div
+                    class="
+                        order-edit-grid
+                    "
+                >
+
+                    <div
+                        class="
+                            order-edit-field
+                        "
+                    >
+
+                        <label>
+                            CUSTOMER NAME
+                        </label>
+
+
+                        <input
+                            type="text"
+                            name="customerName"
+                            value="${escapeHTML(
+                                name
+                            )}"
+                            required
+                            maxlength="100"
+                        >
+
+                    </div>
+
+
+                    <div
+                        class="
+                            order-edit-field
+                        "
+                    >
+
+                        <label>
+                            PHONE
+                        </label>
+
+
+                        <input
+                            type="text"
+                            name="phone"
+                            value="${escapeHTML(
+                                phone
+                            )}"
+                            maxlength="30"
+                        >
+
+                    </div>
+
+
+                    <div
+                        class="
+                            order-edit-field full
+                        "
+                    >
+
+                        <label>
+                            EMAIL
+                        </label>
+
+
+                        <input
+                            type="email"
+                            name="email"
+                            value="${escapeHTML(
+                                email
+                            )}"
+                            maxlength="150"
+                        >
+
+                    </div>
+
+
+                    <div
+                        class="
+                            order-edit-field full
+                        "
+                    >
+
+                        <label>
+                            ADDRESS
+                        </label>
+
+
+                        <input
+                            type="text"
+                            name="address"
+                            value="${escapeHTML(
+                                address
+                            )}"
+                            maxlength="200"
+                        >
+
+                    </div>
+
+
+                    <div
+                        class="
+                            order-edit-field
+                        "
+                    >
+
+                        <label>
+                            CITY / DISTRICT
+                        </label>
+
+
+                        <input
+                            type="text"
+                            name="city"
+                            value="${escapeHTML(
+                                city
+                            )}"
+                            maxlength="80"
+                        >
+
+                    </div>
+
+
+                    <div
+                        class="
+                            order-edit-field
+                        "
+                    >
+
+                        <label>
+                            POSTAL CODE
+                        </label>
+
+
+                        <input
+                            type="text"
+                            name="postal"
+                            value="${escapeHTML(
+                                postal
+                            )}"
+                            maxlength="20"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="
+                        order-edit-footer
+                    "
+                >
+
+                    <button
+                        type="button"
+                        class="
+                            order-edit-cancel
+                        "
+                        data-edit-close
+                    >
+
+                        Cancel
+
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="
+                            order-edit-save
+                        "
+                    >
+
+                        <i
+                            class="
+                                fa-solid
+                                fa-check
+                            "
+                        ></i>
+
+                        Save Changes
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    `;
+
+
+    document.body.appendChild(
+        modal
+    );
+
+
+    modal
+        .querySelectorAll(
+            "[data-edit-close]"
+        )
+        .forEach(
+            element => {
+
+                element.addEventListener(
+                    "click",
+                    closeEditOrderModal
+                );
+
+            }
+        );
+
+
+    modal
+        .querySelector(
+            "#shopmaxEditOrderForm"
+        )
+        ?.addEventListener(
+            "submit",
+            event => {
+
+                event.preventDefault();
+
+
+                saveEditedOrder(
+                    orderId,
+                    event.currentTarget
+                );
+
+            }
+        );
+
+
+    modal.classList.add(
+        "show"
+    );
+
+
+    document.body.style.overflow =
+        "hidden";
+
+
+    modal
+        .querySelector(
+            'input[name="customerName"]'
+        )
+        ?.focus();
+
+}
+
+
+/* =========================================================
+   SAVE EDITED ORDER
+========================================================= */
+
+function saveEditedOrder(
+    orderId,
+    form
+) {
+
+    refreshState();
+
+
+    const order =
+        orders.find(
+            item =>
+                normalizeOrderId(
+                    item?.orderId
+                ) ===
+                normalizeOrderId(
+                    orderId
+                )
+        );
+
+
+    if (!order) {
+
+        showToast(
+            "Order not found.",
+            true
+        );
+
+        return;
+
+    }
+
+
+    const formData =
+        new FormData(
+            form
+        );
+
+
+    const newName =
+        String(
+            formData.get(
+                "customerName"
+            ) ||
+            ""
+        ).trim();
+
+
+    const newPhone =
+        String(
+            formData.get(
+                "phone"
+            ) ||
+            ""
+        ).trim();
+
+
+    const newEmail =
+        String(
+            formData.get(
+                "email"
+            ) ||
+            ""
+        ).trim();
+
+
+    const newAddress =
+        String(
+            formData.get(
+                "address"
+            ) ||
+            ""
+        ).trim();
+
+
+    const newCity =
+        String(
+            formData.get(
+                "city"
+            ) ||
+            ""
+        ).trim();
+
+
+    const newPostal =
+        String(
+            formData.get(
+                "postal"
+            ) ||
+            ""
+        ).trim();
+
+
+    if (!newName) {
+
+        showToast(
+            "Customer name is required.",
+            true
+        );
+
+        return;
+
+    }
+
+
+    /*
+       Ensure objects exist.
+    */
+
+    if (
+        !order.customer ||
+        typeof order.customer !==
+            "object"
+    ) {
+
+        order.customer = {};
+
+    }
+
+
+    if (
+        !order.addressData ||
+        typeof order.addressData !==
+            "object"
+    ) {
+
+        order.addressData = {};
+
+    }
+
+
+    /*
+       OLD VALUES
+    */
+
+    const oldCustomer = {
+
+        name:
+            order.customer.name ||
+            "",
+
+        email:
+            order.customer.email ||
+            "",
+
+        phone:
+            order.customer.phone ||
+            "",
+
+        address:
+            order.customer.address ||
+            order.addressData.formatted ||
+            "",
+
+        city:
+            order.customer.city ||
+            order.addressData.city ||
+            order.addressData.county ||
+            "",
+
+        postal:
+            order.customer.postal ||
+            order.customer.postalCode ||
+            order.addressData.postcode ||
+            ""
+
+    };
+
+
+    /*
+       UPDATE CUSTOMER
+    */
+
+    order.customer.name =
+        newName;
+
+
+    order.customer.email =
+        newEmail;
+
+
+    order.customer.phone =
+        newPhone;
+
+
+    order.customer.address =
+        newAddress;
+
+
+    order.customer.city =
+        newCity;
+
+
+    order.customer.postal =
+        newPostal;
+
+
+    /*
+       Keep addressData synchronized.
+    */
+
+    order.addressData.formatted =
+        newAddress;
+
+
+    order.addressData.city =
+        newCity;
+
+
+    order.addressData.postcode =
+        newPostal;
+
+
+    const now =
+        new Date().toISOString();
+
+
+    order.updatedAt =
+        now;
+
+
+    /*
+       Separate audit event.
+       This is NOT a shipment status event.
+    */
+
+    if (
+        !Array.isArray(
+            order.statusAuditLog
+        )
+    ) {
+
+        order.statusAuditLog =
+            [];
+
+    }
+
+
+    const changes = {};
+
+
+    if (
+        oldCustomer.name !==
+        newName
+    ) {
+
+        changes.name = {
+
+            from:
+                oldCustomer.name,
+
+            to:
+                newName
+
+        };
+
+    }
+
+
+    if (
+        oldCustomer.email !==
+        newEmail
+    ) {
+
+        changes.email = {
+
+            from:
+                oldCustomer.email,
+
+            to:
+                newEmail
+
+        };
+
+    }
+
+
+    if (
+        oldCustomer.phone !==
+        newPhone
+    ) {
+
+        changes.phone = {
+
+            from:
+                oldCustomer.phone,
+
+            to:
+                newPhone
+
+        };
+
+    }
+
+
+    if (
+        oldCustomer.address !==
+        newAddress
+    ) {
+
+        changes.address = {
+
+            from:
+                oldCustomer.address,
+
+            to:
+                newAddress
+
+        };
+
+    }
+
+
+    if (
+        oldCustomer.city !==
+        newCity
+    ) {
+
+        changes.city = {
+
+            from:
+                oldCustomer.city,
+
+            to:
+                newCity
+
+        };
+
+    }
+
+
+    if (
+        oldCustomer.postal !==
+        newPostal
+    ) {
+
+        changes.postal = {
+
+            from:
+                oldCustomer.postal,
+
+            to:
+                newPostal
+
+        };
+
+    }
+
+
+    if (
+        Object.keys(
+            changes
+        ).length
+    ) {
+
+        order.statusAuditLog.push({
+
+            type:
+                "order-update",
+
+            changedAt:
+                now,
+
+            changedBy:
+                "Admin",
+
+            changeType:
+                "order-update",
+
+            reason:
+                "Order information updated",
+
+            changes:
+                changes
+
+        });
+
+    }
+
+
+    saveOrders();
+
+
+    closeEditOrderModal();
+
+
+    refreshState();
+
+    updateHeaderCounts();
+
+    updateSummary();
+
+    renderOrders();
+
+
+    /*
+       If details modal is still open,
+       refresh it with the new data.
+    */
+
+    if (
+        orderDetailsModal?.classList.contains(
+            "show"
+        )
+    ) {
+
+        openOrderDetails(
+            order.orderId
+        );
+
+    }
+
+
+    showToast(
+        `${order.orderId} updated successfully.`
+    );
+
+}
+
+
+/* =========================================================
+   CLOSE EDIT MODAL
+========================================================= */
+
+function closeEditOrderModal() {
+
+    const modal =
+        document.getElementById(
+            "shopmaxEditOrderModal"
+        );
+
+
+    if (
+        modal
+    ) {
+
+        modal.classList.remove(
+            "show"
+        );
+
+
+        setTimeout(
+            () => {
+
+                modal.remove();
+
+            },
+            150
+        );
+
+    }
+
+
+    document.body.style.overflow =
+        "";
+
+}
+
+
+/* =========================================================
+   DELETE / ARCHIVE CONFIRMATION
+========================================================= */
+
+function openDeleteOrderModal(
+    orderId
+) {
+
+    if (
+        getCurrentRole() !==
+        "admin"
+    ) {
+
+        showToast(
+            "Only admin can archive orders.",
+            true
+        );
+
+        return;
+
+    }
+
+
+    refreshState();
+
+
+    const order =
+        orders.find(
+            item =>
+                normalizeOrderId(
+                    item?.orderId
+                ) ===
+                normalizeOrderId(
+                    orderId
+                )
+        );
+
+
+    if (!order) {
+
+        showToast(
+            "Order not found.",
+            true
+        );
+
+        return;
+
+    }
+
+
+    document
+        .getElementById(
+            "shopmaxDeleteOrderModal"
+        )
+        ?.remove();
+
+
+    const modal =
+        document.createElement(
+            "div"
+        );
+
+
+    modal.id =
+        "shopmaxDeleteOrderModal";
+
+
+    modal.className =
+        "order-delete-modal";
+
+
+    modal.innerHTML = `
+
+        <div
+            class="
+                order-delete-overlay
+            "
+            data-delete-close
+        ></div>
+
+
+        <div
+            class="
+                order-delete-dialog
+            "
+            role="dialog"
+            aria-modal="true"
+        >
+
+            <div
+                class="
+                    order-delete-icon
+                "
+            >
+
+                <i
+                    class="
+                        fa-solid
+                        fa-trash
+                    "
+                ></i>
+
+            </div>
+
+
+            <h3>
+                Archive Order?
+            </h3>
+
+
+            <p>
+
+                Are you sure you want to archive
+
+                <strong>
+
+                    ${escapeHTML(
+                        order.orderId
+                    )}
+
+                </strong>
+
+                ?
+
+            </p>
+
+
+            <span
+                class="
+                    order-delete-note
+                "
+            >
+
+                This order will be removed from the
+                active order list, but its complete
+                record and history will be preserved
+                in the archive.
+
+            </span>
+
+
+            <div
+                class="
+                    order-delete-actions
+                "
+            >
+
+                <button
+                    type="button"
+                    class="
+                        order-delete-cancel
+                    "
+                    data-delete-close
+                >
+
+                    Cancel
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="
+                        order-delete-confirm
+                    "
+                    id="confirmDeleteOrderBtn"
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-box-archive
+                        "
+                    ></i>
+
+                    Archive Order
+
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    document.body.appendChild(
+        modal
+    );
+
+
+    modal
+        .querySelectorAll(
+            "[data-delete-close]"
+        )
+        .forEach(
+            element => {
+
+                element.addEventListener(
+                    "click",
+                    closeDeleteOrderModal
+                );
+
+            }
+        );
+
+
+    modal
+        .querySelector(
+            "#confirmDeleteOrderBtn"
+        )
+        ?.addEventListener(
+            "click",
+            () => {
+
+                archiveOrder(
+                    order.orderId
+                );
+
+            }
+        );
+
+
+    modal.classList.add(
+        "show"
+    );
+
+
+    document.body.style.overflow =
+        "hidden";
+
+}
+
+
+/* =========================================================
+   ARCHIVE ORDER
+========================================================= */
+
+function archiveOrder(
+    orderId
+) {
+
+    refreshState();
+
+
+    const orderIndex =
+        orders.findIndex(
+            item =>
+                normalizeOrderId(
+                    item?.orderId
+                ) ===
+                normalizeOrderId(
+                    orderId
+                )
+        );
+
+
+    if (
+        orderIndex ===
+        -1
+    ) {
+
+        showToast(
+            "Order not found.",
+            true
+        );
+
+        return;
+
+    }
+
+
+    const order =
+        orders[
+            orderIndex
+        ];
+
+
+    const now =
+        new Date().toISOString();
+
+
+    if (
+        !Array.isArray(
+            order.statusAuditLog
+        )
+    ) {
+
+        order.statusAuditLog =
+            [];
+
+    }
+
+
+    /*
+       Preserve archive action in audit log.
+    */
+
+    order.statusAuditLog.push({
+
+        type:
+            "order-archive",
+
+        changedAt:
+            now,
+
+        changedBy:
+            "Admin",
+
+        changeType:
+            "archive",
+
+        reason:
+            "Order archived by admin"
+
+    });
+
+
+    order.archivedAt =
+        now;
+
+
+    order.archivedBy =
+        "Admin";
+
+
+    /*
+       Existing archive records.
+    */
+
+    const archivedOrders =
+        readArray(
+            "shopmax-archived-orders"
+        );
+
+
+    /*
+       Avoid duplicate archived records.
+    */
+
+    const alreadyArchived =
+        archivedOrders.some(
+            archived =>
+                normalizeOrderId(
+                    archived?.orderId
+                ) ===
+                normalizeOrderId(
+                    order.orderId
+                )
+        );
+
+
+    if (
+        alreadyArchived
+    ) {
+
+        showToast(
+            "This order is already archived.",
+            true
+        );
+
+        return;
+
+    }
+
+
+    archivedOrders.unshift(
+        order
+    );
+
+
+    localStorage.setItem(
+        "shopmax-archived-orders",
+        JSON.stringify(
+            archivedOrders
+        )
+    );
+
+
+    /*
+       Remove only from active orders.
+    */
+
+    orders.splice(
+        orderIndex,
+        1
+    );
+
+
+    saveOrders();
+
+
+    closeDeleteOrderModal();
+
+
+    closeOrderDetails();
+
+
+    refreshState();
+
+    updateHeaderCounts();
+
+    updateSummary();
+
+    renderOrders();
+
+
+    showToast(
+        `${order.orderId} archived successfully.`
+    );
+
+}
+
+
+/* =========================================================
+   CLOSE DELETE MODAL
+========================================================= */
+
+function closeDeleteOrderModal() {
+
+    const modal =
+        document.getElementById(
+            "shopmaxDeleteOrderModal"
+        );
+
+
+    if (
+        modal
+    ) {
+
+        modal.classList.remove(
+            "show"
+        );
+
+
+        setTimeout(
+            () => {
+
+                modal.remove();
+
+            },
+            150
+        );
+
+    }
+
+
+    document.body.style.overflow =
+        "";
+
+}
+
+
+/* =========================================================
+   DETAILS MODAL CLOSE
 ========================================================= */
 
 function setupDetailsModal() {
@@ -3449,7 +5547,11 @@ function setupDetailsModal() {
 
                 closeOrderDetails();
 
-                closeEmergency();
+                closeEmergencyStatusModal();
+
+                closeEditOrderModal();
+
+                closeDeleteOrderModal();
 
             }
 
@@ -3461,15 +5563,21 @@ function setupDetailsModal() {
 
 function closeOrderDetails() {
 
-    orderDetailsModal?.classList.remove(
-        "show"
-    );
+    if (
+        orderDetailsModal
+    ) {
+
+        orderDetailsModal.classList.remove(
+            "show"
+        );
 
 
-    orderDetailsModal?.setAttribute(
-        "aria-hidden",
-        "true"
-    );
+        orderDetailsModal.setAttribute(
+            "aria-hidden",
+            "true"
+        );
+
+    }
 
 
     document.body.style.overflow =
@@ -3525,9 +5633,7 @@ function handleHeaderSearch() {
             ?.trim();
 
 
-    if (
-        !query
-    ) {
+    if (!query) {
 
         window.location.href =
             "shop.html";
@@ -3560,7 +5666,7 @@ function setupFilters() {
 
 
 /* =========================================================
-   REFRESH
+   REFRESH BUTTON
 ========================================================= */
 
 function setupRefresh() {
@@ -3569,11 +5675,7 @@ function setupRefresh() {
         "click",
         () => {
 
-            refreshOrders();
-
-            refreshCart();
-
-            refreshWishlist();
+            refreshState();
 
             updateHeaderCounts();
 
@@ -3582,20 +5684,8 @@ function setupRefresh() {
             renderOrders();
 
 
-            refreshOrdersBtn?.classList.add(
-                "is-refreshing"
-            );
-
-
-            setTimeout(
-                () => {
-
-                    refreshOrdersBtn?.classList.remove(
-                        "is-refreshing"
-                    );
-
-                },
-                450
+            showToast(
+                "Orders refreshed successfully."
             );
 
         }
@@ -3688,47 +5778,8 @@ function hideEmptyState() {
 
 
 /* =========================================================
-   STATUS CLASSES
+   STATUS CLASS
 ========================================================= */
-
-function updateStatusControlClasses() {
-
-    document
-        .querySelectorAll(
-            ".order-status-select"
-        )
-        .forEach(
-            select => {
-
-                select.classList.remove(
-                    "processing",
-                    "shipped",
-                    "out-for-delivery",
-                    "delivered"
-                );
-
-
-                const className =
-                    getStatusClass(
-                        select.value
-                    );
-
-
-                if (
-                    className
-                ) {
-
-                    select.classList.add(
-                        className
-                    );
-
-                }
-
-            }
-        );
-
-}
-
 
 function getStatusClass(
     status
@@ -3741,18 +5792,27 @@ function getStatusClass(
     ) {
 
         case "processing":
+
             return "processing";
 
+
         case "shipped":
+
             return "shipped";
 
+
         case "out-for-delivery":
+
             return "out-for-delivery";
 
+
         case "delivered":
+
             return "delivered";
 
+
         default:
+
             return "";
 
     }
@@ -3761,7 +5821,7 @@ function getStatusClass(
 
 
 /* =========================================================
-   STATUS HELPERS
+   STATUS NORMALIZATION
 ========================================================= */
 
 function normalizeStatus(
@@ -3825,10 +5885,24 @@ function normalizeStatus(
     }
 
 
+    if (
+        status ===
+        "all"
+    ) {
+
+        return "all";
+
+    }
+
+
     return "placed";
 
 }
 
+
+/* =========================================================
+   FORMAT STATUS
+========================================================= */
 
 function formatStatus(
     value
@@ -3841,24 +5915,37 @@ function formatStatus(
     ) {
 
         case "processing":
+
             return "Processing";
 
+
         case "shipped":
+
             return "Shipped";
 
+
         case "out-for-delivery":
+
             return "Out for Delivery";
 
+
         case "delivered":
+
             return "Delivered";
 
+
         default:
+
             return "Order Placed";
 
     }
 
 }
 
+
+/* =========================================================
+   STATUS INDEX
+========================================================= */
 
 function getStatusIndex(
     status
@@ -3880,22 +5967,33 @@ function getStatusIndex(
 }
 
 
+/* =========================================================
+   ROLE
+========================================================= */
+
 function getCurrentRole() {
 
-    return String(
-        localStorage.getItem(
-            ROLE_KEY
-        ) ||
-        DEFAULT_ROLE
-    )
-        .trim()
-        .toLowerCase();
+    const role =
+        String(
+            localStorage.getItem(
+                ROLE_KEY
+            ) ||
+            DEFAULT_ROLE
+        )
+            .trim()
+            .toLowerCase();
+
+
+    return role ===
+        "rider"
+        ? "rider"
+        : "admin";
 
 }
 
 
 /* =========================================================
-   GENERAL HELPERS
+   ORDER ITEM COUNT
 ========================================================= */
 
 function getOrderItemCount(
@@ -3928,6 +6026,10 @@ function getOrderItemCount(
 
 }
 
+
+/* =========================================================
+   INITIALS
+========================================================= */
 
 function getInitials(
     name
@@ -3974,7 +6076,8 @@ function getInitials(
             .charAt(0)
         +
         words[
-            words.length - 1
+            words.length -
+            1
         ]
             .charAt(0)
     )
@@ -3982,6 +6085,10 @@ function getInitials(
 
 }
 
+
+/* =========================================================
+   ORDER ID
+========================================================= */
 
 function normalizeOrderId(
     value
@@ -4001,6 +6108,10 @@ function normalizeOrderId(
 }
 
 
+/* =========================================================
+   MONEY
+========================================================= */
+
 function formatMoney(
     value
 ) {
@@ -4014,6 +6125,10 @@ function formatMoney(
 
 }
 
+
+/* =========================================================
+   DATE
+========================================================= */
 
 function formatShortDate(
     value
@@ -4050,8 +6165,10 @@ function formatShortDate(
         {
             month:
                 "short",
+
             day:
                 "numeric",
+
             year:
                 "numeric"
         }
@@ -4061,6 +6178,10 @@ function formatShortDate(
 
 }
 
+
+/* =========================================================
+   DATE + TIME
+========================================================= */
 
 function formatDateTime(
     value
@@ -4097,12 +6218,16 @@ function formatDateTime(
         {
             month:
                 "short",
+
             day:
                 "numeric",
+
             year:
                 "numeric",
+
             hour:
                 "numeric",
+
             minute:
                 "2-digit"
         }
@@ -4112,6 +6237,10 @@ function formatDateTime(
 
 }
 
+
+/* =========================================================
+   PAYMENT
+========================================================= */
 
 function formatPayment(
     value
@@ -4128,9 +6257,9 @@ function formatPayment(
 
     if (
         method ===
-            "card" ||
+        "card" ||
         method ===
-            "card payment"
+        "card payment"
     ) {
 
         return "Card Payment";
@@ -4142,6 +6271,52 @@ function formatPayment(
 
 }
 
+
+/* =========================================================
+   ACTOR
+========================================================= */
+
+function formatActor(
+    value
+) {
+
+    const actor =
+        String(
+            value ||
+            ""
+        )
+            .trim()
+            .toLowerCase();
+
+
+    if (
+        actor ===
+        "admin"
+    ) {
+
+        return "Admin";
+
+    }
+
+
+    if (
+        actor ===
+        "rider"
+    ) {
+
+        return "Rider";
+
+    }
+
+
+    return "System";
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
 
 function escapeHTML(
     value
@@ -4186,7 +6361,7 @@ function showToast(
 
     let toast =
         document.getElementById(
-            "shopmaxOrderToast"
+            "ordersStatusToast"
         );
 
 
@@ -4201,7 +6376,7 @@ function showToast(
 
 
         toast.id =
-            "shopmaxOrderToast";
+            "ordersStatusToast";
 
 
         toast.className =
@@ -4231,11 +6406,11 @@ function showToast(
 
 
     clearTimeout(
-        window.shopmaxToastTimer
+        window.__shopmaxToastTimer
     );
 
 
-    window.shopmaxToastTimer =
+    window.__shopmaxToastTimer =
         setTimeout(
             () => {
 
@@ -4268,7 +6443,7 @@ window.addEventListener(
         }
 
 
-        refreshOrders();
+        refreshState();
 
         updateHeaderCounts();
 
@@ -4278,3 +6453,8 @@ window.addEventListener(
 
     }
 );
+
+
+/* =========================================================
+   END
+========================================================= */
