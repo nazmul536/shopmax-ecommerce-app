@@ -10,8 +10,13 @@
         content="width=device-width, initial-scale=1.0"
     >
 
+    <meta
+        name="description"
+        content="Manage archived ShopMax products"
+    >
+
     <title>
-        Archived Customers | ShopMax Admin
+        Archived Products | ShopMax Admin
     </title>
 
 
@@ -26,7 +31,7 @@
 
 
     <!-- =====================================================
-         ADMIN CSS
+         SHARED ADMIN SHELL
     ====================================================== -->
 
     <link
@@ -36,12 +41,12 @@
 
 
     <!-- =====================================================
-         ARCHIVED CUSTOMERS CSS
+         ARCHIVED PRODUCTS
     ====================================================== -->
 
     <link
         rel="stylesheet"
-        href="assets/css/archivedCustomers.css"
+        href="assets/css/archivedProducts.css"
     >
 
 </head>
@@ -75,7 +80,8 @@
 
 
     <!-- =====================================================
-         ADMIN SIDEBAR
+         SIDEBAR
+         EXACT SAME STRUCTURE AS products.html
     ====================================================== -->
 
     <aside
@@ -84,9 +90,8 @@
     >
 
 
-        <!-- BRAND -->
-
         <div class="sidebar-brand">
+
 
             <a
                 href="admin.html"
@@ -95,7 +100,9 @@
 
                 <span class="logo-icon">
 
-                    <i class="fa-solid fa-bag-shopping"></i>
+                    <i
+                        class="fa-solid fa-bag-shopping"
+                    ></i>
 
                 </span>
 
@@ -111,7 +118,6 @@
             </a>
 
 
-            <!-- MOBILE / TABLET CLOSE -->
 
             <button
                 type="button"
@@ -124,6 +130,7 @@
                 <i class="fa-solid fa-xmark"></i>
 
             </button>
+
 
 
             <span class="admin-label">
@@ -162,6 +169,7 @@
             </a>
 
 
+
             <!-- ORDERS -->
 
             <a
@@ -176,6 +184,7 @@
                 </span>
 
             </a>
+
 
 
             <!-- ARCHIVED ORDERS -->
@@ -194,6 +203,7 @@
             </a>
 
 
+
             <!-- CUSTOMERS -->
 
             <a
@@ -210,14 +220,12 @@
             </a>
 
 
-            <!-- ARCHIVED CUSTOMERS - ACTIVE -->
+
+            <!-- ARCHIVED CUSTOMERS -->
 
             <a
                 href="archivedCustomers.html"
-                class="
-                    admin-nav-link
-                    active
-                "
+                class="admin-nav-link"
             >
 
                 <i class="fa-solid fa-user-clock"></i>
@@ -227,6 +235,7 @@
                 </span>
 
             </a>
+
 
 
             <!-- PRODUCTS -->
@@ -245,11 +254,12 @@
             </a>
 
 
-            <!-- ARCHIVED PRODUCTS -->
+
+            <!-- ARCHIVED PRODUCTS - ACTIVE -->
 
             <a
                 href="archivedProducts.html"
-                class="admin-nav-link"
+                class="admin-nav-link active"
             >
 
                 <i class="fa-solid fa-box-archive"></i>
@@ -264,24 +274,19 @@
 
             <!-- SYSTEM -->
 
-            <div
-                class="
-                    nav-section-title
-                    second
-                "
-            >
+            <div class="nav-section-title second">
+
                 SYSTEM
+
             </div>
+
 
 
             <!-- VIEW STORE -->
 
             <a
                 href="index.html"
-                class="
-                    admin-nav-link
-                    public-link
-                "
+                class="admin-nav-link public-link"
             >
 
                 <i class="fa-solid fa-globe"></i>
@@ -290,30 +295,12 @@
                     View Store
                 </span>
 
-                <i class="fa-solid fa-arrow-up-right-from-square"></i>
-
-            </a>
-
-            <!-- SETTINGS -->
-
-            <a
-                href="settings.html"
-                class="admin-nav-link"
-            >
-
                 <i
-                    class="
-                        fa-solid
-                        fa-gear
-                    "
+                    class="fa-solid fa-arrow-up-right-from-square"
                 ></i>
 
-
-                <span>
-                    Settings
-                </span>
-
             </a>
+
 
         </nav>
 
@@ -331,11 +318,13 @@
                     A
                 </div>
 
+
                 <div>
 
                     <strong>
                         Administrator
                     </strong>
+
 
                     <span>
                         ShopMax Admin
@@ -347,12 +336,13 @@
 
         </div>
 
+
     </aside>
 
 
 
     <!-- =====================================================
-         ADMIN MAIN
+         MAIN ADMIN AREA
     ====================================================== -->
 
     <div class="admin-main">
@@ -367,8 +357,6 @@
 
             <div class="topbar-left">
 
-
-                <!-- MOBILE / TABLET OPEN -->
 
                 <button
                     type="button"
@@ -391,7 +379,7 @@
 
 
                     <strong>
-                        Archived Customers
+                        Archived Product Management
                     </strong>
 
                 </div>
@@ -404,82 +392,128 @@
 
 
                 <a
+                    href="products.html"
+                    class="store-btn"
+                >
+
+                    <i
+                        class="fa-solid fa-boxes-stacked"
+                    ></i>
+
+                    Products
+
+                </a>
+
+
+                <a
                     href="index.html"
                     class="store-btn"
                 >
 
-                    <i class="fa-solid fa-store"></i>
+                    <i
+                        class="fa-solid fa-store"
+                    ></i>
 
                     View Store
 
                 </a>
 
+                <!-- SETTINGS -->
 
-                <button
-                    type="button"
-                    id="adminPageRefresh"
-                    class="refresh-btn"
-                >
+<a
+    href="settings.html"
+    class="admin-nav-link"
+>
 
-                    <i class="fa-solid fa-rotate"></i>
+    <i
+        class="
+            fa-solid
+            fa-gear
+        "
+    ></i>
 
-                    Refresh
 
-                </button>
+    <span>
+        Settings
+    </span>
+
+</a>
 
             </div>
+
 
         </header>
 
 
 
         <!-- =================================================
-             ARCHIVED CUSTOMERS CONTENT
+             ARCHIVED PRODUCTS CONTENT
         ================================================== -->
 
-        <main class="archive-admin-content">
-
-            <div class="archive-page-container">
+        <main class="admin-content-wrap">
 
 
-                <!-- BREADCRUMB -->
+            <div class="container">
+
+
+                <!-- =================================================
+                     BREADCRUMB
+                ================================================== -->
 
                 <div class="breadcrumb">
 
-                    <a href="customers.html">
-                        Customers
+
+                    <a href="products.html">
+
+                        Products
+
                     </a>
 
 
-                    <i class="fa-solid fa-chevron-right"></i>
+                    <i
+                        class="fa-solid fa-chevron-right"
+                    ></i>
 
 
                     <span>
-                        Archived Customers
+
+                        Archived Products
+
                     </span>
+
 
                 </div>
 
 
 
-                <!-- HEADING -->
+                <!-- =================================================
+                     PAGE HEADING
+                ================================================== -->
 
                 <section class="page-heading">
 
+
                     <span class="eyebrow">
-                        SHOPMAX CUSTOMER ARCHIVE
+
+                        SHOPMAX PRODUCT ARCHIVE
+
                     </span>
 
 
                     <h1>
-                        Archived Customers
+
+                        Archived Products
+
                     </h1>
 
 
                     <p>
-                        Manage customer profiles removed from
-                        the active customer directory.
+
+                        View and restore products removed
+                        from the active product directory.
+
                     </p>
+
 
                 </section>
 
@@ -491,11 +525,17 @@
 
                 <section class="archive-stats">
 
+
+                    <!-- TOTAL ARCHIVED -->
+
                     <div class="stat-card">
+
 
                         <div class="stat-icon">
 
-                            <i class="fa-solid fa-box-archive"></i>
+                            <i
+                                class="fa-solid fa-box-archive"
+                            ></i>
 
                         </div>
 
@@ -508,21 +548,28 @@
 
 
                             <strong
-                                id="archivedCustomerCount"
+                                id="totalArchivedProducts"
                             >
                                 0
                             </strong>
 
                         </div>
 
+
                     </div>
 
 
+
+                    <!-- ARCHIVED VALUE -->
+
                     <div class="stat-card">
+
 
                         <div class="stat-icon">
 
-                            <i class="fa-solid fa-users"></i>
+                            <i
+                                class="fa-solid fa-dollar-sign"
+                            ></i>
 
                         </div>
 
@@ -530,19 +577,21 @@
                         <div>
 
                             <span>
-                                ARCHIVED CUSTOMERS
+                                ARCHIVED VALUE
                             </span>
 
 
                             <strong
-                                id="archivedCustomerOrders"
+                                id="archivedProductValue"
                             >
-                                0
+                                $0.00
                             </strong>
 
                         </div>
 
+
                     </div>
+
 
                 </section>
 
@@ -554,54 +603,86 @@
 
                 <section class="archive-panel">
 
+
                     <div class="panel-head">
+
 
                         <div>
 
                             <span class="panel-label">
-                                CUSTOMER ARCHIVE
+
+                                PRODUCT ARCHIVE
+
                             </span>
 
 
                             <h2>
-                                All Archived Customers
+
+                                All Archived Products
+
                             </h2>
 
                         </div>
 
 
-                        <button
-                            type="button"
-                            class="refresh-btn"
-                            id="refreshArchivedCustomers"
-                        >
 
-                            <i class="fa-solid fa-rotate"></i>
+                        <div class="panel-actions">
 
-                            Refresh
 
-                        </button>
+                            <a
+                                href="products.html"
+                                class="back-products-btn"
+                            >
+
+                                <i
+                                    class="fa-solid fa-arrow-left"
+                                ></i>
+
+                                Products
+
+                            </a>
+
+
+                            <button
+                                type="button"
+                                class="refresh-btn"
+                                id="refreshArchivedProducts"
+                            >
+
+                                <i
+                                    class="fa-solid fa-rotate"
+                                ></i>
+
+                                Refresh
+
+                            </button>
+
+
+                        </div>
+
 
                     </div>
 
 
 
-                    <!-- SEARCH -->
+                    <!-- =================================================
+                         SEARCH
+                    ================================================== -->
 
-                    <div class="toolbar">
-
-                        <div class="search-box">
-
-                            <i class="fa-solid fa-magnifying-glass"></i>
+                    <div class="archive-search-wrap">
 
 
-                            <input
-                                type="text"
-                                id="archivedCustomerSearch"
-                                placeholder="Search by name, email or phone..."
-                            >
+                        <i
+                            class="fa-solid fa-magnifying-glass"
+                        ></i>
 
-                        </div>
+
+                        <input
+                            type="text"
+                            id="archivedProductSearch"
+                            placeholder="Search by product name, category or ID..."
+                        >
+
 
                     </div>
 
@@ -613,35 +694,43 @@
 
                     <div class="table-wrap">
 
+
                         <table>
+
 
                             <thead>
 
                                 <tr>
 
                                     <th>
-                                        CUSTOMER
+                                        PRODUCT
                                     </th>
 
-                                    <th>
-                                        PHONE
-                                    </th>
 
                                     <th>
-                                        ORDERS
+                                        CATEGORY
                                     </th>
 
-                                    <th>
-                                        TOTAL SPENT
-                                    </th>
 
                                     <th>
-                                        LAST ORDER
+                                        PRICE
                                     </th>
+
+
+                                    <th>
+                                        STOCK
+                                    </th>
+
+
+                                    <th>
+                                        SALES
+                                    </th>
+
 
                                     <th>
                                         ARCHIVED
                                     </th>
+
 
                                     <th>
                                         ACTION
@@ -653,22 +742,24 @@
 
 
                             <tbody
-                                id="archivedCustomersBody"
+                                id="archivedProductsTableBody"
                             ></tbody>
 
+
                         </table>
+
 
                     </div>
 
 
 
                     <!-- =================================================
-                         MOBILE LIST
+                         MOBILE PRODUCTS
                     ================================================== -->
 
                     <div
-                        class="mobile-list"
-                        id="archivedCustomersMobile"
+                        class="mobile-archived-products"
+                        id="mobileArchivedProducts"
                     ></div>
 
 
@@ -678,180 +769,335 @@
                     ================================================== -->
 
                     <div
-                        class="empty-state"
-                        id="archivedCustomersEmpty"
+                        class="archive-empty"
+                        id="archivedProductsEmpty"
                     >
+
 
                         <div class="empty-icon">
 
-                            <i class="fa-solid fa-box-open"></i>
+                            <i
+                                class="fa-solid fa-box-open"
+                            ></i>
 
                         </div>
 
 
                         <h3>
-                            No Archived Customers
+
+                            No Archived Products
+
                         </h3>
 
 
                         <p>
-                            Customers archived from the active
+
+                            Products archived from the active
                             directory will appear here.
+
                         </p>
 
 
                         <a
-                            href="customers.html"
-                            class="back-btn"
+                            href="products.html"
+                            class="empty-btn"
                         >
 
-                            Back to Customers
+                            Back to Products
 
                         </a>
 
+
                     </div>
+
 
                 </section>
 
+
             </div>
+
 
         </main>
 
+
     </div>
 
-</div>
 
-
-
-<!-- =========================================================
-     CUSTOMER DETAILS MODAL
-========================================================= -->
-
-<div
-    class="details-modal"
-    id="archivedCustomerDetailsModal"
-    aria-hidden="true"
->
+    <!-- =====================================================
+         PRODUCT DETAILS MODAL
+    ====================================================== -->
 
     <div
-        class="details-overlay"
-        id="archivedDetailsOverlay"
-    ></div>
+        class="product-details-modal"
+        id="archivedProductDetailsModal"
+        aria-hidden="true"
+    >
 
 
-    <div class="details-dialog">
-
-        <div class="details-header">
-
-            <div>
-
-                <span>
-                    ARCHIVED CUSTOMER
-                </span>
+        <div
+            class="product-modal-overlay"
+            id="archivedProductModalOverlay"
+        ></div>
 
 
-                <h3
-                    id="archivedDetailsTitle"
+        <div class="product-modal-dialog">
+
+
+            <div class="product-modal-header">
+
+
+                <div>
+
+                    <span>
+                        ARCHIVED PRODUCT
+                    </span>
+
+
+                    <h3
+                        id="archivedProductModalTitle"
+                    >
+                        Product
+                    </h3>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    id="archivedProductModalClose"
                 >
-                    Customer
-                </h3>
+
+                    <i
+                        class="fa-solid fa-xmark"
+                    ></i>
+
+                </button>
+
 
             </div>
 
 
-            <button
-                type="button"
-                class="modal-close"
-                id="archivedDetailsClose"
-            >
+            <div
+                class="product-modal-body"
+                id="archivedProductModalBody"
+            ></div>
 
-                <i class="fa-solid fa-xmark"></i>
-
-            </button>
 
         </div>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         RESTORE MODAL
+    ====================================================== -->
+
+    <div
+        class="restore-modal"
+        id="restoreProductModal"
+        aria-hidden="true"
+    >
 
 
         <div
-            class="details-body"
-            id="archivedDetailsBody"
+            class="restore-overlay"
+            data-close-restore
         ></div>
 
-    </div>
 
-</div>
-
+        <div class="restore-dialog">
 
 
-<!-- =========================================================
-     RESTORE MODAL
-========================================================= -->
+            <div class="restore-icon">
 
-<div
-    class="restore-modal"
-    id="restoreCustomerModal"
-    aria-hidden="true"
->
+                <i
+                    class="fa-solid fa-rotate-left"
+                ></i>
 
-    <div
-        class="restore-overlay"
-        data-close-restore
-    ></div>
+            </div>
 
 
-    <div class="restore-dialog">
+            <h3>
 
-        <div class="restore-icon">
+                Restore Product?
 
-            <i class="fa-solid fa-rotate-left"></i>
+            </h3>
+
+
+            <p
+                id="restoreProductMessage"
+            >
+
+                Restore this product?
+
+            </p>
+
+
+            <div class="restore-note">
+
+                The product will return to the active
+                product list. Existing admin changes
+                will be preserved.
+
+            </div>
+
+
+            <div class="restore-actions">
+
+
+                <button
+                    type="button"
+                    class="cancel-btn"
+                    data-close-restore
+                >
+
+                    Cancel
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="restore-confirm-btn"
+                    id="confirmRestoreProduct"
+                >
+
+                    <i
+                        class="fa-solid fa-rotate-left"
+                    ></i>
+
+                    Restore Product
+
+                </button>
+
+
+            </div>
+
 
         </div>
 
 
-        <h3>
-            Restore Customer?
-        </h3>
-
-
-        <p
-            id="restoreCustomerMessage"
-        >
-            Restore this customer?
-        </p>
-
-
-        <div class="restore-actions">
-
-            <button
-                type="button"
-                class="cancel-btn"
-                data-close-restore
-            >
-                Cancel
-            </button>
-
-
-            <button
-                type="button"
-                class="restore-btn"
-                id="confirmRestoreCustomer"
-            >
-
-                <i class="fa-solid fa-rotate-left"></i>
-
-                Restore Customer
-
-            </button>
-
-        </div>
-
     </div>
 
-</div>
 
 
+    <!-- =====================================================
+         JAVASCRIPT
+         UNCHANGED
+    ====================================================== -->
 
-<script src="assets/js/archivedCustomers.js"></script>
+<script src="assets/js/archivedProducts.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const adminLayout =
+        document.getElementById("adminLayout");
+
+    const adminSidebar =
+        document.getElementById("adminSidebar");
+
+    const sidebarToggleBtn =
+        document.getElementById("sidebarToggleBtn");
+
+    const mobileSidebarToggle =
+        document.getElementById("mobileSidebarToggle");
+
+    const sidebarMobileClose =
+        document.getElementById("sidebarMobileClose");
+
+
+    /* =====================================================
+       DESKTOP SIDEBAR TOGGLE
+    ====================================================== */
+
+    sidebarToggleBtn?.addEventListener(
+        "click",
+        function () {
+
+            if (window.innerWidth <= 900) {
+                return;
+            }
+
+            const collapsed =
+                adminLayout.classList.contains(
+                    "sidebar-collapsed"
+                );
+
+
+            if (collapsed) {
+
+                adminLayout.classList.remove(
+                    "sidebar-collapsed"
+                );
+
+                const icon =
+                    sidebarToggleBtn.querySelector("i");
+
+                icon?.classList.remove("fa-bars");
+
+                icon?.classList.add("fa-xmark");
+
+            } else {
+
+                adminLayout.classList.add(
+                    "sidebar-collapsed"
+                );
+
+                const icon =
+                    sidebarToggleBtn.querySelector("i");
+
+                icon?.classList.remove("fa-xmark");
+
+                icon?.classList.add("fa-bars");
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       MOBILE SIDEBAR OPEN
+    ====================================================== */
+
+    mobileSidebarToggle?.addEventListener(
+        "click",
+        function () {
+
+            if (window.innerWidth > 900) {
+                return;
+            }
+
+            adminSidebar?.classList.add("open");
+
+        }
+    );
+
+
+    /* =====================================================
+       MOBILE SIDEBAR CLOSE
+    ====================================================== */
+
+    sidebarMobileClose?.addEventListener(
+        "click",
+        function () {
+
+            if (window.innerWidth > 900) {
+                return;
+            }
+
+            adminSidebar?.classList.remove("open");
+
+        }
+    );
+
+});
+</script>
+
 
 </body>
 

@@ -10,269 +10,750 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Archived Orders | ShopMax</title>
+    <meta
+        name="description"
+        content="Manage archived ShopMax orders"
+    >
 
+    <title>
+        Archived Orders | ShopMax Admin
+    </title>
+
+
+    <!-- FONT AWESOME -->
+
+    <link rel="stylesheet" href="assets/fontawesome/fontCss/all.min.css">
+
+
+
+    <!-- ADMIN CSS -->
 
     <link
         rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        href="assets/css/admin.css"
     >
+
+
+    <!-- ARCHIVED ORDERS CSS -->
 
     <link
         rel="stylesheet"
         href="assets/css/archivedOrders.css"
     >
 
+
+    <style>
+
+        
+        /* =================================================
+           KEEP ORDERS CONTENT INSIDE ADMIN SHELL
+        ================================================== */
+
+        .admin-main .orders-hero {
+
+            margin: 0;
+
+            padding: 0;
+
+            background: transparent;
+
+        }
+
+
+        .admin-main .orders-hero > .container {
+
+            width: 100%;
+
+            max-width: none;
+
+            margin: 0;
+
+            padding: 0;
+
+        }
+
+
+        .admin-main .orders-page {
+
+            margin: 0;
+
+            padding: 0;
+
+        }
+
+
+        .admin-main .orders-page > .container {
+
+            width: 100%;
+
+            max-width: none;
+
+            margin: 0;
+
+            padding: 0;
+
+        }
+
+
+        /* =================================================
+           MODAL
+        ================================================== */
+
+        #orderDetailsModal {
+
+            z-index: 9999 !important;
+
+        }
+
+
+        /* =================================================
+           ORDERS SHELL RESPONSIVE
+        ================================================== */
+
+        @media (max-width: 900px) {
+
+            .admin-main {
+
+                width: 100% !important;
+
+                margin-left: 0 !important;
+
+            }
+
+
+            .admin-sidebar.open {
+
+                transform:
+                    translateX(0) !important;
+
+            }
+
+        }
+    </style>
+
 </head>
 
 
 <body>
 
+
+<!-- =========================================================
+     ADMIN LAYOUT
+========================================================= -->
+
+<div
+    class="admin-layout"
+    id="adminLayout"
+>
+
+
     <!-- =====================================================
-         TOP BAR
+         SIDEBAR
     ====================================================== -->
 
-    <div class="topbar">
-
-        <div class="container topbar-inner">
-
-            <div class="hot-deal">
-
-                <i class="fa-solid fa-fire"></i>
-
-                Hot Deals&nbsp; Summer Sale For All Products
-                - Up To 50% Off
-
-            </div>
+    <aside
+        class="admin-sidebar"
+        id="adminSidebar"
+    >
 
 
-            <div class="top-links">
+        <!-- BRAND -->
 
-                <a href="orders.html">
-                    My Orders
-                </a>
+        <div class="sidebar-brand">
 
-                <a href="#">
-                    Help Center
-                </a>
 
-                <span>
-                    English <i class="fa-solid fa-chevron-down"></i>
+            <a
+                href="admin.html"
+                class="admin-logo"
+            >
+
+                <span class="logo-icon">
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-bag-shopping
+                        "
+                    ></i>
+
                 </span>
 
-                <span>
-                    USD <i class="fa-solid fa-chevron-down"></i>
+
+                <span style="display:flex;">
+
+                    Shop<span>
+                        Max
+                    </span>
+
                 </span>
 
-            </div>
+
+            </a>
+
+
+            <!-- MOBILE / TABLET CLOSE -->
+
+            <button
+                type="button"
+                class="sidebar-mobile-close"
+                id="sidebarMobileClose"
+                aria-label="Close sidebar"
+            >
+
+                <i
+                    class="
+                        fa-solid
+                        fa-xmark
+                    "
+                ></i>
+
+            </button>
+
+
+            <span class="admin-label">
+
+                ADMIN
+
+            </span>
+
 
         </div>
 
-    </div>
 
 
-    <!-- =====================================================
-         HEADER
-    ====================================================== -->
+        <!-- NAV -->
 
-    <header class="main-header">
+        <nav class="admin-nav">
 
-        <div class="container header-inner">
+
+            <div class="nav-section-title">
+
+                MANAGEMENT
+
+            </div>
+
 
             <a
-                href="index.html"
-                class="brand"
+                href="admin.html"
+                class="admin-nav-link"
             >
 
-                <div class="brand-icon">
-                    <i class="fa-solid fa-bag-shopping"></i>
-                </div>
+                <i
+                    class="
+                        fa-solid
+                        fa-grid-2
+                    "
+                ></i>
+
 
                 <span>
-                    Shop<span>Max</span>
+                    Dashboard
                 </span>
 
             </a>
 
 
-            <div class="header-search">
 
-                <div class="category-select">
+            <a
+                href="orders.html"
+                class="admin-nav-link"
+            >
 
-                    All Categories
-
-                    <i class="fa-solid fa-chevron-down"></i>
-
-                </div>
-
-
-                <input
-                    type="text"
-                    id="globalSearch"
-                    placeholder="Search for products..."
-                >
+                <i
+                    class="
+                        fa-solid
+                        fa-bag-shopping
+                    "
+                ></i>
 
 
-                <button
-                    type="button"
-                    id="globalSearchBtn"
-                >
+                <span>
+                    Orders
+                </span>
 
-                    <i class="fa-solid fa-magnifying-glass"></i>
-
-                </button>
-
-            </div>
+            </a>
 
 
-            <div class="header-actions">
 
-                <button
-                    type="button"
-                    onclick="location.href='index.html'"
-                >
+            <a
+                href="archivedOrders.html"
+                class="
+                    admin-nav-link
+                    active
+                "
+            >
 
-                    <i class="fa-regular fa-heart"></i>
+                <i
+                    class="
+                        fa-solid
+                        fa-box-archive
+                    "
+                ></i>
 
-                    Wishlist
-
-                </button>
-
-
-                <button
-                    type="button"
-                >
-
-                    <i class="fa-regular fa-user"></i>
-
-                    Account
-
-                </button>
-
-
-                <button
-                    type="button"
-                    onclick="location.href='shop.html'"
-                >
-
-                    <i class="fa-solid fa-cart-shopping"></i>
-
-                    Cart
-
-                </button>
-
-            </div>
-
-        </div>
-
-
-        <div class="nav-row">
-
-            <div class="container nav-inner">
-
-                <div class="categories-link">
-
-                    <i class="fa-solid fa-bars"></i>
-
-                    All Categories
-
-                    <i class="fa-solid fa-chevron-down"></i>
-
-                </div>
-
-
-                <nav>
-
-                    <a href="index.html">
-                        Home
-                    </a>
-
-                    <a href="shop.html">
-                        Shop
-                    </a>
-
-                    <a href="shop.html">
-                        Deals
-                    </a>
-
-                    <a href="#">
-                        Pages
-                    </a>
-
-                    <a href="#">
-                        Blog
-                    </a>
-
-                    <a href="#">
-                        Contact
-                    </a>
-
-                </nav>
-
-            </div>
-
-        </div>
-
-    </header>
-
-
-    <!-- =====================================================
-         PAGE
-    ====================================================== -->
-
-    <main>
-
-        <div class="container">
-
-            <div class="breadcrumb">
-
-                <a href="orders.html">
-                    Home
-                </a>
-
-                <i class="fa-solid fa-chevron-right"></i>
 
                 <span>
                     Archived Orders
                 </span>
 
+            </a>
+
+
+
+            <a
+                href="customers.html"
+                class="admin-nav-link"
+            >
+
+                <i
+                    class="
+                        fa-solid
+                        fa-users
+                    "
+                ></i>
+
+
+                <span>
+                    Customers
+                </span>
+
+            </a>
+
+
+
+            <a
+                href="archivedCustomers.html"
+                class="admin-nav-link"
+            >
+
+                <i
+                    class="
+                        fa-solid
+                        fa-user-clock
+                    "
+                ></i>
+
+
+                <span>
+                    Archived Customers
+                </span>
+
+            </a>
+
+
+
+            <a
+                href="products.html"
+                class="admin-nav-link"
+            >
+
+                <i
+                    class="
+                        fa-solid
+                        fa-boxes-stacked
+                    "
+                ></i>
+
+
+                <span>
+                    Products
+                </span>
+
+            </a>
+
+
+
+            <a
+                href="archivedProducts.html"
+                class="admin-nav-link"
+            >
+
+                <i
+                    class="
+                        fa-solid
+                        fa-box-archive
+                    "
+                ></i>
+
+
+                <span>
+                    Archived Products
+                </span>
+
+            </a>
+
+
+
+            <div
+                class="
+                    nav-section-title
+                    second
+                "
+            >
+
+                SYSTEM
+
             </div>
 
 
-            <section class="page-heading">
 
-                <span class="eyebrow">
-                    SHOPMAX ORDER ARCHIVE
+            <a
+                href="index.html"
+                class="
+                    admin-nav-link
+                    public-link
+                "
+            >
+
+                <i
+                    class="
+                        fa-solid
+                        fa-globe
+                    "
+                ></i>
+
+
+                <span>
+                    View Store
                 </span>
 
 
-                <h1>
+                <i
+                    class="
+                        fa-solid
+                        fa-arrow-up-right-from-square
+                    "
+                ></i>
+
+            </a>
+
+            <!-- SETTINGS -->
+
+            <a
+                href="settings.html"
+                class="admin-nav-link"
+            >
+
+                <i
+                    class="
+                        fa-solid
+                        fa-gear
+                    "
+                ></i>
+
+
+                <span>
+                    Settings
+                </span>
+
+            </a>
+
+        </nav>
+
+
+
+        <!-- FOOTER -->
+
+        <div class="sidebar-footer">
+
+
+            <div class="admin-user">
+
+
+                <div class="admin-avatar">
+                    A
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        Administrator
+                    </strong>
+
+
+                    <span>
+                        ShopMax Admin
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </aside>
+
+
+
+    <!-- =====================================================
+         DESKTOP TOGGLE
+    ====================================================== -->
+
+    <button
+        type="button"
+        class="sidebar-toggle-control"
+        id="sidebarToggleBtn"
+        aria-label="Close sidebar"
+        title="Close sidebar"
+    >
+
+        <i
+            class="
+                fa-solid
+                fa-xmark
+            "
+        ></i>
+
+    </button>
+
+
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
+    <div class="admin-main">
+
+
+        <!-- TOPBAR -->
+
+        <header class="admin-topbar">
+
+
+            <div class="topbar-left">
+
+
+                <!-- MOBILE MENU -->
+
+                <button
+                    type="button"
+                    id="mobileSidebarToggle"
+                    class="sidebar-toggle"
+                    aria-label="Open sidebar"
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-bars
+                        "
+                    ></i>
+
+                </button>
+
+
+                <div>
+
+                    <span class="topbar-label">
+
+                        ADMIN PANEL
+
+                    </span>
+
+
+                    <strong>
+
+                        Archived Order Management
+
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="topbar-right">
+
+
+                <a
+                    href="orders.html"
+                    class="store-btn"
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-bag-shopping
+                        "
+                    ></i>
+
+
+                    Orders
+
+                </a>
+
+
+                <a
+                    href="index.html"
+                    class="store-btn"
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-store
+                        "
+                    ></i>
+
+
+                    View Store
+
+                </a>
+
+
+            </div>
+
+
+        </header>
+
+
+
+        <!-- =================================================
+             CONTENT
+        ================================================== -->
+
+        <main
+            class="admin-content-wrap"
+        >
+
+
+            <!-- BREADCRUMB -->
+
+            <div class="archive-breadcrumb">
+
+
+                <a href="admin.html">
+                    Dashboard
+                </a>
+
+
+                <i
+                    class="
+                        fa-solid
+                        fa-chevron-right
+                    "
+                ></i>
+
+
+                <a href="orders.html">
+                    Orders
+                </a>
+
+
+                <i
+                    class="
+                        fa-solid
+                        fa-chevron-right
+                    "
+                ></i>
+
+
+                <span>
                     Archived Orders
-                </h1>
+                </span>
 
 
-                <p>
-                    View and restore orders removed from
-                    the active order list.
-                </p>
+            </div>
+
+
+
+            <!-- PAGE HEADING -->
+
+            <section
+                class="
+                    archive-page-heading
+                "
+            >
+
+
+                <div>
+
+
+                    <span class="eyebrow">
+
+                        SHOPMAX ORDER ARCHIVE
+
+                    </span>
+
+
+                    <h1>
+
+                        Archived Orders
+
+                    </h1>
+
+
+                    <p>
+
+                        View and restore orders removed
+                        from the active order list.
+
+                    </p>
+
+
+                </div>
+
+
+                <a
+                    href="orders.html"
+                    class="back-orders-btn"
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-arrow-left
+                        "
+                    ></i>
+
+
+                    Active Orders
+
+                </a>
+
 
             </section>
 
 
+
             <!-- =================================================
-                 ARCHIVE SUMMARY
+                 STATS
             ================================================== -->
 
             <section class="archive-stats">
 
-                <div class="stat-card">
 
-                    <div class="stat-icon">
-                        <i class="fa-solid fa-box-archive"></i>
+                <div
+                    class="
+                        archive-stat-card
+                    "
+                >
+
+
+                    <div
+                        class="
+                            archive-stat-icon
+                        "
+                    >
+
+                        <i
+                            class="
+                                fa-solid
+                                fa-box-archive
+                            "
+                        ></i>
+
+
                     </div>
 
 
                     <div>
+
 
                         <span>
                             TOTAL ARCHIVED
@@ -285,19 +766,41 @@
                             0
                         </strong>
 
+
                     </div>
+
 
                 </div>
 
 
-                <div class="stat-card">
 
-                    <div class="stat-icon">
-                        <i class="fa-solid fa-dollar-sign"></i>
+                <div
+                    class="
+                        archive-stat-card
+                    "
+                >
+
+
+                    <div
+                        class="
+                            archive-stat-icon
+                            money
+                        "
+                    >
+
+                        <i
+                            class="
+                                fa-solid
+                                fa-dollar-sign
+                            "
+                        ></i>
+
+
                     </div>
 
 
                     <div>
+
 
                         <span>
                             ARCHIVED VALUE
@@ -310,33 +813,46 @@
                             $0.00
                         </strong>
 
+
                     </div>
 
+
                 </div>
+
 
             </section>
 
 
+
             <!-- =================================================
-                 ARCHIVE CARD
+                 ARCHIVE PANEL
             ================================================== -->
 
             <section class="archive-panel">
 
+
                 <div class="panel-head">
+
 
                     <div>
 
+
                         <span class="panel-label">
+
                             ORDER ARCHIVE
+
                         </span>
 
 
-                        <h2>
+                        <h3>
+
                             All Archived Orders
-                        </h2>
+
+                        </h3>
+
 
                     </div>
+
 
 
                     <button
@@ -345,40 +861,67 @@
                         id="refreshArchivedBtn"
                     >
 
-                        <i class="fa-solid fa-rotate"></i>
+                        <i
+                            class="
+                                fa-solid
+                                fa-rotate
+                            "
+                        ></i>
+
 
                         Refresh
 
                     </button>
 
+
                 </div>
 
 
+
+                <!-- SEARCH -->
+
                 <div class="archive-toolbar">
+
 
                     <div class="archive-search">
 
-                        <i class="fa-solid fa-magnifying-glass"></i>
+
+                        <i
+                            class="
+                                fa-solid
+                                fa-magnifying-glass
+                            "
+                        ></i>
 
 
                         <input
                             type="text"
                             id="archiveSearch"
-                            placeholder="Search by order ID or customer name..."
+                            placeholder="
+                                Search by order ID,
+                                customer name or email...
+                            "
+                            autocomplete="off"
                         >
 
+
                     </div>
+
 
                 </div>
 
 
-                <!-- Desktop -->
+
+                <!-- DESKTOP TABLE -->
 
                 <div class="table-wrap">
 
+
                     <table>
 
+
                         <thead>
+
 
                             <tr>
 
@@ -386,31 +929,38 @@
                                     ORDER ID
                                 </th>
 
+
                                 <th>
                                     CUSTOMER
                                 </th>
+
 
                                 <th>
                                     DATE
                                 </th>
 
+
                                 <th>
                                     TOTAL
                                 </th>
+
 
                                 <th>
                                     STATUS
                                 </th>
 
+
                                 <th>
                                     ARCHIVED
                                 </th>
+
 
                                 <th>
                                     ACTION
                                 </th>
 
                             </tr>
+
 
                         </thead>
 
@@ -419,12 +969,15 @@
                             id="archivedOrdersBody"
                         ></tbody>
 
+
                     </table>
+
 
                 </div>
 
 
-                <!-- Mobile -->
+
+                <!-- MOBILE -->
 
                 <div
                     class="mobile-archive-list"
@@ -432,14 +985,17 @@
                 ></div>
 
 
-                <!-- Empty -->
+
+                <!-- EMPTY -->
 
                 <div
                     class="empty-state"
                     id="archiveEmpty"
                 >
 
+
                     <div class="empty-icon">
+
 
                         <i
                             class="
@@ -448,16 +1004,21 @@
                             "
                         ></i>
 
+
                     </div>
 
 
                     <h3>
+
                         No Archived Orders
+
                     </h3>
 
 
                     <p>
+
                         Orders you archive will appear here.
+
                     </p>
 
 
@@ -465,197 +1026,464 @@
                         href="orders.html"
                         class="empty-btn"
                     >
+
                         Back to Orders
+
                     </a>
 
+
                 </div>
+
 
             </section>
 
-        </div>
 
-    </main>
-
-
-    <!-- =====================================================
-         DETAILS MODAL
-    ====================================================== -->
-
-    <div
-        class="archive-details-modal"
-        id="archiveDetailsModal"
-        aria-hidden="true"
-    >
-
-        <div
-            class="archive-modal-overlay"
-            id="archiveModalOverlay"
-        ></div>
+        </main>
 
 
-        <div class="archive-modal-dialog">
 
-            <div class="archive-modal-header">
+        <!-- FOOTER -->
 
-                <div>
-
-                    <span>
-                        ARCHIVED ORDER
-                    </span>
+        <footer class="admin-footer">
 
 
-                    <h3 id="archiveModalTitle">
-                        Order
-                    </h3>
+            <span>
 
-                </div>
+                © 2026 ShopMax Admin Panel
 
-
-                <button
-                    type="button"
-                    id="archiveModalClose"
-                    class="modal-close"
-                >
-
-                    <i class="fa-solid fa-xmark"></i>
-
-                </button>
-
-            </div>
+            </span>
 
 
-            <div
-                class="archive-modal-body"
-                id="archiveModalBody"
-            ></div>
+            <span>
 
-        </div>
+                Archived Order Management
+
+            </span>
+
+
+        </footer>
+
 
     </div>
 
 
-    <!-- =====================================================
-         RESTORE MODAL
-    ====================================================== -->
+</div>
+
+
+
+<!-- =========================================================
+     DETAILS MODAL
+========================================================= -->
+
+<div
+    class="archive-details-modal"
+    id="archiveDetailsModal"
+    aria-hidden="true"
+>
+
 
     <div
-        class="restore-modal"
-        id="restoreModal"
-        aria-hidden="true"
-    >
-
-        <div
-            class="restore-overlay"
-            data-close-restore
-        ></div>
+        class="archive-modal-overlay"
+        id="archiveModalOverlay"
+    ></div>
 
 
-        <div class="restore-dialog">
+    <div class="archive-modal-dialog">
 
-            <div class="restore-icon">
 
-                <i class="fa-solid fa-box-archive"></i>
+        <div class="archive-modal-header">
+
+
+            <div>
+
+                <span>
+                    ARCHIVED ORDER
+                </span>
+
+
+                <h3
+                    id="archiveModalTitle"
+                >
+                    Order
+                </h3>
+
 
             </div>
 
 
-            <h3>
-                Restore Order?
-            </h3>
+            <button
+                type="button"
+                id="archiveModalClose"
+                class="modal-close"
+                aria-label="Close"
+            >
+
+                <i
+                    class="
+                        fa-solid
+                        fa-xmark
+                    "
+                ></i>
 
 
-            <p id="restoreText">
-                Restore this order to the active order list?
-            </p>
+            </button>
 
-
-            <div class="restore-actions">
-
-                <button
-                    type="button"
-                    class="restore-cancel"
-                    data-close-restore
-                >
-                    Cancel
-                </button>
-
-
-                <button
-                    type="button"
-                    class="restore-confirm"
-                    id="confirmRestoreBtn"
-                >
-
-                    <i class="fa-solid fa-rotate-left"></i>
-
-                    Restore Order
-
-                </button>
-
-            </div>
 
         </div>
+
+
+        <div
+            class="archive-modal-body"
+            id="archiveModalBody"
+        ></div>
+
 
     </div>
 
 
-    <!-- =====================================================
-         FOOTER
-    ====================================================== -->
-
-    <footer>
-
-        <div class="container footer-inner">
-
-            <div class="footer-brand">
-
-                <div class="footer-logo">
-
-                    <i class="fa-solid fa-bag-shopping"></i>
-
-                    Shop<span>Max</span>
-
-                </div>
+</div>
 
 
-                <p>
-                    Your one-stop destination for quality products.
-                </p>
+
+<!-- =========================================================
+     RESTORE MODAL
+========================================================= -->
+
+<div
+    class="restore-modal"
+    id="restoreModal"
+    aria-hidden="true"
+>
 
 
-                <div class="footer-links">
-
-                    <a href="#">
-                        About Us
-                    </a>
-
-                    <a href="#">
-                        Contact
-                    </a>
-
-                    <a href="#">
-                        Privacy Policy
-                    </a>
-
-                    <a href="#">
-                        Terms & Conditions
-                    </a>
-
-                </div>
+    <div
+        class="restore-overlay"
+        data-close-restore
+    ></div>
 
 
-                <small>
-                    © 2026 ShopMax. All rights reserved.
-                </small>
+    <div class="restore-dialog">
 
-            </div>
+
+        <div class="restore-icon">
+
+
+            <i
+                class="
+                    fa-solid
+                    fa-box-archive
+                "
+            ></i>
+
 
         </div>
 
-    </footer>
+
+        <h3>
+            Restore Order?
+        </h3>
 
 
-    <script src="assets/js/archivedOrders.js"></script>
+        <p id="restoreText">
+
+            Restore this order to the active
+            order list?
+
+        </p>
+
+
+        <div class="restore-actions">
+
+
+            <button
+                type="button"
+                class="restore-cancel"
+                data-close-restore
+            >
+                Cancel
+            </button>
+
+
+            <button
+                type="button"
+                class="restore-confirm"
+                id="confirmRestoreBtn"
+            >
+
+                <i
+                    class="
+                        fa-solid
+                        fa-rotate-left
+                    "
+                ></i>
+
+
+                Restore Order
+
+            </button>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =========================================================
+     ARCHIVED ORDERS JS
+========================================================= -->
+
+<script
+    src="assets/js/archivedOrders.js"
+></script>
+
+
+
+<!-- =========================================================
+     SIDEBAR JS
+========================================================= -->
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+
+        const layout =
+            document.getElementById(
+                "adminLayout"
+            );
+
+
+        const sidebar =
+            document.getElementById(
+                "adminSidebar"
+            );
+
+
+        const desktopToggle =
+            document.getElementById(
+                "sidebarToggleBtn"
+            );
+
+
+        const mobileToggle =
+            document.getElementById(
+                "mobileSidebarToggle"
+            );
+
+
+        const mobileClose =
+            document.getElementById(
+                "sidebarMobileClose"
+            );
+
+
+        const icon =
+            desktopToggle?.querySelector(
+                "i"
+            );
+
+
+
+        /* DESKTOP */
+
+        desktopToggle?.addEventListener(
+            "click",
+            function () {
+
+
+                if (
+                    window.innerWidth <= 900
+                ) {
+
+                    return;
+
+                }
+
+
+                const closed =
+                    layout.classList.toggle(
+                        "sidebar-collapsed"
+                    );
+
+
+                if (
+                    closed
+                ) {
+
+                    icon?.classList.remove(
+                        "fa-xmark"
+                    );
+
+
+                    icon?.classList.add(
+                        "fa-bars"
+                    );
+
+
+                    desktopToggle.setAttribute(
+                        "aria-label",
+                        "Open sidebar"
+                    );
+
+
+                } else {
+
+                    icon?.classList.remove(
+                        "fa-bars"
+                    );
+
+
+                    icon?.classList.add(
+                        "fa-xmark"
+                    );
+
+
+                    desktopToggle.setAttribute(
+                        "aria-label",
+                        "Close sidebar"
+                    );
+
+                }
+
+            }
+        );
+
+
+
+        /* MOBILE OPEN */
+
+        mobileToggle?.addEventListener(
+            "click",
+            function () {
+
+                if (
+                    window.innerWidth <= 900
+                ) {
+
+                    sidebar?.classList.add(
+                        "open"
+                    );
+
+                }
+
+            }
+        );
+
+
+
+        /* MOBILE CLOSE */
+
+        mobileClose?.addEventListener(
+            "click",
+            function () {
+
+                sidebar?.classList.remove(
+                    "open"
+                );
+
+            }
+        );
+
+
+
+        /* MOBILE NAV */
+
+        document
+            .querySelectorAll(
+                ".admin-nav-link"
+            )
+            .forEach(
+                link => {
+
+                    link.addEventListener(
+                        "click",
+                        function () {
+
+                            if (
+                                window.innerWidth <=
+                                900
+                            ) {
+
+                                sidebar?.classList.remove(
+                                    "open"
+                                );
+
+                            }
+
+                        }
+                    );
+
+                }
+            );
+
+
+
+        /* DEFAULT */
+
+        if (
+            window.innerWidth > 900
+        ) {
+
+            layout.classList.remove(
+                "sidebar-collapsed"
+            );
+
+
+            icon?.classList.remove(
+                "fa-bars"
+            );
+
+
+            icon?.classList.add(
+                "fa-xmark"
+            );
+
+        } else {
+
+            sidebar?.classList.remove(
+                "open"
+            );
+
+        }
+
+
+
+        /* RESIZE */
+
+        window.addEventListener(
+            "resize",
+            function () {
+
+                if (
+                    window.innerWidth <= 900
+                ) {
+
+                    layout.classList.remove(
+                        "sidebar-collapsed"
+                    );
+
+
+                    sidebar?.classList.remove(
+                        "open"
+                    );
+
+                }
+
+            }
+        );
+
+    }
+);
+
+</script>
+
 
 </body>
 

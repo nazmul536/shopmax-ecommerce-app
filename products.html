@@ -10,179 +10,34 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <meta
-        name="description"
-        content="Manage ShopMax customers"
+    <title>Products | ShopMax Admin</title>
+
+
+    <!-- Font Awesome -->
+    <link
+        rel="stylesheet"
+        href="assets/fontawesome/fontCss/all.min.css"
     >
 
-    <title>
-        Customers | ShopMax Admin
-    </title>
 
-
-    <!-- FONT AWESOME -->
-
-    <link rel="stylesheet" href="assets/fontawesome/fontCss/all.min.css">
-
-
-    <!-- ADMIN CSS -->
-
+    <!-- Shared Admin Layout -->
     <link
         rel="stylesheet"
         href="assets/css/admin.css"
     >
+
+
+    <!-- Products Page -->
     <link
         rel="stylesheet"
-        href="assets/css/customers.css"
+        href="assets/css/products.css"
     >
-
-
-    <!-- CUSTOMERS CSS -->
-
-    <link
-        rel="stylesheet"
-        href="assets/css/customers.css"
-    >
-
-
-    <style>
-
-        /* =====================================================
-           CUSTOMER PAGE INSIDE ADMIN SHELL
-        ====================================================== */
-
-        .customer-admin-content {
-
-            width: 100%;
-
-            padding:
-                27px 28px 50px;
-
-        }
-
-
-        .customer-admin-heading {
-
-            margin-bottom:
-                27px;
-
-        }
-
-
-        .customer-admin-heading .eyebrow {
-
-            display:
-                inline-flex;
-
-        }
-
-
-        .customer-admin-heading h1 {
-
-            margin:
-                12px 0 7px;
-
-            color:
-                #15213b;
-
-            font-size:
-                38px;
-
-            line-height:
-                1;
-
-            letter-spacing:
-                -1px;
-
-        }
-
-
-        .customer-admin-heading p {
-
-            color:
-                #718096;
-
-            font-size:
-                11px;
-
-        }
-
-
-        /*
-           Prevent old customer stylesheet from changing
-           the admin page wrapper.
-        */
-
-        .customer-admin-content .container {
-
-            width:
-                100%;
-
-            max-width:
-                none;
-
-            margin:
-                0;
-
-        }
-
-
-        .customer-admin-content .customer-panel {
-
-            margin-top:
-                0;
-
-        }
-
-
-
-        /* =====================================================
-           MOBILE
-        ====================================================== */
-
-        @media (max-width: 900px) {
-
-            .customer-admin-content {
-
-                padding:
-                    22px 18px 40px;
-
-            }
-
-        }
-
-
-        @media (max-width: 600px) {
-
-            .customer-admin-content {
-
-                padding:
-                    18px 12px 32px;
-
-            }
-
-
-            .customer-admin-heading h1 {
-
-                font-size:
-                    33px;
-
-            }
-
-        }
-
-    </style>
 
 </head>
 
 
-
 <body>
 
-
-<!-- =========================================================
-     ADMIN LAYOUT
-========================================================= -->
 
 <div
     class="admin-layout"
@@ -191,7 +46,7 @@
 
 
     <!-- =====================================================
-         SIDEBAR
+         ADMIN SIDEBAR
     ====================================================== -->
 
     <aside
@@ -199,11 +54,9 @@
         id="adminSidebar"
     >
 
-
         <!-- BRAND -->
 
         <div class="sidebar-brand">
-
 
             <a
                 href="admin.html"
@@ -213,48 +66,17 @@
                 <span class="logo-icon">
 
                     <i
-                        class="
-                            fa-solid
-                            fa-bag-shopping
-                        "
+                        class="fa-solid fa-bag-shopping"
                     ></i>
 
                 </span>
 
 
-                <span
-                    style="display:flex;"
-                >
-
-                    Shop<span>
-                        Max
-                    </span>
-
+                <span>
+                    Shop<span>Max</span>
                 </span>
 
             </a>
-
-
-
-            <!-- MOBILE/TABLET CLOSE -->
-
-            <button
-                type="button"
-                class="sidebar-mobile-close"
-                id="sidebarMobileClose"
-                aria-label="Close sidebar"
-                title="Close sidebar"
-            >
-
-                <i
-                    class="
-                        fa-solid
-                        fa-xmark
-                    "
-                ></i>
-
-            </button>
-
 
 
             <span class="admin-label">
@@ -262,13 +84,28 @@
             </span>
 
 
+            <!-- MOBILE CLOSE -->
+
+            <button
+                type="button"
+                class="sidebar-mobile-close"
+                id="sidebarMobileClose"
+                aria-label="Close sidebar"
+            >
+
+                <i
+                    class="fa-solid fa-xmark"
+                ></i>
+
+            </button>
+
         </div>
 
 
 
         <!-- NAVIGATION -->
 
-        <nav class="admin-nav">
+        <div class="admin-nav">
 
 
             <div class="nav-section-title">
@@ -276,21 +113,14 @@
             </div>
 
 
-
-            <!-- DASHBOARD -->
-
             <a
                 href="admin.html"
                 class="admin-nav-link"
             >
 
                 <i
-                    class="
-                        fa-solid
-                        fa-grid-2
-                    "
+                    class="fa-solid fa-gauge-high"
                 ></i>
-
 
                 <span>
                     Dashboard
@@ -299,21 +129,14 @@
             </a>
 
 
-
-            <!-- ORDERS -->
-
             <a
                 href="orders.html"
                 class="admin-nav-link"
             >
 
                 <i
-                    class="
-                        fa-solid
-                        fa-bag-shopping
-                    "
+                    class="fa-solid fa-bag-shopping"
                 ></i>
-
 
                 <span>
                     Orders
@@ -322,21 +145,14 @@
             </a>
 
 
-
-            <!-- ARCHIVED ORDERS -->
-
             <a
                 href="archivedOrders.html"
                 class="admin-nav-link"
             >
 
                 <i
-                    class="
-                        fa-solid
-                        fa-box-archive
-                    "
+                    class="fa-solid fa-box-archive"
                 ></i>
-
 
                 <span>
                     Archived Orders
@@ -345,24 +161,14 @@
             </a>
 
 
-
-            <!-- CUSTOMERS -->
-
             <a
                 href="customers.html"
-                class="
-                    admin-nav-link
-                    active
-                "
+                class="admin-nav-link"
             >
 
                 <i
-                    class="
-                        fa-solid
-                        fa-users
-                    "
+                    class="fa-solid fa-users"
                 ></i>
-
 
                 <span>
                     Customers
@@ -371,21 +177,14 @@
             </a>
 
 
-
-            <!-- ARCHIVED CUSTOMERS -->
-
             <a
                 href="archivedCustomers.html"
                 class="admin-nav-link"
             >
 
                 <i
-                    class="
-                        fa-solid
-                        fa-user-clock
-                    "
+                    class="fa-solid fa-user-slash"
                 ></i>
-
 
                 <span>
                     Archived Customers
@@ -394,21 +193,16 @@
             </a>
 
 
-
-            <!-- PRODUCTS -->
+            <!-- ACTIVE -->
 
             <a
                 href="products.html"
-                class="admin-nav-link"
+                class="admin-nav-link active"
             >
 
                 <i
-                    class="
-                        fa-solid
-                        fa-boxes-stacked
-                    "
+                    class="fa-solid fa-boxes-stacked"
                 ></i>
-
 
                 <span>
                     Products
@@ -417,21 +211,14 @@
             </a>
 
 
-
-            <!-- ARCHIVED PRODUCTS -->
-
             <a
                 href="archivedProducts.html"
                 class="admin-nav-link"
             >
 
                 <i
-                    class="
-                        fa-solid
-                        fa-box-archive
-                    "
+                    class="fa-solid fa-box-archive"
                 ></i>
-
 
                 <span>
                     Archived Products
@@ -441,22 +228,15 @@
 
 
 
-            <!-- SYSTEM -->
-
             <div
                 class="
                     nav-section-title
                     second
                 "
             >
-
                 SYSTEM
-
             </div>
 
-
-
-            <!-- VIEW STORE -->
 
             <a
                 href="index.html"
@@ -467,17 +247,12 @@
             >
 
                 <i
-                    class="
-                        fa-solid
-                        fa-globe
-                    "
+                    class="fa-solid fa-globe"
                 ></i>
-
 
                 <span>
                     View Store
                 </span>
-
 
                 <i
                     class="
@@ -488,8 +263,7 @@
 
             </a>
 
-
-        <!-- SETTINGS -->
+            <!-- SETTINGS -->
 
         <a
             href="settings.html"
@@ -510,8 +284,7 @@
 
         </a>
 
-
-        </nav>
+        </div>
 
 
 
@@ -519,9 +292,7 @@
 
         <div class="sidebar-footer">
 
-
             <div class="admin-user">
-
 
                 <div class="admin-avatar">
                     A
@@ -534,19 +305,15 @@
                         Administrator
                     </strong>
 
-
                     <span>
                         ShopMax Admin
                     </span>
 
                 </div>
 
-
             </div>
 
-
         </div>
-
 
     </aside>
 
@@ -565,10 +332,7 @@
     >
 
         <i
-            class="
-                fa-solid
-                fa-xmark
-            "
+            class="fa-solid fa-xmark"
         ></i>
 
     </button>
@@ -576,23 +340,20 @@
 
 
     <!-- =====================================================
-         MAIN
+         ADMIN MAIN
     ====================================================== -->
 
     <div class="admin-main">
 
 
-        <!-- =================================================
-             TOPBAR
-        ================================================== -->
+        <!-- TOPBAR -->
 
         <header class="admin-topbar">
-
 
             <div class="topbar-left">
 
 
-                <!-- MOBILE/TABLET OPEN -->
+                <!-- MOBILE OPEN -->
 
                 <button
                     type="button"
@@ -603,10 +364,7 @@
                 >
 
                     <i
-                        class="
-                            fa-solid
-                            fa-bars
-                        "
+                        class="fa-solid fa-bars"
                     ></i>
 
                 </button>
@@ -615,21 +373,15 @@
                 <div>
 
                     <span class="topbar-label">
-
                         ADMIN PANEL
-
                     </span>
 
 
                     <strong>
-
-                        Customer Management
-
+                        Products
                     </strong>
 
-
                 </div>
-
 
             </div>
 
@@ -639,89 +391,92 @@
 
 
                 <a
-                    href="admin.html"
-                    class="store-btn"
-                >
-
-                    <i
-                        class="
-                            fa-solid
-                            fa-grid-2
-                        "
-                    ></i>
-
-
-                    Dashboard
-
-                </a>
-
-
-
-                <a
                     href="index.html"
                     class="store-btn"
                 >
 
                     <i
-                        class="
-                            fa-solid
-                            fa-store
-                        "
+                        class="fa-solid fa-store"
                     ></i>
-
 
                     View Store
 
                 </a>
 
 
-            </div>
+                <button
+                    type="button"
+                    class="refresh-btn"
+                    id="refreshProductsBtnTop"
+                >
 
+                    <i
+                        class="fa-solid fa-rotate"
+                    ></i>
+
+                    Refresh
+
+                </button>
+
+            </div>
 
         </header>
 
 
 
         <!-- =================================================
-             CUSTOMER CONTENT
+             PRODUCTS CONTENT
         ================================================== -->
 
-        <main
-            class="customer-admin-content"
-        >
+        <main class="products-admin-content">
 
 
-            <div class="container">
+            <div class="products-page-container">
+
+
+                <!-- BREADCRUMB -->
+
+                <div class="breadcrumb">
+
+                    <a href="admin.html">
+                        Dashboard
+                    </a>
+
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-chevron-right
+                        "
+                    ></i>
+
+
+                    <span>
+                        Products
+                    </span>
+
+                </div>
+
 
 
                 <!-- PAGE HEADING -->
 
-                <section
-                    class="
-                        customer-admin-heading
-                    "
-                >
-
+                <section class="page-heading">
 
                     <span class="eyebrow">
-
-                        SHOPMAX CUSTOMER MANAGEMENT
-
+                        SHOPMAX PRODUCT MANAGEMENT
                     </span>
 
 
                     <h1>
-                        Customers
+                        Products
                     </h1>
 
 
                     <p>
-
-                        Manage customer profiles, orders and
-                        purchase history from one place.
-
+                        Manage products, inventory, prices
+                        and sales from one place.
                     </p>
-
 
                 </section>
 
@@ -731,20 +486,19 @@
                      STATS
                 ================================================== -->
 
-                <section class="customer-stats">
+                <section class="product-stats">
 
 
                     <!-- TOTAL -->
 
                     <div class="stat-card">
 
-
                         <div class="stat-icon">
 
                             <i
                                 class="
                                     fa-solid
-                                    fa-users
+                                    fa-boxes-stacked
                                 "
                             ></i>
 
@@ -753,37 +507,33 @@
 
                         <div>
 
-
                             <span>
-                                TOTAL CUSTOMERS
+                                TOTAL PRODUCTS
                             </span>
 
 
                             <strong
-                                id="totalCustomers"
+                                id="totalProducts"
                             >
                                 0
                             </strong>
 
-
                         </div>
-
 
                     </div>
 
 
 
-                    <!-- ACTIVE -->
+                    <!-- IN STOCK -->
 
                     <div class="stat-card">
-
 
                         <div class="stat-icon">
 
                             <i
                                 class="
                                     fa-solid
-                                    fa-user-check
+                                    fa-circle-check
                                 "
                             ></i>
 
@@ -792,37 +542,33 @@
 
                         <div>
 
-
                             <span>
-                                ACTIVE CUSTOMERS
+                                IN STOCK
                             </span>
 
 
                             <strong
-                                id="activeCustomers"
+                                id="inStockProducts"
                             >
                                 0
                             </strong>
 
-
                         </div>
-
 
                     </div>
 
 
 
-                    <!-- ORDERS -->
+                    <!-- LOW STOCK -->
 
                     <div class="stat-card">
-
 
                         <div class="stat-icon">
 
                             <i
                                 class="
                                     fa-solid
-                                    fa-bag-shopping
+                                    fa-triangle-exclamation
                                 "
                             ></i>
 
@@ -831,37 +577,33 @@
 
                         <div>
 
-
                             <span>
-                                TOTAL ORDERS
+                                LOW STOCK
                             </span>
 
 
                             <strong
-                                id="customerOrderCount"
+                                id="lowStockProducts"
                             >
                                 0
                             </strong>
 
-
                         </div>
-
 
                     </div>
 
 
 
-                    <!-- REVENUE -->
+                    <!-- OUT OF STOCK -->
 
                     <div class="stat-card">
-
 
                         <div class="stat-icon">
 
                             <i
                                 class="
                                     fa-solid
-                                    fa-dollar-sign
+                                    fa-circle-xmark
                                 "
                             ></i>
 
@@ -870,34 +612,30 @@
 
                         <div>
 
-
                             <span>
-                                TOTAL REVENUE
+                                OUT OF STOCK
                             </span>
 
 
                             <strong
-                                id="customerRevenue"
+                                id="outOfStockProducts"
                             >
-                                $0.00
+                                0
                             </strong>
-
 
                         </div>
 
-
                     </div>
-
 
                 </section>
 
 
 
                 <!-- =================================================
-                     CUSTOMER DIRECTORY
+                     PRODUCT PANEL
                 ================================================== -->
 
-                <section class="customer-panel">
+                <section class="product-panel">
 
 
                     <div class="panel-head">
@@ -905,41 +643,55 @@
 
                         <div>
 
-
                             <span class="panel-label">
-
-                                CUSTOMER DIRECTORY
-
+                                PRODUCT DIRECTORY
                             </span>
 
 
                             <h2>
-                                All Customers
+                                All Products
                             </h2>
-
 
                         </div>
 
 
+                        <div class="panel-actions">
 
-                        <button
-                            type="button"
-                            class="refresh-btn"
-                            id="refreshCustomersBtn"
-                        >
+                            <a
+                                href="archivedProducts.html"
+                                class="archive-page-btn"
+                            >
 
-                            <i
-                                class="
-                                    fa-solid
-                                    fa-rotate
-                                "
-                            ></i>
+                                <i
+                                    class="
+                                        fa-solid
+                                        fa-box-archive
+                                    "
+                                ></i>
+
+                                Archived Products
+
+                            </a>
 
 
-                            Refresh
+                            <button
+                                type="button"
+                                class="refresh-btn"
+                                id="refreshProductsBtn"
+                            >
 
-                        </button>
+                                <i
+                                    class="
+                                        fa-solid
+                                        fa-rotate
+                                    "
+                                ></i>
 
+                                Refresh
+
+                            </button>
+
+                        </div>
 
                     </div>
 
@@ -947,15 +699,10 @@
 
                     <!-- TOOLBAR -->
 
-                    <div class="customer-toolbar">
+                    <div class="product-toolbar">
 
 
-                        <div
-                            class="
-                                customer-search
-                            "
-                        >
-
+                        <div class="product-search">
 
                             <i
                                 class="
@@ -967,47 +714,52 @@
 
                             <input
                                 type="text"
-                                id="customerSearch"
+                                id="productSearch"
                                 placeholder="
-                                    Search by customer name, email or phone...
+                                    Search by product name, category...
                                 "
-                                autocomplete="off"
                             >
-
 
                         </div>
 
 
-
                         <select
-                            id="customerFilter"
-                            class="customer-filter"
+                            id="productCategoryFilter"
+                            class="product-filter"
                         >
 
-
                             <option value="all">
-
-                                All Customers
-
+                                All Categories
                             </option>
-
-
-                            <option value="active">
-
-                                Active Customers
-
-                            </option>
-
-
-                            <option value="archived">
-
-                                Archived Customers
-
-                            </option>
-
 
                         </select>
 
+
+                        <select
+                            id="productStatusFilter"
+                            class="
+                                product-filter
+                                status-filter
+                            "
+                        >
+
+                            <option value="all">
+                                All Status
+                            </option>
+
+                            <option value="in-stock">
+                                In Stock
+                            </option>
+
+                            <option value="low-stock">
+                                Low Stock
+                            </option>
+
+                            <option value="out-of-stock">
+                                Out of Stock
+                            </option>
+
+                        </select>
 
                     </div>
 
@@ -1017,65 +769,50 @@
 
                     <div class="table-wrap">
 
-
                         <table>
-
 
                             <thead>
 
-
                                 <tr>
 
-
                                     <th>
-                                        CUSTOMER
+                                        PRODUCT
                                     </th>
 
-
                                     <th>
-                                        PHONE
+                                        CATEGORY
                                     </th>
 
-
                                     <th>
-                                        ORDERS
+                                        PRICE
                                     </th>
 
-
                                     <th>
-                                        TOTAL SPENT
+                                        STOCK
                                     </th>
 
-
                                     <th>
-                                        LAST ORDER
+                                        SALES
                                     </th>
-
 
                                     <th>
                                         STATUS
                                     </th>
 
-
                                     <th>
                                         ACTION
                                     </th>
 
-
                                 </tr>
-
 
                             </thead>
 
 
-
                             <tbody
-                                id="customersTableBody"
+                                id="productsTableBody"
                             ></tbody>
 
-
                         </table>
-
 
                     </div>
 
@@ -1084,10 +821,8 @@
                     <!-- MOBILE -->
 
                     <div
-                        class="
-                            mobile-customers
-                        "
-                        id="mobileCustomers"
+                        class="mobile-products"
+                        id="mobileProducts"
                     ></div>
 
 
@@ -1095,206 +830,149 @@
                     <!-- EMPTY -->
 
                     <div
-                        class="
-                            customer-empty
-                        "
-                        id="customerEmpty"
+                        class="product-empty"
+                        id="productEmpty"
                     >
 
-
                         <div class="empty-icon">
-
 
                             <i
                                 class="
                                     fa-solid
-                                    fa-users
+                                    fa-box-open
                                 "
                             ></i>
-
 
                         </div>
 
 
                         <h3>
-                            No Customers Found
+                            No Products Found
                         </h3>
 
 
                         <p>
-
-                            No customer matches your current
-                            search or filter.
-
+                            No products match your current
+                            search or filters.
                         </p>
-
 
                     </div>
 
-
                 </section>
-
 
             </div>
 
-
         </main>
 
-
     </div>
-
 
 </div>
 
 
 
 <!-- =========================================================
-     CUSTOMER DETAILS MODAL
-========================================================= -->
+     PRODUCT DETAILS MODAL
+========================================================== -->
 
 <div
-    class="customer-details-modal"
-    id="customerDetailsModal"
+    class="product-details-modal"
+    id="productDetailsModal"
     aria-hidden="true"
 >
 
-
     <div
-        class="
-            customer-modal-overlay
-        "
-        id="customerModalOverlay"
+        class="product-modal-overlay"
+        id="productModalOverlay"
     ></div>
 
 
-
-    <div
-        class="
-            customer-modal-dialog
-        "
-        role="dialog"
-        aria-modal="true"
-    >
+    <div class="product-modal-dialog">
 
 
-        <div
-            class="
-                customer-modal-header
-            "
-        >
-
+        <div class="product-modal-header">
 
             <div>
 
-
                 <span>
-                    CUSTOMER DETAILS
+                    PRODUCT DETAILS
                 </span>
 
 
                 <h3
-                    id="customerModalTitle"
+                    id="productModalTitle"
                 >
-                    Customer
+                    Product
                 </h3>
 
-
             </div>
-
 
 
             <button
                 type="button"
                 class="modal-close"
-                id="customerModalClose"
+                id="productModalClose"
             >
 
                 <i
-                    class="
-                        fa-solid
-                        fa-xmark
-                    "
+                    class="fa-solid fa-xmark"
                 ></i>
 
-
             </button>
-
 
         </div>
 
 
-
         <div
-            class="
-                customer-modal-body
-            "
-            id="customerModalBody"
+            class="product-modal-body"
+            id="productModalBody"
         ></div>
 
-
     </div>
-
 
 </div>
 
 
 
 <!-- =========================================================
-     EDIT CUSTOMER MODAL
-========================================================= -->
+     EDIT PRODUCT MODAL
+========================================================== -->
 
 <div
-    class="customer-edit-modal"
-    id="customerEditModal"
+    class="product-edit-modal"
+    id="productEditModal"
     aria-hidden="true"
 >
 
-
     <div
-        class="
-            customer-edit-overlay
-        "
+        class="product-edit-overlay"
         data-close-edit
     ></div>
 
 
-
-    <div
-        class="
-            customer-edit-dialog
-        "
-    >
+    <div class="product-edit-dialog">
 
 
-        <div
-            class="
-                customer-edit-header
-            "
-        >
-
+        <div class="product-edit-header">
 
             <div>
 
-
                 <span>
-                    CUSTOMER MANAGEMENT
+                    PRODUCT MANAGEMENT
                 </span>
 
 
                 <h3>
-                    Edit Customer
+                    Edit Product
                 </h3>
 
 
                 <p
-                    id="editCustomerIdentity"
+                    id="editProductIdentity"
                 >
-                    Customer
+                    Product
                 </p>
 
-
             </div>
-
 
 
             <button
@@ -1304,43 +982,35 @@
             >
 
                 <i
-                    class="
-                        fa-solid
-                        fa-xmark
-                    "
+                    class="fa-solid fa-xmark"
                 ></i>
 
-
             </button>
-
 
         </div>
 
 
 
         <form
-            id="customerEditForm"
+            id="productEditForm"
         >
-
 
             <div class="edit-grid">
 
 
-                <div class="edit-field">
-
+                <div class="edit-field full">
 
                     <label>
-                        CUSTOMER NAME
+                        PRODUCT NAME
                     </label>
 
 
                     <input
                         type="text"
-                        name="name"
+                        name="title"
                         required
-                        maxlength="100"
+                        maxlength="180"
                     >
-
 
                 </div>
 
@@ -1348,85 +1018,35 @@
 
                 <div class="edit-field">
 
-
                     <label>
-                        PHONE
+                        CATEGORY
                     </label>
 
 
                     <input
                         type="text"
-                        name="phone"
-                        maxlength="30"
-                    >
-
-
-                </div>
-
-
-
-                <div
-                    class="
-                        edit-field
-                        full
-                    "
-                >
-
-
-                    <label>
-                        EMAIL
-                    </label>
-
-
-                    <input
-                        type="email"
-                        name="email"
-                        maxlength="150"
-                    >
-
-
-                </div>
-
-
-
-                <div
-                    class="
-                        edit-field
-                        full
-                    "
-                >
-
-
-                    <label>
-                        ADDRESS
-                    </label>
-
-
-                    <input
-                        type="text"
-                        name="address"
-                        maxlength="200"
-                    >
-
-
-                </div>
-
-
-
-                <div class="edit-field">
-
-
-                    <label>
-                        CITY / DISTRICT
-                    </label>
-
-
-                    <input
-                        type="text"
-                        name="city"
+                        name="category"
                         maxlength="80"
                     >
 
+                </div>
+
+
+
+                <div class="edit-field">
+
+                    <label>
+                        PRICE
+                    </label>
+
+
+                    <input
+                        type="number"
+                        name="price"
+                        min="0"
+                        step="0.01"
+                        required
+                    >
 
                 </div>
 
@@ -1434,28 +1054,60 @@
 
                 <div class="edit-field">
 
-
                     <label>
-                        POSTAL CODE
+                        STOCK
                     </label>
 
 
                     <input
-                        type="text"
-                        name="postal"
-                        maxlength="20"
+                        type="number"
+                        name="stock"
+                        min="0"
+                        step="1"
                     >
-
 
                 </div>
 
+
+
+                <div class="edit-field">
+
+                    <label>
+                        SALES
+                    </label>
+
+
+                    <input
+                        type="number"
+                        name="sales"
+                        min="0"
+                        step="1"
+                    >
+
+                </div>
+
+
+
+                <div class="edit-field full">
+
+                    <label>
+                        IMAGE URL
+                    </label>
+
+
+                    <input
+                        type="url"
+                        name="image"
+                        maxlength="500"
+                    >
+
+                </div>
 
             </div>
 
 
 
             <div class="edit-footer">
-
 
                 <button
                     type="button"
@@ -1472,60 +1124,42 @@
                 >
 
                     <i
-                        class="
-                            fa-solid
-                            fa-check
-                        "
+                        class="fa-solid fa-check"
                     ></i>
-
 
                     Save Changes
 
                 </button>
 
-
             </div>
-
 
         </form>
 
-
     </div>
-
 
 </div>
 
 
 
 <!-- =========================================================
-     ARCHIVE CUSTOMER MODAL
-========================================================= -->
+     ARCHIVE MODAL
+========================================================== -->
 
 <div
-    class="customer-archive-modal"
-    id="customerArchiveModal"
+    class="product-archive-modal"
+    id="productArchiveModal"
     aria-hidden="true"
 >
 
-
     <div
-        class="
-            customer-archive-overlay
-        "
+        class="product-archive-overlay"
         data-close-archive
     ></div>
 
 
-
-    <div
-        class="
-            customer-archive-dialog
-        "
-    >
-
+    <div class="product-archive-dialog">
 
         <div class="archive-warning-icon">
-
 
             <i
                 class="
@@ -1534,33 +1168,31 @@
                 "
             ></i>
 
-
         </div>
 
 
         <h3>
-            Archive Customer?
+            Archive Product?
         </h3>
 
 
         <p
-            id="archiveCustomerText"
+            id="archiveProductText"
         >
-            Archive this customer?
+            Archive this product?
         </p>
 
 
         <div class="archive-note">
 
-            Customer profile will be hidden from the
-            active customer list. Existing orders will
-            not be deleted.
+            The product will be removed from the
+            active product list. Existing order
+            history will not be deleted.
 
         </div>
 
 
         <div class="archive-actions">
-
 
             <button
                 type="button"
@@ -1574,7 +1206,7 @@
             <button
                 type="button"
                 class="archive-confirm-btn"
-                id="confirmArchiveCustomer"
+                id="confirmArchiveProduct"
             >
 
                 <i
@@ -1584,41 +1216,31 @@
                     "
                 ></i>
 
-
-                Archive Customer
+                Archive Product
 
             </button>
 
-
         </div>
 
-
     </div>
-
 
 </div>
 
 
 
 <!-- =========================================================
-     CUSTOMER JS
-========================================================= -->
-
-<script
-    src="assets/js/customers.js"
-></script>
-
-
-
-<!-- =========================================================
-     ADMIN SIDEBAR
-========================================================= -->
+     SIDEBAR SCRIPT
+========================================================== -->
 
 <script>
+
+"use strict";
+
 
 document.addEventListener(
     "DOMContentLoaded",
     function () {
+
 
         const layout =
             document.getElementById(
@@ -1650,16 +1272,10 @@ document.addEventListener(
             );
 
 
-        const desktopIcon =
-            desktopToggle?.querySelector(
-                "i"
-            );
 
-
-
-        /* ==============================================
-           DESKTOP
-        =============================================== */
+        /* -----------------------------------------
+           DESKTOP TOGGLE
+        ------------------------------------------ */
 
         desktopToggle?.addEventListener(
             "click",
@@ -1674,9 +1290,20 @@ document.addEventListener(
                 }
 
 
+                layout.classList.toggle(
+                    "sidebar-collapsed"
+                );
+
+
                 const closed =
-                    layout.classList.toggle(
+                    layout.classList.contains(
                         "sidebar-collapsed"
+                    );
+
+
+                const icon =
+                    desktopToggle.querySelector(
+                        "i"
                     );
 
 
@@ -1684,21 +1311,18 @@ document.addEventListener(
                     closed
                 ) {
 
-                    desktopIcon?.classList.remove(
+                    icon.classList.remove(
                         "fa-xmark"
                     );
 
-
-                    desktopIcon?.classList.add(
+                    icon.classList.add(
                         "fa-bars"
                     );
-
 
                     desktopToggle.setAttribute(
                         "aria-label",
                         "Open sidebar"
                     );
-
 
                     desktopToggle.setAttribute(
                         "title",
@@ -1707,21 +1331,18 @@ document.addEventListener(
 
                 } else {
 
-                    desktopIcon?.classList.remove(
+                    icon.classList.remove(
                         "fa-bars"
                     );
 
-
-                    desktopIcon?.classList.add(
+                    icon.classList.add(
                         "fa-xmark"
                     );
-
 
                     desktopToggle.setAttribute(
                         "aria-label",
                         "Close sidebar"
                     );
-
 
                     desktopToggle.setAttribute(
                         "title",
@@ -1735,55 +1356,52 @@ document.addEventListener(
 
 
 
-        /* ==============================================
-           MOBILE / TABLET OPEN
-        =============================================== */
+        /* -----------------------------------------
+           MOBILE OPEN
+        ------------------------------------------ */
 
         mobileToggle?.addEventListener(
             "click",
             function () {
 
                 if (
-                    window.innerWidth <= 900
+                    window.innerWidth > 900
                 ) {
 
-                    sidebar?.classList.add(
-                        "open"
-                    );
+                    return;
 
                 }
+
+
+                sidebar.classList.add(
+                    "open"
+                );
 
             }
         );
 
 
 
-        /* ==============================================
-           MOBILE / TABLET CLOSE
-        =============================================== */
+        /* -----------------------------------------
+           MOBILE CLOSE
+        ------------------------------------------ */
 
         mobileClose?.addEventListener(
             "click",
             function () {
 
-                if (
-                    window.innerWidth <= 900
-                ) {
-
-                    sidebar?.classList.remove(
-                        "open"
-                    );
-
-                }
+                sidebar.classList.remove(
+                    "open"
+                );
 
             }
         );
 
 
 
-        /* ==============================================
-           NAVIGATION
-        =============================================== */
+        /* -----------------------------------------
+           CLOSE AFTER NAVIGATION
+        ------------------------------------------ */
 
         document
             .querySelectorAll(
@@ -1797,11 +1415,10 @@ document.addEventListener(
                         function () {
 
                             if (
-                                window.innerWidth <=
-                                900
+                                window.innerWidth <= 900
                             ) {
 
-                                sidebar?.classList.remove(
+                                sidebar.classList.remove(
                                     "open"
                                 );
 
@@ -1815,41 +1432,9 @@ document.addEventListener(
 
 
 
-        /* ==============================================
-           INITIAL STATE
-        =============================================== */
-
-        if (
-            window.innerWidth > 900
-        ) {
-
-            layout.classList.remove(
-                "sidebar-collapsed"
-            );
-
-
-            desktopIcon?.classList.remove(
-                "fa-bars"
-            );
-
-
-            desktopIcon?.classList.add(
-                "fa-xmark"
-            );
-
-        } else {
-
-            sidebar?.classList.remove(
-                "open"
-            );
-
-        }
-
-
-
-        /* ==============================================
+        /* -----------------------------------------
            RESIZE
-        =============================================== */
+        ------------------------------------------ */
 
         window.addEventListener(
             "resize",
@@ -1859,27 +1444,34 @@ document.addEventListener(
                     window.innerWidth > 900
                 ) {
 
-                    sidebar?.classList.remove(
+                    sidebar.classList.remove(
                         "open"
                     );
 
+                    layout.classList.remove(
+                        "sidebar-collapsed"
+                    );
 
-                    const closed =
-                        layout.classList.contains(
-                            "sidebar-collapsed"
+
+                    const icon =
+                        desktopToggle?.querySelector(
+                            "i"
                         );
 
 
-                    desktopIcon?.classList.toggle(
-                        "fa-bars",
-                        closed
-                    );
+                    if (
+                        icon
+                    ) {
 
+                        icon.classList.remove(
+                            "fa-bars"
+                        );
 
-                    desktopIcon?.classList.toggle(
-                        "fa-xmark",
-                        !closed
-                    );
+                        icon.classList.add(
+                            "fa-xmark"
+                        );
+
+                    }
 
                 } else {
 
@@ -1887,15 +1479,30 @@ document.addEventListener(
                         "sidebar-collapsed"
                     );
 
+                    sidebar.classList.remove(
+                        "open"
+                    );
+
                 }
 
             }
         );
 
+
     }
 );
 
 </script>
+
+
+
+<!-- =========================================================
+     PRODUCTS JS
+========================================================== -->
+
+<script
+    src="assets/js/products.js"
+></script>
 
 
 </body>

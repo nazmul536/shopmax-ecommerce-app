@@ -1,0 +1,1466 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Admin Dashboard | ShopMax
+    </title>
+
+
+    <!-- =====================================================
+         FONT AWESOME
+    ====================================================== -->
+
+    <link rel="stylesheet" href="assets/fontawesome/fontCss/all.min.css">
+
+
+    <!-- =====================================================
+         ADMIN CSS
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="assets/css/admin.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<div
+    class="admin-layout"
+    id="adminLayout"
+>
+
+
+
+    <!-- =====================================================
+         DESKTOP TOGGLE
+         Visible on desktop.
+         Hidden on mobile/tablet.
+    ====================================================== -->
+
+    <button
+        type="button"
+        class="sidebar-toggle-control"
+        id="sidebarToggleBtn"
+        aria-label="Close sidebar"
+        title="Close sidebar"
+    >
+
+        <i class="fa-solid fa-xmark"></i>
+
+    </button>
+
+
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside
+        class="admin-sidebar"
+        id="adminSidebar"
+    >
+
+
+        <!-- =================================================
+             BRAND
+        ================================================== -->
+
+        <div class="sidebar-brand">
+
+
+            <a
+                href="admin.html"
+                class="admin-logo"
+            >
+
+                <span class="logo-icon">
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-bag-shopping
+                        "
+                    ></i>
+
+                </span>
+
+
+                <span
+                    style="display:flex;"
+                >
+
+                    Shop<span>
+                        Max
+                    </span>
+
+                </span>
+
+            </a>
+
+
+
+            <!-- =============================================
+                 MOBILE / TABLET CLOSE BUTTON
+            ============================================== -->
+
+            <button
+                type="button"
+                class="sidebar-mobile-close"
+                id="sidebarMobileClose"
+                aria-label="Close sidebar"
+                title="Close sidebar"
+            >
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+
+
+            <span class="admin-label">
+                ADMIN
+            </span>
+
+        </div>
+
+
+
+        <!-- =================================================
+             NAVIGATION
+        ================================================== -->
+
+        <nav class="admin-nav">
+
+
+            <div class="nav-section-title">
+                MANAGEMENT
+            </div>
+
+
+
+            <!-- DASHBOARD -->
+
+            <a
+                href="admin.html"
+                class="
+                    admin-nav-link
+                    active
+                "
+            >
+
+                <i
+                    class="
+                        fa-solid
+                        fa-grid-2
+                    "
+                ></i>
+
+
+                <span>
+                    Dashboard
+                </span>
+
+            </a>
+
+
+
+            <!-- ORDERS -->
+
+            <a
+                href="orders.html"
+                class="admin-nav-link"
+            >
+
+                <i
+                    class="
+                        fa-solid
+                        fa-bag-shopping
+                    "
+                ></i>
+
+
+                <span>
+                    Orders
+                </span>
+
+            </a>
+
+
+
+            <!-- ARCHIVED ORDERS -->
+
+            <a
+                href="archivedOrders.html"
+                class="admin-nav-link"
+            >
+
+                <i
+                    class="
+                        fa-solid
+                        fa-box-archive
+                    "
+                ></i>
+
+
+                <span>
+                    Archived Orders
+                </span>
+
+            </a>
+
+
+
+            <!-- CUSTOMERS -->
+
+            <a
+                href="customers.html"
+                class="admin-nav-link"
+            >
+
+                <i
+                    class="
+                        fa-solid
+                        fa-users
+                    "
+                ></i>
+
+
+                <span>
+                    Customers
+                </span>
+
+            </a>
+
+
+
+            <!-- ARCHIVED CUSTOMERS -->
+
+            <a
+                href="archivedCustomers.html"
+                class="admin-nav-link"
+            >
+
+                <i
+                    class="
+                        fa-solid
+                        fa-user-clock
+                    "
+                ></i>
+
+
+                <span>
+                    Archived Customers
+                </span>
+
+            </a>
+
+
+
+            <!-- PRODUCTS -->
+
+            <a
+                href="products.html"
+                class="admin-nav-link"
+            >
+
+                <i
+                    class="
+                        fa-solid
+                        fa-boxes-stacked
+                    "
+                ></i>
+
+
+                <span>
+                    Products
+                </span>
+
+            </a>
+
+
+
+            <!-- ARCHIVED PRODUCTS -->
+
+            <a
+                href="archivedProducts.html"
+                class="admin-nav-link"
+            >
+
+                <i
+                    class="
+                        fa-solid
+                        fa-box-archive
+                    "
+                ></i>
+
+
+                <span>
+                    Archived Products
+                </span>
+
+            </a>
+
+
+
+            <!-- SYSTEM -->
+
+            <div
+                class="
+                    nav-section-title
+                    second
+                "
+            >
+                SYSTEM
+            </div>
+
+
+
+            <!-- VIEW STORE -->
+
+            <a
+                href="index.html"
+                class="
+                    admin-nav-link
+                    public-link
+                "
+            >
+
+                <i
+                    class="
+                        fa-solid
+                        fa-globe
+                    "
+                ></i>
+
+
+                <span>
+                    View Store
+                </span>
+
+
+                <i
+                    class="
+                        fa-solid
+                        fa-arrow-up-right-from-square
+                    "
+                ></i>
+
+            </a>
+
+            <!-- SETTINGS -->
+
+            <a
+                href="settings.html"
+                class="admin-nav-link"
+            >
+
+                <i
+                    class="
+                        fa-solid
+                        fa-gear
+                    "
+                ></i>
+
+
+                <span>
+                    Settings
+                </span>
+
+            </a>
+
+        </nav>
+
+
+
+        <!-- =================================================
+             SIDEBAR FOOTER
+        ================================================== -->
+
+        <div class="sidebar-footer">
+
+
+            <div class="admin-user">
+
+
+                <div class="admin-avatar">
+                    A
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        Administrator
+                    </strong>
+
+
+                    <span>
+                        ShopMax Admin
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
+    <div class="admin-main">
+
+
+        <!-- =================================================
+             TOPBAR
+        ================================================== -->
+
+        <header class="admin-topbar">
+
+
+            <div class="topbar-left">
+
+
+                <!-- MOBILE / TABLET OPEN -->
+
+                <button
+                    type="button"
+                    id="mobileSidebarToggle"
+                    class="sidebar-toggle"
+                    aria-label="Open sidebar"
+                    title="Open sidebar"
+                >
+
+                    <i class="fa-solid fa-bars"></i>
+
+                </button>
+
+
+                <div>
+
+                    <span class="topbar-label">
+                        ADMIN PANEL
+                    </span>
+
+
+                    <strong>
+                        ShopMax Management
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="topbar-right">
+
+
+                <a
+                    href="index.html"
+                    class="store-btn"
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-store
+                        "
+                    ></i>
+
+
+                    View Store
+
+                </a>
+
+
+                <button
+                    type="button"
+                    id="dashboardRefresh"
+                    class="refresh-btn"
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-rotate
+                        "
+                    ></i>
+
+
+                    Refresh
+
+                </button>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =================================================
+             DASHBOARD CONTENT
+        ================================================== -->
+
+        <main class="dashboard-content">
+
+
+            <!-- =================================================
+                 HEADING
+            ================================================== -->
+
+            <section class="dashboard-heading">
+
+
+                <div>
+
+
+                    <span class="eyebrow">
+                        SHOPMAX ADMINISTRATION
+                    </span>
+
+
+                    <h1>
+                        Dashboard
+                    </h1>
+
+
+                    <p>
+                        Overview of orders, customers,
+                        products and revenue.
+                    </p>
+
+
+                </div>
+
+
+
+                <div class="dashboard-date">
+
+
+                    <i
+                        class="
+                            fa-regular
+                            fa-calendar
+                        "
+                    ></i>
+
+
+                    <span
+                        id="currentDate"
+                    >
+                        —
+                    </span>
+
+
+                </div>
+
+
+            </section>
+
+
+
+            <!-- =================================================
+                 STATS
+            ================================================== -->
+
+            <section class="main-stats">
+
+
+                <!-- TOTAL ORDERS -->
+
+                <div class="stat-card">
+
+
+                    <div
+                        class="
+                            stat-icon
+                            blue
+                        "
+                    >
+
+                        <i
+                            class="
+                                fa-solid
+                                fa-bag-shopping
+                            "
+                        ></i>
+
+                    </div>
+
+
+                    <div class="stat-content">
+
+                        <span>
+                            TOTAL ORDERS
+                        </span>
+
+
+                        <strong
+                            id="totalOrders"
+                        >
+                            0
+                        </strong>
+
+
+                        <small>
+                            All recorded orders
+                        </small>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- TOTAL CUSTOMERS -->
+
+                <div class="stat-card">
+
+
+                    <div
+                        class="
+                            stat-icon
+                            purple
+                        "
+                    >
+
+                        <i
+                            class="
+                                fa-solid
+                                fa-users
+                            "
+                        ></i>
+
+                    </div>
+
+
+                    <div class="stat-content">
+
+                        <span>
+                            TOTAL CUSTOMERS
+                        </span>
+
+
+                        <strong
+                            id="totalCustomers"
+                        >
+                            0
+                        </strong>
+
+
+                        <small>
+                            Active + archived
+                        </small>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- ACTIVE PRODUCTS -->
+
+                <div class="stat-card">
+
+
+                    <div
+                        class="
+                            stat-icon
+                            orange
+                        "
+                    >
+
+                        <i
+                            class="
+                                fa-solid
+                                fa-boxes-stacked
+                            "
+                        ></i>
+
+                    </div>
+
+
+                    <div class="stat-content">
+
+                        <span>
+                            ACTIVE PRODUCTS
+                        </span>
+
+
+                        <strong
+                            id="totalProducts"
+                        >
+                            0
+                        </strong>
+
+
+                        <small>
+                            From product API
+                        </small>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- REVENUE -->
+
+                <div class="stat-card">
+
+
+                    <div
+                        class="
+                            stat-icon
+                            green
+                        "
+                    >
+
+                        <i
+                            class="
+                                fa-solid
+                                fa-dollar-sign
+                            "
+                        ></i>
+
+                    </div>
+
+
+                    <div class="stat-content">
+
+                        <span>
+                            TOTAL REVENUE
+                        </span>
+
+
+                        <strong
+                            id="totalRevenue"
+                        >
+                            $0.00
+                        </strong>
+
+
+                        <small>
+                            From recorded orders
+                        </small>
+
+                    </div>
+
+
+                </div>
+
+
+            </section>
+
+
+
+            <!-- =================================================
+                 ORDER STATUS + QUICK ACTIONS
+            ================================================== -->
+
+            <section class="dashboard-grid">
+
+
+                <!-- ORDER STATUS -->
+
+                <div class="dashboard-card">
+
+
+                    <div class="card-header">
+
+
+                        <div>
+
+                            <span>
+                                ORDER OVERVIEW
+                            </span>
+
+
+                            <h2>
+                                Order Status
+                            </h2>
+
+                        </div>
+
+
+                        <a
+                            href="orders.html"
+                            class="card-link"
+                        >
+                            View Orders
+                        </a>
+
+
+                    </div>
+
+
+
+                    <div class="status-list">
+
+
+                        <div class="status-item">
+
+                            <div class="status-left">
+
+                                <span
+                                    class="
+                                        status-dot
+                                        placed
+                                    "
+                                ></span>
+
+
+                                <span>
+                                    Order Placed
+                                </span>
+
+
+                            </div>
+
+
+                            <strong
+                                id="placedOrders"
+                            >
+                                0
+                            </strong>
+
+
+                        </div>
+
+
+
+                        <div class="status-item">
+
+                            <div class="status-left">
+
+                                <span
+                                    class="
+                                        status-dot
+                                        processing
+                                    "
+                                ></span>
+
+
+                                <span>
+                                    Processing
+                                </span>
+
+
+                            </div>
+
+
+                            <strong
+                                id="processingOrders"
+                            >
+                                0
+                            </strong>
+
+
+                        </div>
+
+
+
+                        <div class="status-item">
+
+                            <div class="status-left">
+
+                                <span
+                                    class="
+                                        status-dot
+                                        shipped
+                                    "
+                                ></span>
+
+
+                                <span>
+                                    Shipped
+                                </span>
+
+
+                            </div>
+
+
+                            <strong
+                                id="shippedOrders"
+                            >
+                                0
+                            </strong>
+
+
+                        </div>
+
+
+
+                        <div class="status-item">
+
+                            <div class="status-left">
+
+                                <span
+                                    class="
+                                        status-dot
+                                        delivery
+                                    "
+                                ></span>
+
+
+                                <span>
+                                    Out for Delivery
+                                </span>
+
+
+                            </div>
+
+
+                            <strong
+                                id="deliveryOrders"
+                            >
+                                0
+                            </strong>
+
+
+                        </div>
+
+
+
+                        <div class="status-item">
+
+                            <div class="status-left">
+
+                                <span
+                                    class="
+                                        status-dot
+                                        delivered
+                                    "
+                                ></span>
+
+
+                                <span>
+                                    Delivered
+                                </span>
+
+
+                            </div>
+
+
+                            <strong
+                                id="deliveredOrders"
+                            >
+                                0
+                            </strong>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- QUICK ACTIONS -->
+
+                <div class="dashboard-card">
+
+
+                    <div class="card-header">
+
+
+                        <div>
+
+                            <span>
+                                SHORTCUTS
+                            </span>
+
+
+                            <h2>
+                                Quick Actions
+                            </h2>
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <div class="quick-actions">
+
+
+                        <a
+                            href="orders.html"
+                            class="quick-action"
+                        >
+
+                            <span
+                                class="
+                                    quick-icon
+                                    blue
+                                "
+                            >
+
+                                <i
+                                    class="
+                                        fa-solid
+                                        fa-bag-shopping
+                                    "
+                                ></i>
+
+
+                            </span>
+
+
+                            <div>
+
+                                <strong>
+                                    Manage Orders
+                                </strong>
+
+
+                                <small>
+                                    View and update orders
+                                </small>
+
+
+                            </div>
+
+
+                            <i
+                                class="
+                                    fa-solid
+                                    fa-chevron-right
+                                "
+                            ></i>
+
+
+                        </a>
+
+
+
+                        <a
+                            href="customers.html"
+                            class="quick-action"
+                        >
+
+                            <span
+                                class="
+                                    quick-icon
+                                    purple
+                                "
+                            >
+
+                                <i
+                                    class="
+                                        fa-solid
+                                        fa-users
+                                    "
+                                ></i>
+
+
+                            </span>
+
+
+                            <div>
+
+                                <strong>
+                                    Manage Customers
+                                </strong>
+
+
+                                <small>
+                                    Customer directory
+                                </small>
+
+
+                            </div>
+
+
+                            <i
+                                class="
+                                    fa-solid
+                                    fa-chevron-right
+                                "
+                            ></i>
+
+
+                        </a>
+
+
+
+                        <a
+                            href="products.html"
+                            class="quick-action"
+                        >
+
+                            <span
+                                class="
+                                    quick-icon
+                                    orange
+                                "
+                            >
+
+                                <i
+                                    class="
+                                        fa-solid
+                                        fa-boxes-stacked
+                                    "
+                                ></i>
+
+
+                            </span>
+
+
+                            <div>
+
+                                <strong>
+                                    Manage Products
+                                </strong>
+
+
+                                <small>
+                                    Inventory and pricing
+                                </small>
+
+
+                            </div>
+
+
+                            <i
+                                class="
+                                    fa-solid
+                                    fa-chevron-right
+                                "
+                            ></i>
+
+
+                        </a>
+
+
+
+                        <a
+                            href="archivedProducts.html"
+                            class="quick-action"
+                        >
+
+                            <span
+                                class="
+                                    quick-icon
+                                    gray
+                                "
+                            >
+
+                                <i
+                                    class="
+                                        fa-solid
+                                        fa-box-archive
+                                    "
+                                ></i>
+
+
+                            </span>
+
+
+                            <div>
+
+                                <strong>
+                                    Archived Products
+                                </strong>
+
+
+                                <small>
+                                    Restore archived products
+                                </small>
+
+
+                            </div>
+
+
+                            <i
+                                class="
+                                    fa-solid
+                                    fa-chevron-right
+                                "
+                            ></i>
+
+
+                        </a>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </section>
+
+
+
+            <!-- =================================================
+                 RECENT ORDERS + LOW STOCK
+            ================================================== -->
+
+            <section class="dashboard-grid">
+
+
+                <!-- RECENT ORDERS -->
+
+                <div
+                    class="
+                        dashboard-card
+                        large-card
+                    "
+                >
+
+
+                    <div class="card-header">
+
+
+                        <div>
+
+                            <span>
+                                SALES ACTIVITY
+                            </span>
+
+
+                            <h2>
+                                Recent Orders
+                            </h2>
+
+
+                        </div>
+
+
+                        <a
+                            href="orders.html"
+                            class="card-link"
+                        >
+                            View All
+                        </a>
+
+
+                    </div>
+
+
+
+                    <div
+                        class="recent-orders"
+                        id="recentOrders"
+                    ></div>
+
+
+                    <div
+                        class="table-empty"
+                        id="recentOrdersEmpty"
+                    >
+
+                        No orders available.
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- LOW STOCK -->
+
+                <div class="dashboard-card">
+
+
+                    <div class="card-header">
+
+
+                        <div>
+
+                            <span>
+                                INVENTORY
+                            </span>
+
+
+                            <h2>
+                                Low Stock
+                            </h2>
+
+
+                        </div>
+
+
+                        <a
+                            href="products.html"
+                            class="card-link"
+                        >
+                            Products
+                        </a>
+
+
+                    </div>
+
+
+
+                    <div
+                        class="stock-list"
+                        id="lowStockList"
+                    ></div>
+
+
+                    <div
+                        class="table-empty"
+                        id="lowStockEmpty"
+                    >
+
+                        No low stock products.
+
+                    </div>
+
+
+                </div>
+
+
+            </section>
+
+
+
+            <!-- =================================================
+                 FOOT INFO
+            ================================================== -->
+
+            <section class="dashboard-footer-info">
+
+
+                <div>
+
+                    <span>
+                        ACTIVE
+                    </span>
+
+
+                    <strong
+                        id="activeCustomersCount"
+                    >
+                        0
+                    </strong>
+
+
+                    <small>
+                        Customers
+                    </small>
+
+                </div>
+
+
+
+                <div>
+
+                    <span>
+                        ARCHIVED
+                    </span>
+
+
+                    <strong
+                        id="archivedOrdersCount"
+                    >
+                        0
+                    </strong>
+
+
+                    <small>
+                        Orders
+                    </small>
+
+                </div>
+
+
+
+                <div>
+
+                    <span>
+                        ARCHIVED
+                    </span>
+
+
+                    <strong
+                        id="archivedProductsCount"
+                    >
+                        0
+                    </strong>
+
+
+                    <small>
+                        Products
+                    </small>
+
+                </div>
+
+
+
+                <div>
+
+                    <span>
+                        ARCHIVED
+                    </span>
+
+
+                    <strong
+                        id="archivedCustomersCount"
+                    >
+                        0
+                    </strong>
+
+
+                    <small>
+                        Customers
+                    </small>
+
+                </div>
+
+
+            </section>
+
+
+        </main>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =========================================================
+     ADMIN JS
+========================================================= -->
+
+<script
+    src="assets/js/admin.js"
+></script>
+
+
+</body>
+
+</html>

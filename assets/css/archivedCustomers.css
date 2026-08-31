@@ -2357,3 +2357,234 @@ footer {
     }
 
 }
+
+/* =========================================================
+   ADMIN PAGE INTEGRATION
+   Shared sidebar/topbar comes from admin.css
+========================================================= */
+
+.archive-admin-content {
+
+    width: 100%;
+
+    min-height: calc(100vh - 70px);
+
+    padding: 27px 28px 50px;
+
+}
+
+
+.archive-page-container {
+
+    width: 100%;
+
+    max-width: 1400px;
+
+    margin: 0 auto;
+
+}
+
+
+/*
+   Keep archived-customer page styles scoped
+   inside the admin content area.
+*/
+
+.archive-admin-content .breadcrumb {
+
+    margin-bottom: 24px;
+
+}
+
+
+.archive-admin-content .page-heading {
+
+    margin-bottom: 27px;
+
+}
+
+
+.archive-admin-content .page-heading h1 {
+
+    font-size: 38px;
+
+}
+
+
+/*
+   The original public page has a footer/header.
+   The admin version does not use those elements.
+*/
+
+.archive-admin-content .archive-panel {
+
+    width: 100%;
+
+}
+
+
+/* =========================================================
+   ADMIN PAGE REFRESH BUTTON
+========================================================= */
+
+.admin-topbar .refresh-btn {
+
+    min-height: 34px;
+
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .archive-admin-content {
+
+        padding:
+            22px 18px 40px;
+
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .archive-admin-content {
+
+        padding:
+            22px 18px 40px;
+
+    }
+
+
+    .archive-admin-content
+    .page-heading h1 {
+
+        font-size: 33px;
+
+    }
+
+}
+
+
+/* =========================================================
+   VERY SMALL DEVICES
+========================================================= */
+
+@media (max-width: 380px) {
+
+    .archive-admin-content {
+
+        padding:
+            18px 12px 32px;
+
+    }
+
+
+    .archive-admin-content
+    .page-heading h1 {
+
+        font-size: 29px;
+
+    }
+
+}
+/* =========================================================
+   FIX - ADMIN SIDEBAR NAV CONFLICT
+========================================================= */
+
+.admin-sidebar .admin-nav {
+
+    display: flex !important;
+
+    flex-direction: column !important;
+
+    align-items: stretch !important;
+
+    justify-content: flex-start !important;
+
+    gap: 0 !important;
+
+    width: 100%;
+
+    padding:
+        20px 12px;
+
+}
+
+
+/* Sidebar menu items */
+
+.admin-sidebar .admin-nav-link {
+
+    width: 100%;
+
+    min-height: 39px;
+
+    display: flex !important;
+
+    flex-direction: row !important;
+
+    align-items: center !important;
+
+    justify-content: flex-start !important;
+
+    gap: 10px !important;
+
+    margin-bottom: 3px;
+
+}
+
+
+/* Section headings */
+
+.admin-sidebar .nav-section-title {
+
+    width: 100%;
+
+    display: block !important;
+
+    flex: none !important;
+
+}
+
+
+/* System heading */
+
+.admin-sidebar .nav-section-title.second {
+
+    margin-top: 20px;
+
+}
+
+
+/* View Store external icon */
+
+.admin-sidebar .public-link i:last-child {
+
+    margin-left: auto !important;
+
+}
+
+
+/* =========================================================
+   IMPORTANT
+   Old public navbar rule must NOT affect admin sidebar
+========================================================= */
+
+.admin-sidebar nav {
+
+    display: flex !important;
+
+    flex-direction: column !important;
+
+    gap: 0 !important;
+
+}

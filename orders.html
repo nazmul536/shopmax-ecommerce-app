@@ -12,11 +12,11 @@
 
     <meta
         name="description"
-        content="View all ShopMax orders"
+        content="Manage ShopMax orders"
     >
 
     <title>
-        My Orders | ShopMax
+        Orders | ShopMax Admin
     </title>
 
 
@@ -24,20 +24,8 @@
          FONT AWESOME
     ====================================================== -->
 
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-    >
+    <link rel="stylesheet" href="assets/fontawesome/fontCss/all.min.css">
 
-
-    <!-- =====================================================
-         GLOBAL CSS
-    ====================================================== -->
-
-    <link
-        rel="stylesheet"
-        href="assets/css/style.css"
-    >
 
 
     <!-- =====================================================
@@ -49,6 +37,110 @@
         href="assets/css/orders.css"
     >
 
+
+    <!-- =====================================================
+         ADMIN CSS
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="assets/css/admin.css"
+    >
+
+
+    <!-- =====================================================
+         ORDERS + ADMIN ALIGNMENT
+    ====================================================== -->
+
+    <style>
+
+        /* =================================================
+           KEEP ORDERS CONTENT INSIDE ADMIN SHELL
+        ================================================== */
+
+        .admin-main .orders-hero {
+
+            margin: 0;
+
+            padding: 0;
+
+            background: transparent;
+
+        }
+
+
+        .admin-main .orders-hero > .container {
+
+            width: 100%;
+
+            max-width: none;
+
+            margin: 0;
+
+            padding: 0;
+
+        }
+
+
+        .admin-main .orders-page {
+
+            margin: 0;
+
+            padding: 0;
+
+        }
+
+
+        .admin-main .orders-page > .container {
+
+            width: 100%;
+
+            max-width: none;
+
+            margin: 0;
+
+            padding: 0;
+
+        }
+
+
+        /* =================================================
+           MODAL
+        ================================================== */
+
+        #orderDetailsModal {
+
+            z-index: 9999 !important;
+
+        }
+
+
+        /* =================================================
+           ORDERS SHELL RESPONSIVE
+        ================================================== */
+
+        @media (max-width: 900px) {
+
+            .admin-main {
+
+                width: 100% !important;
+
+                margin-left: 0 !important;
+
+            }
+
+
+            .admin-sidebar.open {
+
+                transform:
+                    translateX(0) !important;
+
+            }
+
+        }
+
+    </style>
+
 </head>
 
 
@@ -56,889 +148,99 @@
 
 
 <!-- =========================================================
-     TOP BAR
+     ADMIN LAYOUT
 ========================================================= -->
 
-<div class="top-bar">
-
-    <div class="container top-bar-inner">
-
-        <div class="top-sale">
-
-            <i class="fa-solid fa-fire"></i>
-
-            Hot Deals
-
-            <span>
-                Summer Sale For All Products - Up To 50% Off
-            </span>
-
-        </div>
-
-
-        <div class="top-links">
-
-            <a href="trackOrder.html">
-                Track Order
-            </a>
-
-
-            <a href="#">
-                Help Center
-            </a>
-
-
-            <button type="button">
-
-                English
-
-                <i
-                    class="fa-solid fa-chevron-down"
-                ></i>
-
-            </button>
-
-
-            <button type="button">
-
-                USD
-
-                <i
-                    class="fa-solid fa-chevron-down"
-                ></i>
-
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-
-<!-- =========================================================
-     HEADER
-========================================================= -->
-
-<header class="header">
-
-    <div class="container header-main">
-
-
-        <!-- LOGO -->
-
-        <a
-            href="index.html"
-            class="logo"
-        >
-
-            <span class="logo-icon">
-
-                <i
-                    class="
-                        fa-solid
-                        fa-bag-shopping
-                    "
-                ></i>
-
-            </span>
-
-
-            <span>
-
-                Shop<span>
-                    Max
-                </span>
-
-            </span>
-
-        </a>
-
-
-
-        <!-- SEARCH -->
-
-        <div class="search-box">
-
-            <select
-                aria-label="Search category"
-                id="ordersSearchCategory"
-            >
-
-                <option value="all">
-                    All Categories
-                </option>
-
-                <option value="electronics">
-                    Electronics
-                </option>
-
-                <option value="jewelery">
-                    Jewelry
-                </option>
-
-                <option value="men's clothing">
-                    Men's Clothing
-                </option>
-
-                <option value="women's clothing">
-                    Women's Clothing
-                </option>
-
-            </select>
-
-
-            <input
-                type="text"
-                id="ordersSearch"
-                placeholder="Search for products..."
-                autocomplete="off"
-            >
-
-
-            <button
-                type="button"
-                id="ordersSearchBtn"
-                aria-label="Search"
-            >
-
-                <i
-                    class="
-                        fa-solid
-                        fa-magnifying-glass
-                    "
-                ></i>
-
-            </button>
-
-        </div>
-
-
-
-        <!-- HEADER ACTIONS -->
-
-        <div class="header-actions">
-
-
-            <!-- WISHLIST -->
-
-            <button
-                type="button"
-                class="header-action"
-                id="ordersWishlistBtn"
-            >
-
-                <span
-                    class="wishlist-icon-wrap"
-                >
-
-                    <i
-                        class="
-                            fa-regular
-                            fa-heart
-                        "
-                    ></i>
-
-
-                    <b
-                        id="ordersWishlistCount"
-                    >
-                        0
-                    </b>
-
-                </span>
-
-
-                <span>
-                    Wishlist
-                </span>
-
-            </button>
-
-
-
-            <!-- ACCOUNT -->
-
-            <button
-                type="button"
-                class="header-action"
-            >
-
-                <i
-                    class="
-                        fa-regular
-                        fa-user
-                    "
-                ></i>
-
-
-                <span>
-                    Account
-                </span>
-
-            </button>
-
-
-
-            <!-- CART -->
-
-            <button
-                type="button"
-                class="header-action"
-                id="ordersCartBtn"
-            >
-
-                <span
-                    class="cart-icon-wrap"
-                >
-
-                    <i
-                        class="
-                            fa-solid
-                            fa-cart-shopping
-                        "
-                    ></i>
-
-
-                    <b
-                        id="ordersCartCount"
-                    >
-                        0
-                    </b>
-
-                </span>
-
-
-                <span>
-                    Cart
-                </span>
-
-            </button>
-
-        </div>
-
-    </div>
+<div
+    class="admin-layout"
+    id="adminLayout"
+>
+
+
+    <!-- =====================================================
+         DESKTOP SIDEBAR TOGGLE
+
+         This stays outside the sidebar so when the sidebar
+         becomes width: 0, the button remains visible.
+    ====================================================== -->
+
+    <button
+        type="button"
+        class="sidebar-toggle-control"
+        id="sidebarToggleBtn"
+        aria-label="Close sidebar"
+        title="Close sidebar"
+    >
+
+        <i
+            class="
+                fa-solid
+                fa-xmark
+            "
+        ></i>
+
+    </button>
 
 
 
     <!-- =====================================================
-         NAVIGATION
+         SIDEBAR
     ====================================================== -->
 
-    <div class="navigation">
-
-        <div class="container navigation-inner">
-
-
-            <!-- CATEGORIES -->
-
-            <div class="categories-wrapper">
-
-                <button
-                    type="button"
-                    class="categories-btn"
-                    id="ordersCategoriesBtn"
-                >
-
-                    <i
-                        class="
-                            fa-solid
-                            fa-bars
-                        "
-                    ></i>
-
-
-                    All Categories
-
-
-                    <i
-                        class="
-                            fa-solid
-                            fa-chevron-down
-                            arrow
-                        "
-                    ></i>
-
-                </button>
-
-            </div>
-
-
-
-            <!-- NAV -->
-
-            <nav class="nav-links">
-
-                <a href="index.html">
-                    Home
-                </a>
-
-
-                <a href="shop.html">
-                    Shop
-                </a>
-
-
-                <a href="#">
-                    Deals
-                </a>
-
-
-                <a href="#">
-                    Pages
-                </a>
-
-
-                <a href="#">
-                    Blog
-                </a>
-
-
-                <a href="#">
-                    Contact
-                </a>
-
-            </nav>
-
-
-
-            <!-- HOTLINE -->
-
-            <div class="hotline">
-
-                <i
-                    class="
-                        fa-solid
-                        fa-headset
-                    "
-                ></i>
-
-
-                Hotline:
-
-
-                <strong>
-                    (800) 123-4567
-                </strong>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</header>
-
-
-
-<!-- =========================================================
-     HERO
-========================================================= -->
-
-<section class="orders-hero">
-
-    <div class="container">
-
-
-        <!-- BREADCRUMB -->
-
-        <div class="orders-breadcrumb">
-
-            <a href="index.html">
-                Home
-            </a>
-
-
-            <i
-                class="
-                    fa-solid
-                    fa-chevron-right
-                "
-            ></i>
-
-
-            <span>
-                My Orders
-            </span>
-
-        </div>
-
-
-
-        <!-- LABEL -->
-
-        <span class="orders-label">
-
-            SHOPMAX ORDER HISTORY
-
-        </span>
-
-
-
-        <!-- TITLE -->
-
-        <h1>
-            My Orders
-        </h1>
-
-
-        <p>
-            View your previous orders and track your purchases.
-        </p>
-
-    </div>
-
-</section>
-
-
-
-<!-- =========================================================
-     ORDERS PAGE
-========================================================= -->
-
-<main class="orders-page">
-
-    <div class="container">
-
-
-        <!-- =================================================
-             SUMMARY
-        ================================================== -->
-
-        <section class="orders-summary">
-
-
-            <!-- TOTAL ORDERS -->
-
-            <div class="orders-summary-card">
-
-                <div class="orders-summary-icon">
-
-                    <i
-                        class="
-                            fa-solid
-                            fa-box
-                        "
-                    ></i>
-
-                </div>
-
-
-                <div>
-
-                    <span>
-                        TOTAL ORDERS
-                    </span>
-
-
-                    <strong
-                        id="totalOrdersCount"
-                    >
-                        0
-                    </strong>
-
-                </div>
-
-            </div>
-
-
-
-            <!-- TOTAL SPENT -->
-
-            <div class="orders-summary-card">
-
-                <div class="orders-summary-icon">
-
-                    <i
-                        class="
-                            fa-solid
-                            fa-dollar-sign
-                        "
-                    ></i>
-
-                </div>
-
-
-                <div>
-
-                    <span>
-                        TOTAL SPENT
-                    </span>
-
-
-                    <strong
-                        id="totalOrdersSpent"
-                    >
-                        $0.00
-                    </strong>
-
-                </div>
-
-            </div>
-
-
-
-            <!-- LATEST ORDER -->
-
-            <div class="orders-summary-card">
-
-                <div class="orders-summary-icon">
-
-                    <i
-                        class="
-                            fa-solid
-                            fa-clock
-                        "
-                    ></i>
-
-                </div>
-
-
-                <div>
-
-                    <span>
-                        LATEST ORDER
-                    </span>
-
-
-                    <strong
-                        id="latestOrderDate"
-                    >
-                        —
-                    </strong>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- =================================================
-             ORDERS CARD
-        ================================================== -->
-
-        <section class="orders-card">
-
-
-            <!-- HEADER -->
-
-            <div class="orders-card-header">
-
-                <div>
-
-                    <span>
-                        ORDER HISTORY
-                    </span>
-
-
-                    <h2>
-                        All Orders
-                    </h2>
-
-                </div>
-
-
-                <div
-                    class="orders-header-actions"
-                >
-
-                    <button
-                        type="button"
-                        id="refreshOrdersBtn"
-                        class="orders-refresh-btn"
-                    >
-
-                        <i
-                            class="
-                                fa-solid
-                                fa-rotate
-                            "
-                        ></i>
-
-
-                        Refresh
-
-                    </button>
-
-                </div>
-
-            </div>
-
-
-
-            <!-- =================================================
-                 FILTERS
-            ================================================== -->
-
-            <div class="orders-filter">
-
-
-                <!-- SEARCH -->
-
-                <div
-                    class="
-                        orders-filter-input
-                    "
-                >
-
-                    <i
-                        class="
-                            fa-solid
-                            fa-magnifying-glass
-                        "
-                    ></i>
-
-
-                    <input
-                        type="text"
-                        id="orderTableSearch"
-                        placeholder="Search by order ID or customer name..."
-                        autocomplete="off"
-                    >
-
-                </div>
-
-
-
-                <!-- STATUS -->
-
-                <select
-                    id="orderStatusFilter"
-                    class="orders-status-filter"
-                >
-
-                    <option value="all">
-                        All Status
-                    </option>
-
-                    <option value="Order Placed">
-                        Order Placed
-                    </option>
-
-                    <option value="Processing">
-                        Processing
-                    </option>
-
-                    <option value="Shipped">
-                        Shipped
-                    </option>
-
-                    <option value="Out for Delivery">
-                        Out for Delivery
-                    </option>
-
-                    <option value="Delivered">
-                        Delivered
-                    </option>
-
-                </select>
-
-            </div>
-
-
-
-            <!-- =================================================
-                 DESKTOP TABLE
-            ================================================== -->
-
-            <div class="orders-table-wrapper">
-
-                <table class="orders-table">
-
-                    <thead>
-
-                        <tr>
-
-                            <th>
-                                Order ID
-                            </th>
-
-
-                            <th>
-                                Customer
-                            </th>
-
-
-                            <th>
-                                Date
-                            </th>
-
-
-                            <th>
-                                Items
-                            </th>
-
-
-                            <th>
-                                Total
-                            </th>
-
-
-                            <th>
-                                Status
-                            </th>
-
-
-                            <th>
-                                Action
-                            </th>
-
-                        </tr>
-
-                    </thead>
-
-
-                    <tbody
-                        id="ordersTableBody"
-                    >
-
-                        <!--
-                            Orders generated by
-                            orders.js
-                        -->
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-
-
-            <!-- =================================================
-                 MOBILE ORDERS
-            ================================================== -->
-
-            <div
-                class="orders-mobile-list"
-                id="ordersMobileList"
-            >
-
-                <!--
-                    Mobile orders generated
-                    by orders.js
-                -->
-
-            </div>
-
-
-
-            <!-- =================================================
-                 EMPTY STATE
-            ================================================== -->
-
-            <div
-                class="orders-empty"
-                id="ordersEmpty"
-            >
-
-                <div class="orders-empty-icon">
-
-                    <i
-                        class="
-                            fa-solid
-                            fa-box-open
-                        "
-                    ></i>
-
-                </div>
-
-
-                <h3>
-                    No Orders Found
-                </h3>
-
-
-                <p>
-                    Your order history will appear here after you place an order.
-                </p>
-
-
-                <a
-                    href="shop.html"
-                    class="orders-shop-btn"
-                >
-
-                    Start Shopping
-
-
-                    <i
-                        class="
-                            fa-solid
-                            fa-arrow-right
-                        "
-                    ></i>
-
-                </a>
-
-            </div>
-
-        </section>
-
-    </div>
-
-</main>
-
-
-
-<!-- =========================================================
-     ORDER DETAILS MODAL
-========================================================= -->
-
-<div
-    class="order-details-modal"
-    id="orderDetailsModal"
-    aria-hidden="true"
->
-
-
-    <!-- OVERLAY -->
-
-    <div
-        class="order-details-overlay"
-        id="orderDetailsOverlay"
-    ></div>
-
-
-
-    <!-- DIALOG -->
-
-    <div
-        class="order-details-dialog"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="orderDetailsTitle"
+    <aside
+        class="admin-sidebar"
+        id="adminSidebar"
     >
 
 
-        <!-- HEADER -->
+        <!-- =================================================
+             BRAND
+        ================================================== -->
 
-        <div class="order-details-header">
+        <div class="sidebar-brand">
 
-            <div>
 
-                <span>
-                    ORDER DETAILS
+            <a
+                href="admin.html"
+                class="admin-logo"
+            >
+
+                <span class="logo-icon">
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-bag-shopping
+                        "
+                    ></i>
+
                 </span>
 
 
-                <h2
-                    id="orderDetailsTitle"
+                <span
+                    style="display:flex;"
                 >
-                    Order #—
-                </h2>
 
-            </div>
+                    Shop<span>
+                        Max
+                    </span>
 
+                </span>
+
+            </a>
+
+
+
+            <!-- =============================================
+                 TABLET / MOBILE CLOSE BUTTON
+            ============================================== -->
 
             <button
                 type="button"
-                class="order-details-close"
-                id="orderDetailsClose"
-                aria-label="Close order details"
+                class="sidebar-mobile-close"
+                id="sidebarMobileClose"
+                aria-label="Close sidebar"
+                title="Close sidebar"
             >
 
                 <i
@@ -950,23 +252,1025 @@
 
             </button>
 
-        </div>
 
 
-
-        <!-- BODY -->
-
-        <div
-            class="order-details-body"
-            id="orderDetailsBody"
-        >
-
-            <!--
-                Full order details are
-                generated by orders.js
-            -->
+            <span class="admin-label">
+                ADMIN
+            </span>
 
         </div>
+
+
+
+        <!-- =================================================
+             NAVIGATION
+        ================================================== -->
+
+        <nav class="admin-nav">
+
+
+            <div class="nav-section-title">
+                MANAGEMENT
+            </div>
+
+
+
+            <!-- DASHBOARD -->
+
+            <a
+                href="admin.html"
+                class="admin-nav-link"
+            >
+
+                <i
+                    class="
+                        fa-solid
+                        fa-grid-2
+                    "
+                ></i>
+
+
+                <span>
+                    Dashboard
+                </span>
+
+            </a>
+
+
+
+            <!-- ORDERS -->
+
+            <a
+                href="orders.html"
+                class="
+                    admin-nav-link
+                    active
+                "
+            >
+
+                <i
+                    class="
+                        fa-solid
+                        fa-bag-shopping
+                    "
+                ></i>
+
+
+                <span>
+                    Orders
+                </span>
+
+            </a>
+
+
+
+            <!-- ARCHIVED ORDERS -->
+
+            <a
+                href="archivedOrders.html"
+                class="admin-nav-link"
+            >
+
+                <i
+                    class="
+                        fa-solid
+                        fa-box-archive
+                    "
+                ></i>
+
+
+                <span>
+                    Archived Orders
+                </span>
+
+            </a>
+
+
+
+            <!-- CUSTOMERS -->
+
+            <a
+                href="customers.html"
+                class="admin-nav-link"
+            >
+
+                <i
+                    class="
+                        fa-solid
+                        fa-users
+                    "
+                ></i>
+
+
+                <span>
+                    Customers
+                </span>
+
+            </a>
+
+
+
+            <!-- ARCHIVED CUSTOMERS -->
+
+            <a
+                href="archivedCustomers.html"
+                class="admin-nav-link"
+            >
+
+                <i
+                    class="
+                        fa-solid
+                        fa-user-clock
+                    "
+                ></i>
+
+
+                <span>
+                    Archived Customers
+                </span>
+
+            </a>
+
+
+
+            <!-- PRODUCTS -->
+
+            <a
+                href="products.html"
+                class="admin-nav-link"
+            >
+
+                <i
+                    class="
+                        fa-solid
+                        fa-boxes-stacked
+                    "
+                ></i>
+
+
+                <span>
+                    Products
+                </span>
+
+            </a>
+
+
+
+            <!-- ARCHIVED PRODUCTS -->
+
+            <a
+                href="archivedProducts.html"
+                class="admin-nav-link"
+            >
+
+                <i
+                    class="
+                        fa-solid
+                        fa-box-archive
+                    "
+                ></i>
+
+
+                <span>
+                    Archived Products
+                </span>
+
+            </a>
+
+
+
+            <!-- =================================================
+                 SYSTEM
+            ================================================== -->
+
+            <div
+                class="
+                    nav-section-title
+                    second
+                "
+            >
+
+                SYSTEM
+
+            </div>
+
+
+
+            <!-- VIEW STORE -->
+
+            <a
+                href="index.html"
+                class="
+                    admin-nav-link
+                    public-link
+                "
+            >
+
+                <i
+                    class="
+                        fa-solid
+                        fa-globe
+                    "
+                ></i>
+
+
+                <span>
+                    View Store
+                </span>
+
+
+                <i
+                    class="
+                        fa-solid
+                        fa-arrow-up-right-from-square
+                    "
+                ></i>
+
+            </a>
+
+            <!-- SETTINGS -->
+
+            <a
+                href="settings.html"
+                class="admin-nav-link"
+            >
+
+                <i
+                    class="
+                        fa-solid
+                        fa-gear
+                    "
+                ></i>
+
+
+                <span>
+                    Settings
+                </span>
+
+            </a>
+
+        </nav>
+
+
+
+        <!-- =================================================
+             SIDEBAR FOOTER
+        ================================================== -->
+
+        <div class="sidebar-footer">
+
+
+            <div class="admin-user">
+
+
+                <div class="admin-avatar">
+                    A
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        Administrator
+                    </strong>
+
+
+                    <span>
+                        ShopMax Admin
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
+    <div class="admin-main">
+
+
+        <!-- =================================================
+             TOPBAR
+        ================================================== -->
+
+        <header class="admin-topbar">
+
+
+            <div class="topbar-left">
+
+
+                <!-- TABLET / MOBILE OPEN -->
+
+                <button
+                    type="button"
+                    id="mobileSidebarToggle"
+                    class="sidebar-toggle"
+                    aria-label="Open sidebar"
+                    title="Open sidebar"
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-bars
+                        "
+                    ></i>
+
+                </button>
+
+
+                <div>
+
+                    <span class="topbar-label">
+                        ADMIN PANEL
+                    </span>
+
+
+                    <strong>
+                        Order Management
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="topbar-right">
+
+
+                <!-- DASHBOARD -->
+
+                <a
+                    href="admin.html"
+                    class="store-btn"
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-grid-2
+                        "
+                    ></i>
+
+
+                    Dashboard
+
+                </a>
+
+
+
+                <!-- VIEW STORE -->
+
+                <a
+                    href="index.html"
+                    class="store-btn"
+                >
+
+                    <i
+                        class="
+                            fa-solid
+                            fa-store
+                        "
+                    ></i>
+
+
+                    View Store
+
+                </a>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =================================================
+             PAGE CONTENT
+        ================================================== -->
+
+        <main class="dashboard-content">
+
+
+            <!-- =================================================
+                 PAGE HEADING
+            ================================================== -->
+
+            <section class="dashboard-heading">
+
+
+                <div>
+
+                    <span class="eyebrow">
+
+                        SHOPMAX ORDER MANAGEMENT
+
+                    </span>
+
+
+                    <h1>
+                        Orders
+                    </h1>
+
+
+                    <p>
+                        Manage orders, update shipment status,
+                        track deliveries and review order history.
+                    </p>
+
+                </div>
+
+
+            </section>
+
+
+
+            <!-- =================================================
+                 ORDERS
+            ================================================== -->
+
+            <section class="orders-page">
+
+                <div class="container">
+
+
+                    <!-- =================================================
+                         SUMMARY
+                    ================================================== -->
+
+                    <section class="orders-summary">
+
+
+                        <!-- TOTAL ORDERS -->
+
+                        <div
+                            class="
+                                orders-summary-card
+                            "
+                        >
+
+                            <div
+                                class="
+                                    orders-summary-icon
+                                "
+                            >
+
+                                <i
+                                    class="
+                                        fa-solid
+                                        fa-box
+                                    "
+                                ></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    TOTAL ORDERS
+                                </span>
+
+
+                                <strong
+                                    id="totalOrdersCount"
+                                >
+                                    0
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- TOTAL SPENT -->
+
+                        <div
+                            class="
+                                orders-summary-card
+                            "
+                        >
+
+                            <div
+                                class="
+                                    orders-summary-icon
+                                "
+                            >
+
+                                <i
+                                    class="
+                                        fa-solid
+                                        fa-dollar-sign
+                                    "
+                                ></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    TOTAL SPENT
+                                </span>
+
+
+                                <strong
+                                    id="totalOrdersSpent"
+                                >
+                                    $0.00
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- LATEST ORDER -->
+
+                        <div
+                            class="
+                                orders-summary-card
+                            "
+                        >
+
+                            <div
+                                class="
+                                    orders-summary-icon
+                                "
+                            >
+
+                                <i
+                                    class="
+                                        fa-solid
+                                        fa-clock
+                                    "
+                                ></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    LATEST ORDER
+                                </span>
+
+
+                                <strong
+                                    id="latestOrderDate"
+                                >
+                                    —
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+
+                    <!-- =================================================
+                         ORDERS CARD
+                    ================================================== -->
+
+                    <section class="orders-card">
+
+
+                        <!-- HEADER -->
+
+                        <div
+                            class="
+                                orders-card-header
+                            "
+                        >
+
+
+                            <div>
+
+                                <span>
+                                    ORDER DIRECTORY
+                                </span>
+
+
+                                <h2>
+                                    All Orders
+                                </h2>
+
+                            </div>
+
+
+
+                            <div
+                                class="
+                                    orders-header-actions
+                                "
+                            >
+
+
+                                <!-- ARCHIVED -->
+
+                                <a
+                                    href="archivedOrders.html"
+                                    class="
+                                        orders-refresh-btn
+                                        archive-link
+                                    "
+                                    style="
+                                        text-decoration:none;
+                                    "
+                                >
+
+                                    <i
+                                        class="
+                                            fa-solid
+                                            fa-box-archive
+                                        "
+                                    ></i>
+
+
+                                    Archived Orders
+
+                                </a>
+
+
+
+                                <!-- REFRESH -->
+
+                                <button
+                                    type="button"
+                                    id="refreshOrdersBtn"
+                                    class="
+                                        orders-refresh-btn
+                                    "
+                                >
+
+                                    <i
+                                        class="
+                                            fa-solid
+                                            fa-rotate
+                                        "
+                                    ></i>
+
+
+                                    Refresh
+
+                                </button>
+
+
+                            </div>
+
+
+                        </div>
+
+
+
+                        <!-- =================================================
+                             FILTER
+                        ================================================== -->
+
+                        <div class="orders-filter">
+
+
+                            <!-- SEARCH -->
+
+                            <div
+                                class="
+                                    orders-filter-input
+                                "
+                            >
+
+                                <i
+                                    class="
+                                        fa-solid
+                                        fa-magnifying-glass
+                                    "
+                                ></i>
+
+
+                                <input
+                                    type="text"
+                                    id="orderTableSearch"
+                                    placeholder="
+                                        Search by order ID or customer name...
+                                    "
+                                    autocomplete="off"
+                                >
+
+                            </div>
+
+
+
+                            <!-- STATUS -->
+
+                            <select
+                                id="orderStatusFilter"
+                                class="
+                                    orders-status-filter
+                                "
+                            >
+
+                                <option value="all">
+                                    All Status
+                                </option>
+
+
+                                <option value="Order Placed">
+                                    Order Placed
+                                </option>
+
+
+                                <option value="Processing">
+                                    Processing
+                                </option>
+
+
+                                <option value="Shipped">
+                                    Shipped
+                                </option>
+
+
+                                <option value="Out for Delivery">
+                                    Out for Delivery
+                                </option>
+
+
+                                <option value="Delivered">
+                                    Delivered
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+
+                        <!-- =================================================
+                             TABLE
+                        ================================================== -->
+
+                        <div
+                            class="
+                                orders-table-wrapper
+                            "
+                        >
+
+                            <table
+                                class="
+                                    orders-table
+                                "
+                            >
+
+                                <thead>
+
+                                    <tr>
+
+                                        <th>
+                                            Order ID
+                                        </th>
+
+
+                                        <th>
+                                            Customer
+                                        </th>
+
+
+                                        <th>
+                                            Date
+                                        </th>
+
+
+                                        <th>
+                                            Items
+                                        </th>
+
+
+                                        <th>
+                                            Total
+                                        </th>
+
+
+                                        <th>
+                                            Status
+                                        </th>
+
+
+                                        <th>
+                                            Action
+                                        </th>
+
+                                    </tr>
+
+                                </thead>
+
+
+                                <tbody
+                                    id="ordersTableBody"
+                                ></tbody>
+
+                            </table>
+
+                        </div>
+
+
+
+                        <!-- =================================================
+                             MOBILE ORDER LIST
+                        ================================================== -->
+
+                        <div
+                            class="
+                                orders-mobile-list
+                            "
+                            id="ordersMobileList"
+                        ></div>
+
+
+
+                        <!-- =================================================
+                             EMPTY STATE
+                        ================================================== -->
+
+                        <div
+                            class="
+                                orders-empty
+                            "
+                            id="ordersEmpty"
+                        >
+
+
+                            <div
+                                class="
+                                    orders-empty-icon
+                                "
+                            >
+
+                                <i
+                                    class="
+                                        fa-solid
+                                        fa-box-open
+                                    "
+                                ></i>
+
+                            </div>
+
+
+                            <h3>
+                                No Orders Found
+                            </h3>
+
+
+                            <p>
+                                Your order history will appear here
+                                after you place an order.
+                            </p>
+
+
+                            <a
+                                href="index.html"
+                                class="
+                                    orders-shop-btn
+                                "
+                            >
+
+                                View Store
+
+
+                                <i
+                                    class="
+                                        fa-solid
+                                        fa-arrow-right
+                                    "
+                                ></i>
+
+                            </a>
+
+
+                        </div>
+
+
+                    </section>
+
+
+                </div>
+
+
+            </section>
+
+
+
+            <!-- =================================================
+                 ORDER DETAILS MODAL
+            ================================================== -->
+
+            <div
+                class="
+                    order-details-modal
+                "
+                id="orderDetailsModal"
+                aria-hidden="true"
+            >
+
+
+                <!-- OVERLAY -->
+
+                <div
+                    class="
+                        order-details-overlay
+                    "
+                    id="orderDetailsOverlay"
+                ></div>
+
+
+
+                <!-- DIALOG -->
+
+                <div
+                    class="
+                        order-details-dialog
+                    "
+                    role="dialog"
+                    aria-modal="true"
+                    aria-labelledby="
+                        orderDetailsTitle
+                    "
+                >
+
+
+                    <!-- HEADER -->
+
+                    <div
+                        class="
+                            order-details-header
+                        "
+                    >
+
+                        <div>
+
+                            <span>
+                                ORDER DETAILS
+                            </span>
+
+
+                            <h2
+                                id="orderDetailsTitle"
+                            >
+                                Order #—
+                            </h2>
+
+                        </div>
+
+
+                        <button
+                            type="button"
+                            class="
+                                order-details-close
+                            "
+                            id="orderDetailsClose"
+                            aria-label="
+                                Close order details
+                            "
+                        >
+
+                            <i
+                                class="
+                                    fa-solid
+                                    fa-xmark
+                                "
+                            ></i>
+
+                        </button>
+
+                    </div>
+
+
+
+                    <!-- BODY -->
+
+                    <div
+                        class="
+                            order-details-body
+                        "
+                        id="orderDetailsBody"
+                    ></div>
+
+                </div>
+
+            </div>
+
+
+        </main>
 
     </div>
 
@@ -975,76 +1279,358 @@
 
 
 <!-- =========================================================
-     FOOTER
-========================================================= -->
-
-<footer class="footer">
-
-    <div class="container">
-
-        <div class="footer-logo">
-
-            <i
-                class="
-                    fa-solid
-                    fa-bag-shopping
-                "
-            ></i>
-
-
-            Shop<span>
-                Max
-            </span>
-
-        </div>
-
-
-        <p>
-            Your one-stop destination for quality products.
-        </p>
-
-
-        <div class="footer-links">
-
-            <a href="#">
-                About Us
-            </a>
-
-
-            <a href="#">
-                Contact
-            </a>
-
-
-            <a href="#">
-                Privacy Policy
-            </a>
-
-
-            <a href="#">
-                Terms & Conditions
-            </a>
-
-        </div>
-
-
-        <small>
-            © 2026 ShopMax. All rights reserved.
-        </small>
-
-    </div>
-
-</footer>
-
-
-
-<!-- =========================================================
-     JAVASCRIPT
+     ORDERS JS
 ========================================================= -->
 
 <script
     src="assets/js/orders.js"
 ></script>
+
+
+
+<!-- =========================================================
+     ADMIN SIDEBAR CONTROL
+========================================================= -->
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+
+        const layout =
+            document.getElementById(
+                "adminLayout"
+            );
+
+
+        const sidebar =
+            document.getElementById(
+                "adminSidebar"
+            );
+
+
+        const desktopToggle =
+            document.getElementById(
+                "sidebarToggleBtn"
+            );
+
+
+        const mobileToggle =
+            document.getElementById(
+                "mobileSidebarToggle"
+            );
+
+
+        const mobileClose =
+            document.getElementById(
+                "sidebarMobileClose"
+            );
+
+
+        const desktopIcon =
+            desktopToggle?.querySelector(
+                "i"
+            );
+
+
+
+        /* =================================================
+           DESKTOP DEFAULT = OPEN
+        ================================================== */
+
+        function openDesktopSidebar() {
+
+            layout?.classList.remove(
+                "sidebar-collapsed"
+            );
+
+
+            desktopIcon?.classList.remove(
+                "fa-bars"
+            );
+
+
+            desktopIcon?.classList.add(
+                "fa-xmark"
+            );
+
+
+            desktopToggle?.setAttribute(
+                "aria-label",
+                "Close sidebar"
+            );
+
+
+            desktopToggle?.setAttribute(
+                "title",
+                "Close sidebar"
+            );
+
+        }
+
+
+
+        /* =================================================
+           DESKTOP CLOSE
+        ================================================== */
+
+        function closeDesktopSidebar() {
+
+            layout?.classList.add(
+                "sidebar-collapsed"
+            );
+
+
+            desktopIcon?.classList.remove(
+                "fa-xmark"
+            );
+
+
+            desktopIcon?.classList.add(
+                "fa-bars"
+            );
+
+
+            desktopToggle?.setAttribute(
+                "aria-label",
+                "Open sidebar"
+            );
+
+
+            desktopToggle?.setAttribute(
+                "title",
+                "Open sidebar"
+            );
+
+        }
+
+
+
+        /* =================================================
+           DESKTOP BUTTON
+        ================================================== */
+
+        desktopToggle?.addEventListener(
+            "click",
+            function () {
+
+
+                if (
+                    window.innerWidth <=
+                    900
+                ) {
+
+                    return;
+
+                }
+
+
+                const closed =
+                    layout?.classList.contains(
+                        "sidebar-collapsed"
+                    );
+
+
+                if (
+                    closed
+                ) {
+
+                    openDesktopSidebar();
+
+                } else {
+
+                    closeDesktopSidebar();
+
+                }
+
+            }
+        );
+
+
+
+        /* =================================================
+           MOBILE / TABLET OPEN
+        ================================================== */
+
+        mobileToggle?.addEventListener(
+            "click",
+            function () {
+
+
+                if (
+                    window.innerWidth >
+                    900
+                ) {
+
+                    return;
+
+                }
+
+
+                sidebar?.classList.add(
+                    "open"
+                );
+
+            }
+        );
+
+
+
+        /* =================================================
+           MOBILE / TABLET CLOSE
+        ================================================== */
+
+        mobileClose?.addEventListener(
+            "click",
+            function () {
+
+
+                if (
+                    window.innerWidth >
+                    900
+                ) {
+
+                    return;
+
+                }
+
+
+                sidebar?.classList.remove(
+                    "open"
+                );
+
+            }
+        );
+
+
+
+        /* =================================================
+           CLOSE AFTER NAVIGATION
+        ================================================== */
+
+        document
+            .querySelectorAll(
+                ".admin-nav-link"
+            )
+            .forEach(
+                link => {
+
+                    link.addEventListener(
+                        "click",
+                        function () {
+
+
+                            if (
+                                window.innerWidth <=
+                                900
+                            ) {
+
+                                sidebar?.classList.remove(
+                                    "open"
+                                );
+
+                            }
+
+                        }
+                    );
+
+                }
+            );
+
+
+
+        /* =================================================
+           INITIAL STATE
+        ================================================== */
+
+        if (
+            window.innerWidth > 900
+        ) {
+
+            openDesktopSidebar();
+
+        } else {
+
+            layout?.classList.remove(
+                "sidebar-collapsed"
+            );
+
+            sidebar?.classList.remove(
+                "open"
+            );
+
+        }
+
+
+
+        /* =================================================
+           RESIZE
+        ================================================== */
+
+        window.addEventListener(
+            "resize",
+            function () {
+
+
+                if (
+                    window.innerWidth <=
+                    900
+                ) {
+
+                    layout?.classList.remove(
+                        "sidebar-collapsed"
+                    );
+
+
+                    sidebar?.classList.remove(
+                        "open"
+                    );
+
+                } else {
+
+                    sidebar?.classList.remove(
+                        "open"
+                    );
+
+
+                    /*
+                       On desktop preserve current
+                       collapse state.
+                    */
+
+                    if (
+                        layout?.classList.contains(
+                            "sidebar-collapsed"
+                        )
+                    ) {
+
+                        desktopIcon?.classList.remove(
+                            "fa-xmark"
+                        );
+
+
+                        desktopIcon?.classList.add(
+                            "fa-bars"
+                        );
+
+                    } else {
+
+                        openDesktopSidebar();
+
+                    }
+
+                }
+
+            }
+        );
+
+
+    }
+);
+
+</script>
 
 
 </body>

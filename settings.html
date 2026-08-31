@@ -1,0 +1,1890 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="ShopMax administrator settings"
+    >
+
+    <title>
+        Settings | ShopMax Admin
+    </title>
+
+
+    <!-- =====================================================
+         FONT AWESOME
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="assets/fontawesome/fontCss/all.min.css"
+    >
+
+
+    <!-- =====================================================
+         GLOBAL ADMIN CSS
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="assets/css/admin.css"
+    >
+
+
+    <!-- =====================================================
+         SETTINGS CSS
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="assets/css/settings.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<div
+    class="admin-layout"
+    id="adminLayout"
+>
+
+
+    <!-- =====================================================
+         SIDEBAR
+         SAME ADMIN SHELL AS PRODUCTS
+    ====================================================== -->
+
+    <aside
+        class="admin-sidebar"
+        id="adminSidebar"
+    >
+
+        <div class="sidebar-brand">
+
+            <a
+                href="admin.html"
+                class="admin-logo"
+            >
+
+                <span class="logo-icon">
+
+                    <i class="fa-solid fa-bag-shopping"></i>
+
+                </span>
+
+                <span style="display:flex;">
+
+                    Shop<span>Max</span>
+
+                </span>
+
+            </a>
+
+
+            <button
+                type="button"
+                class="sidebar-mobile-close"
+                id="sidebarMobileClose"
+                aria-label="Close sidebar"
+            >
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+
+            <span class="admin-label">
+
+                ADMIN
+
+            </span>
+
+        </div>
+
+
+        <nav class="admin-nav">
+
+
+            <div class="nav-section-title">
+                MANAGEMENT
+            </div>
+
+
+            <a
+                href="admin.html"
+                class="admin-nav-link"
+            >
+
+                <i class="fa-solid fa-grid-2"></i>
+
+                <span>Dashboard</span>
+
+            </a>
+
+
+            <a
+                href="orders.html"
+                class="admin-nav-link"
+            >
+
+                <i class="fa-solid fa-bag-shopping"></i>
+
+                <span>Orders</span>
+
+            </a>
+
+
+            <a
+                href="archivedOrders.html"
+                class="admin-nav-link"
+            >
+
+                <i class="fa-solid fa-box-archive"></i>
+
+                <span>Archived Orders</span>
+
+            </a>
+
+
+            <a
+                href="customers.html"
+                class="admin-nav-link"
+            >
+
+                <i class="fa-solid fa-users"></i>
+
+                <span>Customers</span>
+
+            </a>
+
+
+            <a
+                href="archivedCustomers.html"
+                class="admin-nav-link"
+            >
+
+                <i class="fa-solid fa-user-clock"></i>
+
+                <span>Archived Customers</span>
+
+            </a>
+
+
+            <a
+                href="products.html"
+                class="admin-nav-link"
+            >
+
+                <i class="fa-solid fa-boxes-stacked"></i>
+
+                <span>Products</span>
+
+            </a>
+
+
+            <a
+                href="archivedProducts.html"
+                class="admin-nav-link"
+            >
+
+                <i class="fa-solid fa-box-archive"></i>
+
+                <span>Archived Products</span>
+
+            </a>
+
+
+            <div class="nav-section-title second">
+                SYSTEM
+            </div>
+
+
+            <a
+                href="index.html"
+                class="admin-nav-link public-link"
+            >
+
+                <i class="fa-solid fa-globe"></i>
+
+                <span>View Store</span>
+
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+
+            </a>
+
+
+            <a
+                href="settings.html"
+                class="admin-nav-link active"
+            >
+
+                <i class="fa-solid fa-gear"></i>
+
+                <span>Settings</span>
+
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-footer">
+
+            <div class="admin-user">
+
+                <div class="admin-avatar">
+                    A
+                </div>
+
+                <div>
+
+                    <strong>
+                        Administrator
+                    </strong>
+
+                    <span>
+                        ShopMax Admin
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =====================================================
+         SIDEBAR TOGGLE
+    ====================================================== -->
+
+    <button
+        type="button"
+        class="sidebar-toggle-control"
+        id="sidebarToggleBtn"
+        aria-label="Toggle sidebar"
+    >
+
+        <i class="fa-solid fa-xmark"></i>
+
+    </button>
+
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
+    <div class="admin-main">
+
+
+        <!-- =================================================
+             TOPBAR
+        ================================================== -->
+
+        <header class="admin-topbar">
+
+            <div class="topbar-left">
+
+                <button
+                    type="button"
+                    id="mobileSidebarToggle"
+                    class="sidebar-toggle"
+                    aria-label="Open sidebar"
+                >
+
+                    <i class="fa-solid fa-bars"></i>
+
+                </button>
+
+
+                <div>
+
+                    <span class="topbar-label">
+                        ADMIN PANEL
+                    </span>
+
+                    <strong>
+                        Settings
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="topbar-right">
+
+                <a
+                    href="index.html"
+                    class="store-btn"
+                >
+
+                    <i class="fa-solid fa-store"></i>
+
+                    View Store
+
+                </a>
+
+            </div>
+
+        </header>
+
+
+        <!-- =================================================
+             PAGE CONTENT
+        ================================================== -->
+
+        <main class="settings-admin-content">
+
+            <div class="settings-page-container">
+
+
+                <!-- BREADCRUMB -->
+
+                <div class="breadcrumb">
+
+                    <a href="admin.html">
+                        Dashboard
+                    </a>
+
+                    <i class="fa-solid fa-chevron-right"></i>
+
+                    <span>
+                        Settings
+                    </span>
+
+                </div>
+
+
+                <!-- PAGE HEADER -->
+
+                <section class="page-heading">
+
+                    <span class="eyebrow">
+                        SHOPMAX ADMIN SETTINGS
+                    </span>
+
+                    <h1>
+                        Settings
+                    </h1>
+
+                    <p>
+                        Manage your store preferences and administrator settings from one place.
+                    </p>
+
+                </section>
+
+
+
+                <!-- =================================================
+                     GENERAL SETTINGS
+                ================================================== -->
+
+                <section class="settings-card">
+
+
+                    <div class="settings-card-header">
+
+                        <div>
+
+                            <span class="section-eyebrow">
+                                GENERAL SETTINGS
+                            </span>
+
+                            <h2>
+                                Store Settings
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="settings-grid">
+
+
+                        <div class="setting-item">
+
+                            <label for="storeName">
+                                Store Name
+                            </label>
+
+                            <input
+                                type="text"
+                                id="storeName"
+                                placeholder="ShopMax"
+                            >
+
+                            <small>
+                                The name displayed across your store.
+                            </small>
+
+                        </div>
+
+
+                        <div class="setting-item">
+
+                            <label for="storeEmail">
+                                Store Email
+                            </label>
+
+                            <input
+                                type="email"
+                                id="storeEmail"
+                                placeholder="admin@shopmax.com"
+                            >
+
+                            <small>
+                                Your primary store contact email.
+                            </small>
+
+                        </div>
+
+
+                        <div class="setting-item">
+
+                            <label for="storePhone">
+                                Store Phone
+                            </label>
+
+                            <input
+                                type="tel"
+                                id="storePhone"
+                                placeholder="+880 1XXX-XXXXXX"
+                            >
+
+                            <small>
+                                Customer support contact number.
+                            </small>
+
+                        </div>
+
+
+                        <div class="setting-item">
+
+                            <label for="storeAddress">
+                                Store Address
+                            </label>
+
+                            <input
+                                type="text"
+                                id="storeAddress"
+                                placeholder="Dhaka, Bangladesh"
+                            >
+
+                            <small>
+                                Your business or store location.
+                            </small>
+
+                        </div>
+
+
+                        <div class="setting-item">
+
+                            <label for="currency">
+                                Currency
+                            </label>
+
+                            <select id="currency">
+
+                                <option value="USD">
+                                    USD — US Dollar
+                                </option>
+
+                                <option value="BDT">
+                                    BDT — Bangladeshi Taka
+                                </option>
+
+                                <option value="EUR">
+                                    EUR — Euro
+                                </option>
+
+                                <option value="GBP">
+                                    GBP — British Pound
+                                </option>
+
+                            </select>
+
+                            <small>
+                                Default currency used for product prices.
+                            </small>
+
+                        </div>
+
+
+                        <div class="setting-item">
+
+                            <label for="language">
+                                Language
+                            </label>
+
+                            <select id="language">
+
+                                <option value="en">
+                                    English
+                                </option>
+
+                                <option value="bn">
+                                    বাংলা
+                                </option>
+
+                            </select>
+
+                            <small>
+                                Select your preferred admin language.
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="settings-actions">
+
+                        <button
+                            type="button"
+                            id="resetSettings"
+                            class="settings-btn secondary"
+                        >
+                            Cancel
+                        </button>
+
+                        <button
+                            type="button"
+                            id="saveSettings"
+                            class="settings-btn primary"
+                        >
+
+                            <i class="fa-solid fa-check"></i>
+
+                            Save Changes
+
+                        </button>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- =================================================
+                     ADMINISTRATOR ACCOUNT
+                ================================================== -->
+
+                <section class="settings-card">
+
+
+                    <div class="settings-card-header">
+
+                        <div>
+
+                            <span class="section-eyebrow">
+                                ACCOUNT
+                            </span>
+
+                            <h2>
+                                Administrator Account
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="account-box">
+
+
+                        <div
+                            class="account-avatar"
+                            id="accountAvatar"
+                        >
+                            A
+                        </div>
+
+
+                        <div class="account-info">
+
+                            <strong id="adminName">
+                                Administrator
+                            </strong>
+
+                            <span id="adminEmail">
+                                ShopMax Admin
+                            </span>
+
+                        </div>
+
+
+                        <button
+                            type="button"
+                            class="account-edit-btn"
+                            id="editProfileBtn"
+                        >
+
+                            <i class="fa-solid fa-pen"></i>
+
+                            Edit Profile
+
+                        </button>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- =================================================
+                     STORE AVAILABILITY
+                ================================================== -->
+
+                <section class="settings-card">
+
+
+                    <div class="settings-card-header">
+
+                        <div>
+
+                            <span class="section-eyebrow">
+                                STORE STATUS
+                            </span>
+
+                            <h2>
+                                Store Availability
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="status-setting">
+
+
+                        <div class="status-content">
+
+                            <div class="status-icon">
+
+                                <i class="fa-solid fa-store"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <strong id="storeStatusTitle">
+                                    Store is open
+                                </strong>
+
+                                <span id="storeStatusDescription">
+                                    Customers can currently browse and purchase products.
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <label class="switch">
+
+                            <input
+                                type="checkbox"
+                                id="storeStatus"
+                                checked
+                            >
+
+                            <span class="slider"></span>
+
+                        </label>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- =================================================
+                     ORDER SETTINGS
+                ================================================== -->
+
+                <section class="settings-card">
+
+
+                    <div class="settings-card-header">
+
+                        <div>
+
+                            <span class="section-eyebrow">
+                                ORDERS
+                            </span>
+
+                            <h2>
+                                Order Settings
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="settings-grid">
+
+
+                        <div class="setting-item">
+
+                            <label for="orderConfirmation">
+                                Order Confirmation
+                            </label>
+
+                            <select id="orderConfirmation">
+
+                                <option value="automatic">
+                                    Automatic
+                                </option>
+
+                                <option value="manual">
+                                    Manual
+                                </option>
+
+                            </select>
+
+                            <small>
+                                Choose how new orders are confirmed.
+                            </small>
+
+                        </div>
+
+
+                        <div class="setting-item">
+
+                            <label for="minimumOrder">
+                                Minimum Order Amount
+                            </label>
+
+                            <input
+                                type="number"
+                                id="minimumOrder"
+                                min="0"
+                                step="0.01"
+                                placeholder="0.00"
+                            >
+
+                            <small>
+                                Set 0 to allow orders of any amount.
+                            </small>
+
+                        </div>
+
+
+                        <div class="setting-item">
+
+                            <label for="guestCheckout">
+                                Guest Checkout
+                            </label>
+
+                            <select id="guestCheckout">
+
+                                <option value="allowed">
+                                    Allowed
+                                </option>
+
+                                <option value="disabled">
+                                    Disabled
+                                </option>
+
+                            </select>
+
+                            <small>
+                                Allow customers to order without an account.
+                            </small>
+
+                        </div>
+
+
+                        <div class="setting-item">
+
+                            <label for="orderCancellation">
+                                Order Cancellation
+                            </label>
+
+                            <select id="orderCancellation">
+
+                                <option value="allowed">
+                                    Allowed
+                                </option>
+
+                                <option value="disabled">
+                                    Disabled
+                                </option>
+
+                            </select>
+
+                            <small>
+                                Allow customers to cancel eligible orders.
+                            </small>
+
+                        </div>
+
+
+                        <div class="setting-item">
+
+                            <label for="cancellationLimit">
+                                Cancellation Time Limit
+                            </label>
+
+                            <select id="cancellationLimit">
+
+                                <option value="15">
+                                    15 minutes
+                                </option>
+
+                                <option value="30">
+                                    30 minutes
+                                </option>
+
+                                <option value="60">
+                                    1 hour
+                                </option>
+
+                                <option value="120">
+                                    2 hours
+                                </option>
+
+                                <option value="0">
+                                    No limit
+                                </option>
+
+                            </select>
+
+                            <small>
+                                Time customers have to cancel an order.
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- =================================================
+                     PRODUCT SETTINGS
+                ================================================== -->
+
+                <section class="settings-card">
+
+
+                    <div class="settings-card-header">
+
+                        <div>
+
+                            <span class="section-eyebrow">
+                                PRODUCTS
+                            </span>
+
+                            <h2>
+                                Product Settings
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="settings-grid">
+
+
+                        <div class="setting-item">
+
+                            <label for="lowStockThreshold">
+                                Low Stock Threshold
+                            </label>
+
+                            <input
+                                type="number"
+                                id="lowStockThreshold"
+                                min="0"
+                                step="1"
+                            >
+
+                            <small>
+                                Products at or below this number are low stock.
+                            </small>
+
+                        </div>
+
+
+                        <div class="setting-item">
+
+                            <label for="productsPerPage">
+                                Products Per Page
+                            </label>
+
+                            <select id="productsPerPage">
+
+                                <option value="10">
+                                    10
+                                </option>
+
+                                <option value="20">
+                                    20
+                                </option>
+
+                                <option value="30">
+                                    30
+                                </option>
+
+                                <option value="50">
+                                    50
+                                </option>
+
+                            </select>
+
+                            <small>
+                                Number of products shown in the directory.
+                            </small>
+
+                        </div>
+
+
+                        <div class="setting-item">
+
+                            <label for="outOfStockPurchase">
+                                Out-of-Stock Purchase
+                            </label>
+
+                            <select id="outOfStockPurchase">
+
+                                <option value="disabled">
+                                    Disabled
+                                </option>
+
+                                <option value="allowed">
+                                    Allowed
+                                </option>
+
+                            </select>
+
+                            <small>
+                                Allow customers to purchase unavailable products.
+                            </small>
+
+                        </div>
+
+
+                        <div class="setting-item">
+
+                            <label for="showSku">
+                                Product SKU
+                            </label>
+
+                            <select id="showSku">
+
+                                <option value="visible">
+                                    Visible
+                                </option>
+
+                                <option value="hidden">
+                                    Hidden
+                                </option>
+
+                            </select>
+
+                            <small>
+                                Show product SKU on customer-facing pages.
+                            </small>
+
+                        </div>
+
+
+                        <div class="setting-item">
+
+                            <label for="showStock">
+                                Product Stock
+                            </label>
+
+                            <select id="showStock">
+
+                                <option value="visible">
+                                    Visible
+                                </option>
+
+                                <option value="hidden">
+                                    Hidden
+                                </option>
+
+                            </select>
+
+                            <small>
+                                Show available stock information.
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- =================================================
+                     CUSTOMER SETTINGS
+                ================================================== -->
+
+                <section class="settings-card">
+
+
+                    <div class="settings-card-header">
+
+                        <div>
+
+                            <span class="section-eyebrow">
+                                CUSTOMERS
+                            </span>
+
+                            <h2>
+                                Customer Settings
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="settings-grid">
+
+
+                        <div class="setting-item">
+
+                            <label for="customerRegistration">
+                                Customer Registration
+                            </label>
+
+                            <select id="customerRegistration">
+
+                                <option value="allowed">
+                                    Allowed
+                                </option>
+
+                                <option value="disabled">
+                                    Disabled
+                                </option>
+
+                            </select>
+
+                            <small>
+                                Allow new customers to create accounts.
+                            </small>
+
+                        </div>
+
+
+                        <div class="setting-item">
+
+                            <label for="emailVerification">
+                                Email Verification
+                            </label>
+
+                            <select id="emailVerification">
+
+                                <option value="required">
+                                    Required
+                                </option>
+
+                                <option value="optional">
+                                    Optional
+                                </option>
+
+                            </select>
+
+                            <small>
+                                Require customers to verify their email.
+                            </small>
+
+                        </div>
+
+
+                        <div class="setting-item">
+
+                            <label for="customerApproval">
+                                Account Approval
+                            </label>
+
+                            <select id="customerApproval">
+
+                                <option value="automatic">
+                                    Automatic
+                                </option>
+
+                                <option value="manual">
+                                    Manual
+                                </option>
+
+                            </select>
+
+                            <small>
+                                Choose how new customer accounts are approved.
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- =================================================
+                     NOTIFICATIONS
+                ================================================== -->
+
+                <section class="settings-card">
+
+
+                    <div class="settings-card-header">
+
+                        <div>
+
+                            <span class="section-eyebrow">
+                                NOTIFICATIONS
+                            </span>
+
+                            <h2>
+                                Notification Settings
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="settings-options">
+
+
+                        <div class="option-row">
+
+                            <div class="option-content">
+
+                                <div class="option-icon">
+
+                                    <i class="fa-solid fa-bag-shopping"></i>
+
+                                </div>
+
+                                <div>
+
+                                    <strong>
+                                        New Order Notifications
+                                    </strong>
+
+                                    <span>
+                                        Receive an alert when a new order is placed.
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <label class="switch">
+
+                                <input
+                                    type="checkbox"
+                                    id="notifyOrders"
+                                    checked
+                                >
+
+                                <span class="slider"></span>
+
+                            </label>
+
+                        </div>
+
+
+                        <div class="option-row">
+
+                            <div class="option-content">
+
+                                <div class="option-icon">
+
+                                    <i class="fa-solid fa-user-plus"></i>
+
+                                </div>
+
+                                <div>
+
+                                    <strong>
+                                        New Customer Notifications
+                                    </strong>
+
+                                    <span>
+                                        Receive an alert when a customer registers.
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <label class="switch">
+
+                                <input
+                                    type="checkbox"
+                                    id="notifyCustomers"
+                                    checked
+                                >
+
+                                <span class="slider"></span>
+
+                            </label>
+
+                        </div>
+
+
+                        <div class="option-row">
+
+                            <div class="option-content">
+
+                                <div class="option-icon">
+
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+
+                                </div>
+
+                                <div>
+
+                                    <strong>
+                                        Low Stock Notifications
+                                    </strong>
+
+                                    <span>
+                                        Get notified when products reach low stock.
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <label class="switch">
+
+                                <input
+                                    type="checkbox"
+                                    id="notifyLowStock"
+                                    checked
+                                >
+
+                                <span class="slider"></span>
+
+                            </label>
+
+                        </div>
+
+
+                        <div class="option-row">
+
+                            <div class="option-content">
+
+                                <div class="option-icon">
+
+                                    <i class="fa-solid fa-envelope"></i>
+
+                                </div>
+
+                                <div>
+
+                                    <strong>
+                                        Email Notifications
+                                    </strong>
+
+                                    <span>
+                                        Enable email-based store notifications.
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <label class="switch">
+
+                                <input
+                                    type="checkbox"
+                                    id="emailNotifications"
+                                    checked
+                                >
+
+                                <span class="slider"></span>
+
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- =================================================
+                     STOREFRONT
+                ================================================== -->
+
+                <section class="settings-card">
+
+
+                    <div class="settings-card-header">
+
+                        <div>
+
+                            <span class="section-eyebrow">
+                                STOREFRONT
+                            </span>
+
+                            <h2>
+                                Storefront Settings
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="settings-grid">
+
+
+                        <div class="setting-item">
+
+                            <label for="homepageTitle">
+                                Homepage Title
+                            </label>
+
+                            <input
+                                type="text"
+                                id="homepageTitle"
+                                placeholder="ShopMax - Online Store"
+                            >
+
+                            <small>
+                                Browser title displayed on the storefront.
+                            </small>
+
+                        </div>
+
+
+                        <div class="setting-item">
+
+                            <label for="homepageDescription">
+                                Homepage Description
+                            </label>
+
+                            <input
+                                type="text"
+                                id="homepageDescription"
+                                placeholder="Shop quality products at ShopMax."
+                            >
+
+                            <small>
+                                Short description for your storefront.
+                            </small>
+
+                        </div>
+
+
+                        <div class="setting-item">
+
+                            <label for="featuredProducts">
+                                Featured Products
+                            </label>
+
+                            <select id="featuredProducts">
+
+                                <option value="enabled">
+                                    Enabled
+                                </option>
+
+                                <option value="disabled">
+                                    Disabled
+                                </option>
+
+                            </select>
+
+                            <small>
+                                Display featured products on the homepage.
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- =================================================
+                     SECURITY
+                ================================================== -->
+
+                <section class="settings-card">
+
+
+                    <div class="settings-card-header">
+
+                        <div>
+
+                            <span class="section-eyebrow">
+                                SECURITY
+                            </span>
+
+                            <h2>
+                                Security Settings
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="settings-grid">
+
+
+                        <div class="setting-item">
+
+                            <label for="sessionTimeout">
+                                Session Timeout
+                            </label>
+
+                            <select id="sessionTimeout">
+
+                                <option value="30">
+                                    30 minutes
+                                </option>
+
+                                <option value="60">
+                                    1 hour
+                                </option>
+
+                                <option value="120">
+                                    2 hours
+                                </option>
+
+                                <option value="480">
+                                    8 hours
+                                </option>
+
+                            </select>
+
+                            <small>
+                                Automatically expire inactive admin sessions.
+                            </small>
+
+                        </div>
+
+
+                        <div class="setting-item">
+
+                            <label>
+                                Password
+                            </label>
+
+                            <button
+                                type="button"
+                                class="security-action-btn"
+                                id="changePasswordBtn"
+                            >
+
+                                <i class="fa-solid fa-key"></i>
+
+                                Change Password
+
+                            </button>
+
+                            <small>
+                                Update your administrator password.
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- =================================================
+                     DANGER ZONE
+                ================================================== -->
+
+                <section
+                    class="
+                        settings-card
+                        danger-zone
+                    "
+                >
+
+
+                    <div class="settings-card-header">
+
+                        <div>
+
+                            <span class="section-eyebrow">
+                                DANGER ZONE
+                            </span>
+
+                            <h2>
+                                Store Data
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="danger-row">
+
+
+                        <div>
+
+                            <strong>
+                                Reset Settings
+                            </strong>
+
+                            <span>
+                                Restore all settings to their default values.
+                            </span>
+
+                        </div>
+
+
+                        <button
+                            type="button"
+                            class="danger-btn"
+                            id="dangerResetBtn"
+                        >
+
+                            <i class="fa-solid fa-rotate-left"></i>
+
+                            Reset Settings
+
+                        </button>
+
+                    </div>
+
+
+                    <div class="danger-row">
+
+
+                        <div>
+
+                            <strong>
+                                Clear Settings Data
+                            </strong>
+
+                            <span>
+                                Remove saved ShopMax settings from this browser.
+                            </span>
+
+                        </div>
+
+
+                        <button
+                            type="button"
+                            class="danger-btn"
+                            id="clearSettingsBtn"
+                        >
+
+                            <i class="fa-solid fa-trash"></i>
+
+                            Clear Data
+
+                        </button>
+
+                    </div>
+
+                </section>
+
+
+            </div>
+
+        </main>
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     MOBILE OVERLAY
+====================================================== -->
+
+<div
+    class="sidebar-overlay"
+    id="sidebarOverlay"
+></div>
+
+
+
+<!-- =====================================================
+     PROFILE MODAL
+====================================================== -->
+
+<div
+    class="settings-modal"
+    id="profileModal"
+    aria-hidden="true"
+>
+
+    <div class="settings-modal-box">
+
+
+        <div class="modal-header">
+
+            <div>
+
+                <span class="section-eyebrow">
+                    ACCOUNT
+                </span>
+
+                <h3>
+                    Edit Profile
+                </h3>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="modal-close"
+                data-close-modal="profileModal"
+            >
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+        </div>
+
+
+        <div class="modal-body">
+
+
+            <div class="modal-field">
+
+                <label for="profileName">
+                    Full Name
+                </label>
+
+                <input
+                    type="text"
+                    id="profileName"
+                    value="Administrator"
+                >
+
+            </div>
+
+
+            <div class="modal-field">
+
+                <label for="profileEmail">
+                    Email
+                </label>
+
+                <input
+                    type="email"
+                    id="profileEmail"
+                    value="admin@shopmax.com"
+                >
+
+            </div>
+
+        </div>
+
+
+        <div class="modal-actions">
+
+            <button
+                type="button"
+                class="settings-btn secondary"
+                data-close-modal="profileModal"
+            >
+                Cancel
+            </button>
+
+
+            <button
+                type="button"
+                class="settings-btn primary"
+                id="saveProfile"
+            >
+
+                <i class="fa-solid fa-check"></i>
+
+                Save Profile
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     PASSWORD MODAL
+====================================================== -->
+
+<div
+    class="settings-modal"
+    id="passwordModal"
+    aria-hidden="true"
+>
+
+    <div class="settings-modal-box">
+
+
+        <div class="modal-header">
+
+            <div>
+
+                <span class="section-eyebrow">
+                    SECURITY
+                </span>
+
+                <h3>
+                    Change Password
+                </h3>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="modal-close"
+                data-close-modal="passwordModal"
+            >
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+        </div>
+
+
+        <div class="modal-body">
+
+
+            <div class="modal-field">
+
+                <label for="currentPassword">
+                    Current Password
+                </label>
+
+                <input
+                    type="password"
+                    id="currentPassword"
+                    autocomplete="current-password"
+                >
+
+            </div>
+
+
+            <div class="modal-field">
+
+                <label for="newPassword">
+                    New Password
+                </label>
+
+                <input
+                    type="password"
+                    id="newPassword"
+                    autocomplete="new-password"
+                >
+
+            </div>
+
+
+            <div class="modal-field">
+
+                <label for="confirmPassword">
+                    Confirm New Password
+                </label>
+
+                <input
+                    type="password"
+                    id="confirmPassword"
+                    autocomplete="new-password"
+                >
+
+            </div>
+
+        </div>
+
+
+        <div class="modal-actions">
+
+            <button
+                type="button"
+                class="settings-btn secondary"
+                data-close-modal="passwordModal"
+            >
+                Cancel
+            </button>
+
+
+            <button
+                type="button"
+                class="settings-btn primary"
+                id="savePassword"
+            >
+
+                <i class="fa-solid fa-check"></i>
+
+                Update Password
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     TOAST
+====================================================== -->
+
+<div
+    id="settingsToast"
+    class="settings-toast"
+    role="status"
+    aria-live="polite"
+></div>
+
+
+
+<script
+    src="assets/js/settings.js"
+></script>
+
+
+</body>
+
+</html>

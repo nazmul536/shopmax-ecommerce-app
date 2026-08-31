@@ -2,15 +2,6 @@
 
 /* =========================================================
    SHOPMAX - ARCHIVED CUSTOMERS
-   =========================================================
-
-   PURPOSE:
-   - Read archived customer snapshots
-   - Display archived customers
-   - Show customer details
-   - Restore customer
-   - Auto-sync when localStorage changes
-
 ========================================================= */
 
 
@@ -41,14 +32,36 @@ let lastStorageSnapshot = "";
 
 
 /* =========================================================
-   DOM - STATS
+   ADMIN SIDEBAR DOM
+========================================================= */
+
+const adminLayout =
+    document.getElementById("adminLayout");
+
+const adminSidebar =
+    document.getElementById("adminSidebar");
+
+const sidebarToggleBtn =
+    document.getElementById("sidebarToggleBtn");
+
+const sidebarMobileClose =
+    document.getElementById("sidebarMobileClose");
+
+const mobileSidebarToggle =
+    document.getElementById("mobileSidebarToggle");
+
+const adminPageRefresh =
+    document.getElementById("adminPageRefresh");
+
+
+/* =========================================================
+   STATS DOM
 ========================================================= */
 
 const archivedCustomerCount =
     document.getElementById(
         "archivedCustomerCount"
     );
-
 
 const archivedCustomerOrders =
     document.getElementById(
@@ -57,7 +70,7 @@ const archivedCustomerOrders =
 
 
 /* =========================================================
-   DOM - SEARCH / TABLE
+   SEARCH / TABLE DOM
 ========================================================= */
 
 const archivedCustomerSearch =
@@ -65,24 +78,20 @@ const archivedCustomerSearch =
         "archivedCustomerSearch"
     );
 
-
 const archivedCustomersBody =
     document.getElementById(
         "archivedCustomersBody"
     );
-
 
 const archivedCustomersMobile =
     document.getElementById(
         "archivedCustomersMobile"
     );
 
-
 const archivedCustomersEmpty =
     document.getElementById(
         "archivedCustomersEmpty"
     );
-
 
 const refreshArchivedCustomers =
     document.getElementById(
@@ -91,7 +100,7 @@ const refreshArchivedCustomers =
 
 
 /* =========================================================
-   DOM - DETAILS MODAL
+   DETAILS MODAL DOM
 ========================================================= */
 
 const archivedCustomerDetailsModal =
@@ -99,24 +108,20 @@ const archivedCustomerDetailsModal =
         "archivedCustomerDetailsModal"
     );
 
-
 const archivedDetailsOverlay =
     document.getElementById(
         "archivedDetailsOverlay"
     );
-
 
 const archivedDetailsClose =
     document.getElementById(
         "archivedDetailsClose"
     );
 
-
 const archivedDetailsTitle =
     document.getElementById(
         "archivedDetailsTitle"
     );
-
 
 const archivedDetailsBody =
     document.getElementById(
@@ -125,7 +130,7 @@ const archivedDetailsBody =
 
 
 /* =========================================================
-   DOM - RESTORE MODAL
+   RESTORE MODAL DOM
 ========================================================= */
 
 const restoreCustomerModal =
@@ -133,12 +138,10 @@ const restoreCustomerModal =
         "restoreCustomerModal"
     );
 
-
 const restoreCustomerMessage =
     document.getElementById(
         "restoreCustomerMessage"
     );
-
 
 const confirmRestoreCustomer =
     document.getElementById(
@@ -168,7 +171,379 @@ function initArchivedCustomers() {
 
     setupEvents();
 
+    initializeAdminSidebar();
+
     saveStorageSnapshot();
+
+}
+
+
+/* =========================================================
+   ADMIN SIDEBAR
+========================================================= */
+
+function initializeAdminSidebar() {
+
+    if (
+        !adminLayout ||
+        !adminSidebar
+    ) {
+
+        return;
+
+    }
+
+
+    /*
+       Desktop starts open.
+    */
+
+    if (
+        window.innerWidth > 900
+    ) {
+
+        openAdminDesktopSidebar();
+
+    }
+
+
+    /*
+       Mobile / Tablet starts closed.
+    */
+
+    if (
+        window.innerWidth <= 900
+    ) {
+
+        adminSidebar.classList.remove(
+            "open"
+        );
+
+    }
+
+
+    /*
+       Desktop close/open button
+    */
+
+    sidebarToggleBtn?.addEventListener(
+        "click",
+        function () {
+
+            if (
+                window.innerWidth <= 900
+            ) {
+
+                return;
+
+            }
+
+
+            const isClosed =
+                adminLayout.classList.contains(
+                    "sidebar-collapsed"
+                );
+
+
+            if (
+                isClosed
+            ) {
+
+                openAdminDesktopSidebar();
+
+            } else {
+
+                closeAdminDesktopSidebar();
+
+            }
+
+        }
+    );
+
+
+    /*
+       Mobile open
+    */
+
+    mobileSidebarToggle?.addEventListener(
+        "click",
+        function () {
+
+            if (
+                window.innerWidth > 900
+            ) {
+
+                return;
+
+            }
+
+
+            adminSidebar.classList.add(
+                "open"
+            );
+
+        }
+    );
+
+
+    /*
+       Mobile close
+    */
+
+    sidebarMobileClose?.addEventListener(
+        "click",
+        function () {
+
+            if (
+                window.innerWidth > 900
+            ) {
+
+                return;
+
+            }
+
+
+            adminSidebar.classList.remove(
+                "open"
+            );
+
+        }
+    );
+
+
+    /*
+       Close after navigation
+    */
+
+    document
+        .querySelectorAll(
+            ".admin-nav-link"
+        )
+        .forEach(
+            link => {
+
+                link.addEventListener(
+                    "click",
+                    function () {
+
+                        if (
+                            window.innerWidth <=
+                            900
+                        ) {
+
+                            adminSidebar.classList.remove(
+                                "open"
+                            );
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+
+
+    /*
+       Resize
+    */
+
+    window.addEventListener(
+        "resize",
+        handleAdminSidebarResize
+    );
+
+}
+
+
+/* =========================================================
+   OPEN DESKTOP SIDEBAR
+========================================================= */
+
+function openAdminDesktopSidebar() {
+
+    if (
+        !adminLayout
+    ) {
+
+        return;
+
+    }
+
+
+    adminLayout.classList.remove(
+        "sidebar-collapsed"
+    );
+
+
+    updateAdminDesktopToggle(
+        false
+    );
+
+}
+
+
+/* =========================================================
+   CLOSE DESKTOP SIDEBAR
+========================================================= */
+
+function closeAdminDesktopSidebar() {
+
+    if (
+        !adminLayout
+    ) {
+
+        return;
+
+    }
+
+
+    adminLayout.classList.add(
+        "sidebar-collapsed"
+    );
+
+
+    updateAdminDesktopToggle(
+        true
+    );
+
+}
+
+
+/* =========================================================
+   DESKTOP TOGGLE ICON
+========================================================= */
+
+function updateAdminDesktopToggle(
+    closed
+) {
+
+    if (
+        !sidebarToggleBtn
+    ) {
+
+        return;
+
+    }
+
+
+    const icon =
+        sidebarToggleBtn.querySelector(
+            "i"
+        );
+
+
+    if (
+        !icon
+    ) {
+
+        return;
+
+    }
+
+
+    if (
+        closed
+    ) {
+
+        icon.classList.remove(
+            "fa-xmark"
+        );
+
+        icon.classList.add(
+            "fa-bars"
+        );
+
+        sidebarToggleBtn.setAttribute(
+            "aria-label",
+            "Open sidebar"
+        );
+
+        sidebarToggleBtn.setAttribute(
+            "title",
+            "Open sidebar"
+        );
+
+    } else {
+
+        icon.classList.remove(
+            "fa-bars"
+        );
+
+        icon.classList.add(
+            "fa-xmark"
+        );
+
+        sidebarToggleBtn.setAttribute(
+            "aria-label",
+            "Close sidebar"
+        );
+
+        sidebarToggleBtn.setAttribute(
+            "title",
+            "Close sidebar"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   SIDEBAR RESIZE
+========================================================= */
+
+function handleAdminSidebarResize() {
+
+    if (
+        !adminLayout ||
+        !adminSidebar
+    ) {
+
+        return;
+
+    }
+
+
+    /*
+       Mobile / Tablet
+    */
+
+    if (
+        window.innerWidth <= 900
+    ) {
+
+        adminLayout.classList.remove(
+            "sidebar-collapsed"
+        );
+
+        adminSidebar.classList.remove(
+            "open"
+        );
+
+        return;
+
+    }
+
+
+    /*
+       Desktop
+    */
+
+    adminSidebar.classList.remove(
+        "open"
+    );
+
+
+    const closed =
+        adminLayout.classList.contains(
+            "sidebar-collapsed"
+        );
+
+
+    updateAdminDesktopToggle(
+        closed
+    );
 
 }
 
@@ -184,7 +559,6 @@ function loadData() {
             ARCHIVED_CUSTOMERS_KEY
         );
 
-
     orders =
         readArray(
             ORDERS_KEY
@@ -194,7 +568,7 @@ function loadData() {
 
 
 /* =========================================================
-   BUILD ARCHIVED CUSTOMER RECORDS
+   BUILD CUSTOMER RECORDS
 ========================================================= */
 
 function buildArchivedCustomerRecords() {
@@ -204,10 +578,7 @@ function buildArchivedCustomerRecords() {
 
 
     /*
-       ------------------------------------------------------
-       STEP 1
-       Read archived customer snapshots
-       ------------------------------------------------------
+       Archived customer snapshots
     */
 
     archivedCustomers.forEach(
@@ -215,8 +586,7 @@ function buildArchivedCustomerRecords() {
 
             if (
                 !archived ||
-                typeof archived !==
-                    "object"
+                typeof archived !== "object"
             ) {
 
                 return;
@@ -236,6 +606,7 @@ function buildArchivedCustomerRecords() {
             map.set(
                 archived.key,
                 {
+
                     key:
                         archived.key,
 
@@ -275,14 +646,11 @@ function buildArchivedCustomerRecords() {
                         archived.archivedBy ||
                         "Admin",
 
-                    orders:
-                        [],
+                    orders: [],
 
-                    totalSpent:
-                        0,
+                    totalSpent: 0,
 
-                    lastOrder:
-                        null
+                    lastOrder: null
 
                 }
             );
@@ -292,23 +660,7 @@ function buildArchivedCustomerRecords() {
 
 
     /*
-       ------------------------------------------------------
-       STEP 2
-       Connect active orders to archived customer
-       ------------------------------------------------------
-
-       IMPORTANT:
-
-       Archiving a customer does NOT archive orders.
-
-       So their orders remain inside:
-
-       shopmax-orders
-
-       We only read them here to show:
-       - order count
-       - total spent
-       - last order
+       Attach active orders
     */
 
     orders.forEach(
@@ -316,8 +668,7 @@ function buildArchivedCustomerRecords() {
 
             if (
                 !order ||
-                typeof order !==
-                    "object"
+                typeof order !== "object"
             ) {
 
                 return;
@@ -326,8 +677,7 @@ function buildArchivedCustomerRecords() {
 
 
             const customer =
-                order.customer ||
-                {};
+                order.customer || {};
 
 
             const key =
@@ -336,7 +686,9 @@ function buildArchivedCustomerRecords() {
                 );
 
 
-            if (!key) {
+            if (
+                !key
+            ) {
 
                 return;
 
@@ -344,9 +696,7 @@ function buildArchivedCustomerRecords() {
 
 
             const archivedCustomer =
-                map.get(
-                    key
-                );
+                map.get(key);
 
 
             if (
@@ -366,8 +716,7 @@ function buildArchivedCustomerRecords() {
             archivedCustomer.totalSpent +=
                 Number(
                     order.total
-                ) ||
-                0;
+                ) || 0;
 
 
             if (
@@ -383,21 +732,18 @@ function buildArchivedCustomerRecords() {
                     new Date(
                         archivedCustomer
                             .lastOrder
-                            ?.createdAt ||
-                        0
+                            ?.createdAt || 0
                     ).getTime();
 
 
                 const newTime =
                     new Date(
-                        order?.createdAt ||
-                        0
+                        order?.createdAt || 0
                     ).getTime();
 
 
                 if (
-                    newTime >
-                    currentTime
+                    newTime > currentTime
                 ) {
 
                     archivedCustomer.lastOrder =
@@ -412,41 +758,29 @@ function buildArchivedCustomerRecords() {
 
 
     /*
-       ------------------------------------------------------
-       STEP 3
        Latest archived first
-       ------------------------------------------------------
     */
 
     archivedCustomerRecords =
-        [...map.values()]
-            .sort(
-                (
-                    a,
-                    b
-                ) => {
+        [...map.values()].sort(
+            (a, b) => {
 
-                    const aTime =
-                        new Date(
-                            a?.archivedAt ||
-                            0
-                        ).getTime();
+                const aTime =
+                    new Date(
+                        a?.archivedAt || 0
+                    ).getTime();
 
 
-                    const bTime =
-                        new Date(
-                            b?.archivedAt ||
-                            0
-                        ).getTime();
+                const bTime =
+                    new Date(
+                        b?.archivedAt || 0
+                    ).getTime();
 
 
-                    return (
-                        bTime -
-                        aTime
-                    );
+                return bTime - aTime;
 
-                }
-            );
+            }
+        );
 
 }
 
@@ -461,8 +795,7 @@ function createCustomerKey(
 
     const email =
         String(
-            customer?.email ||
-            ""
+            customer?.email || ""
         )
             .trim()
             .toLowerCase();
@@ -470,8 +803,7 @@ function createCustomerKey(
 
     const phone =
         String(
-            customer?.phone ||
-            ""
+            customer?.phone || ""
         )
             .replace(
                 /\D/g,
@@ -481,8 +813,7 @@ function createCustomerKey(
 
     const name =
         String(
-            customer?.name ||
-            ""
+            customer?.name || ""
         )
             .trim()
             .toLowerCase()
@@ -491,11 +822,6 @@ function createCustomerKey(
                 " "
             );
 
-
-    /*
-       SAME IDENTIFICATION RULE
-       AS customers.js
-    */
 
     if (
         email
@@ -603,40 +929,29 @@ function getFilteredRecords() {
 
             const name =
                 String(
-                    customer.name ||
-                    ""
+                    customer.name || ""
                 )
                     .toLowerCase();
 
 
             const email =
                 String(
-                    customer.email ||
-                    ""
+                    customer.email || ""
                 )
                     .toLowerCase();
 
 
             const phone =
                 String(
-                    customer.phone ||
-                    ""
+                    customer.phone || ""
                 )
                     .toLowerCase();
 
 
             return (
-                name.includes(
-                    query
-                )
-                ||
-                email.includes(
-                    query
-                )
-                ||
-                phone.includes(
-                    query
-                )
+                name.includes(query) ||
+                email.includes(query) ||
+                phone.includes(query)
             );
 
         }
@@ -656,7 +971,7 @@ function renderArchivedCustomers() {
 
 
     /*
-       Desktop table
+       Desktop
     */
 
     if (
@@ -674,7 +989,7 @@ function renderArchivedCustomers() {
 
 
     /*
-       Mobile cards
+       Mobile
     */
 
     if (
@@ -699,8 +1014,7 @@ function renderArchivedCustomers() {
     */
 
     if (
-        list.length ===
-        0
+        list.length === 0
     ) {
 
         archivedCustomersEmpty?.classList.add(
@@ -732,13 +1046,9 @@ function createDesktopRow(
 
             <td>
 
-                <div
-                    class="customer-cell"
-                >
+                <div class="customer-cell">
 
-                    <div
-                        class="avatar"
-                    >
+                    <div class="avatar">
 
                         ${escapeHTML(
                             getInitials(
@@ -751,11 +1061,7 @@ function createDesktopRow(
 
                     <div>
 
-                        <span
-                            class="
-                                customer-name
-                            "
-                        >
+                        <span class="customer-name">
 
                             ${escapeHTML(
                                 customer.name
@@ -764,11 +1070,7 @@ function createDesktopRow(
                         </span>
 
 
-                        <span
-                            class="
-                                customer-email
-                            "
-                        >
+                        <span class="customer-email">
 
                             ${escapeHTML(
                                 customer.email ||
@@ -796,11 +1098,7 @@ function createDesktopRow(
 
             <td>
 
-                <span
-                    class="
-                        orders-count
-                    "
-                >
+                <span class="orders-count">
 
                     ${customer.orders.length}
 
@@ -824,11 +1122,7 @@ function createDesktopRow(
 
             <td>
 
-                <span
-                    class="
-                        muted-date
-                    "
-                >
+                <span class="muted-date">
 
                     ${escapeHTML(
                         formatDate(
@@ -845,11 +1139,7 @@ function createDesktopRow(
 
             <td>
 
-                <span
-                    class="
-                        muted-date
-                    "
-                >
+                <span class="muted-date">
 
                     ${escapeHTML(
                         formatDateTime(
@@ -864,11 +1154,7 @@ function createDesktopRow(
 
             <td>
 
-                <div
-                    class="
-                        action-group
-                    "
-                >
+                <div class="action-group">
 
                     <button
                         type="button"
@@ -878,12 +1164,7 @@ function createDesktopRow(
                         )}"
                     >
 
-                        <i
-                            class="
-                                fa-regular
-                                fa-eye
-                            "
-                        ></i>
+                        <i class="fa-regular fa-eye"></i>
 
                         View
 
@@ -892,21 +1173,13 @@ function createDesktopRow(
 
                     <button
                         type="button"
-                        class="
-                            action-btn
-                            restore
-                        "
+                        class="action-btn restore"
                         data-restore-customer="${escapeHTML(
                             customer.key
                         )}"
                     >
 
-                        <i
-                            class="
-                                fa-solid
-                                fa-rotate-left
-                            "
-                        ></i>
+                        <i class="fa-solid fa-rotate-left"></i>
 
                         Restore
 
@@ -933,27 +1206,13 @@ function createMobileCard(
 
     return `
 
-        <article
-            class="
-                mobile-card
-            "
-        >
+        <article class="mobile-card">
 
-            <div
-                class="
-                    mobile-card-top
-                "
-            >
+            <div class="mobile-card-top">
 
-                <div
-                    class="
-                        mobile-main
-                    "
-                >
+                <div class="mobile-main">
 
-                    <div
-                        class="avatar"
-                    >
+                    <div class="avatar">
 
                         ${escapeHTML(
                             getInitials(
@@ -989,11 +1248,7 @@ function createMobileCard(
                 </div>
 
 
-                <span
-                    class="
-                        status-badge
-                    "
-                >
+                <span class="status-badge">
 
                     Archived
 
@@ -1002,18 +1257,13 @@ function createMobileCard(
             </div>
 
 
-            <div
-                class="
-                    mobile-meta
-                "
-            >
+            <div class="mobile-meta">
 
                 <div>
 
                     <small>
                         ORDERS
                     </small>
-
 
                     <strong>
 
@@ -1029,7 +1279,6 @@ function createMobileCard(
                     <small>
                         TOTAL SPENT
                     </small>
-
 
                     <strong>
 
@@ -1048,7 +1297,6 @@ function createMobileCard(
                         ARCHIVED
                     </small>
 
-
                     <strong>
 
                         ${escapeHTML(
@@ -1064,11 +1312,7 @@ function createMobileCard(
             </div>
 
 
-            <div
-                class="
-                    mobile-actions
-                "
-            >
+            <div class="mobile-actions">
 
                 <button
                     type="button"
@@ -1078,12 +1322,7 @@ function createMobileCard(
                     )}"
                 >
 
-                    <i
-                        class="
-                            fa-regular
-                            fa-eye
-                        "
-                    ></i>
+                    <i class="fa-regular fa-eye"></i>
 
                     View
 
@@ -1092,21 +1331,13 @@ function createMobileCard(
 
                 <button
                     type="button"
-                    class="
-                        action-btn
-                        restore
-                    "
+                    class="action-btn restore"
                     data-restore-customer="${escapeHTML(
                         customer.key
                     )}"
                 >
 
-                    <i
-                        class="
-                            fa-solid
-                            fa-rotate-left
-                        "
-                    ></i>
+                    <i class="fa-solid fa-rotate-left"></i>
 
                     Restore
 
@@ -1144,9 +1375,7 @@ function bindActions() {
                             );
 
 
-                        openDetails(
-                            key
-                        );
+                        openDetails(key);
 
                     }
                 );
@@ -1172,9 +1401,7 @@ function bindActions() {
                             );
 
 
-                        openRestoreModal(
-                            key
-                        );
+                        openRestoreModal(key);
 
                     }
                 );
@@ -1196,8 +1423,7 @@ function openDetails(
     const customer =
         archivedCustomerRecords.find(
             item =>
-                item.key ===
-                customerKey
+                item.key === customerKey
         );
 
 
@@ -1226,34 +1452,25 @@ function openDetails(
 
 
     const sortedOrders =
-        [...customer.orders]
-            .sort(
-                (
-                    a,
-                    b
-                ) => {
+        [...customer.orders].sort(
+            (a, b) => {
 
-                    const aTime =
-                        new Date(
-                            a?.createdAt ||
-                            0
-                        ).getTime();
+                const aTime =
+                    new Date(
+                        a?.createdAt || 0
+                    ).getTime();
 
 
-                    const bTime =
-                        new Date(
-                            b?.createdAt ||
-                            0
-                        ).getTime();
+                const bTime =
+                    new Date(
+                        b?.createdAt || 0
+                    ).getTime();
 
 
-                    return (
-                        bTime -
-                        aTime
-                    );
+                return bTime - aTime;
 
-                }
-            );
+            }
+        );
 
 
     if (
@@ -1262,17 +1479,9 @@ function openDetails(
 
         archivedDetailsBody.innerHTML = `
 
-            <div
-                class="
-                    profile-head
-                "
-            >
+            <div class="profile-head">
 
-                <div
-                    class="
-                        profile-avatar
-                    "
-                >
+                <div class="profile-avatar">
 
                     ${escapeHTML(
                         getInitials(
@@ -1308,17 +1517,9 @@ function openDetails(
             </div>
 
 
-            <div
-                class="
-                    detail-stats
-                "
-            >
+            <div class="detail-stats">
 
-                <div
-                    class="
-                        detail-stat
-                    "
-                >
+                <div class="detail-stat">
 
                     <span>
                         TOTAL ORDERS
@@ -1334,11 +1535,7 @@ function openDetails(
                 </div>
 
 
-                <div
-                    class="
-                        detail-stat
-                    "
-                >
+                <div class="detail-stat">
 
                     <span>
                         TOTAL SPENT
@@ -1356,11 +1553,7 @@ function openDetails(
                 </div>
 
 
-                <div
-                    class="
-                        detail-stat
-                    "
-                >
+                <div class="detail-stat">
 
                     <span>
                         ARCHIVED
@@ -1382,227 +1575,69 @@ function openDetails(
             </div>
 
 
-            <section
-                class="
-                    detail-section
-                "
-            >
+            <section class="detail-section">
 
                 <h4>
                     Customer Information
                 </h4>
 
 
-                <div
-                    class="
-                        info-grid
-                    "
-                >
+                <div class="info-grid">
 
-                    <div
-                        class="
-                            info-item
-                        "
-                    >
+                    ${createInfoItem(
+                        "NAME",
+                        customer.name
+                    )}
 
-                        <span>
-                            NAME
-                        </span>
+                    ${createInfoItem(
+                        "EMAIL",
+                        customer.email
+                    )}
 
+                    ${createInfoItem(
+                        "PHONE",
+                        customer.phone
+                    )}
 
-                        <strong>
+                    ${createInfoItem(
+                        "ADDRESS",
+                        customer.address
+                    )}
 
-                            ${escapeHTML(
-                                customer.name ||
-                                "—"
-                            )}
+                    ${createInfoItem(
+                        "CITY / DISTRICT",
+                        customer.city
+                    )}
 
-                        </strong>
+                    ${createInfoItem(
+                        "POSTAL CODE",
+                        customer.postal
+                    )}
 
-                    </div>
+                    ${createInfoItem(
+                        "COUNTRY",
+                        customer.country
+                    )}
 
-
-                    <div
-                        class="
-                            info-item
-                        "
-                    >
-
-                        <span>
-                            EMAIL
-                        </span>
-
-
-                        <strong>
-
-                            ${escapeHTML(
-                                customer.email ||
-                                "—"
-                            )}
-
-                        </strong>
-
-                    </div>
-
-
-                    <div
-                        class="
-                            info-item
-                        "
-                    >
-
-                        <span>
-                            PHONE
-                        </span>
-
-
-                        <strong>
-
-                            ${escapeHTML(
-                                customer.phone ||
-                                "—"
-                            )}
-
-                        </strong>
-
-                    </div>
-
-
-                    <div
-                        class="
-                            info-item
-                        "
-                    >
-
-                        <span>
-                            ADDRESS
-                        </span>
-
-
-                        <strong>
-
-                            ${escapeHTML(
-                                customer.address ||
-                                "—"
-                            )}
-
-                        </strong>
-
-                    </div>
-
-
-                    <div
-                        class="
-                            info-item
-                        "
-                    >
-
-                        <span>
-                            CITY / DISTRICT
-                        </span>
-
-
-                        <strong>
-
-                            ${escapeHTML(
-                                customer.city ||
-                                "—"
-                            )}
-
-                        </strong>
-
-                    </div>
-
-
-                    <div
-                        class="
-                            info-item
-                        "
-                    >
-
-                        <span>
-                            POSTAL CODE
-                        </span>
-
-
-                        <strong>
-
-                            ${escapeHTML(
-                                customer.postal ||
-                                "—"
-                            )}
-
-                        </strong>
-
-                    </div>
-
-
-                    <div
-                        class="
-                            info-item
-                        "
-                    >
-
-                        <span>
-                            COUNTRY
-                        </span>
-
-
-                        <strong>
-
-                            ${escapeHTML(
-                                customer.country ||
-                                "—"
-                            )}
-
-                        </strong>
-
-                    </div>
-
-
-                    <div
-                        class="
-                            info-item
-                        "
-                    >
-
-                        <span>
-                            ARCHIVED BY
-                        </span>
-
-
-                        <strong>
-
-                            ${escapeHTML(
-                                customer.archivedBy ||
-                                "Admin"
-                            )}
-
-                        </strong>
-
-                    </div>
+                    ${createInfoItem(
+                        "ARCHIVED BY",
+                        customer.archivedBy ||
+                        "Admin"
+                    )}
 
                 </div>
 
             </section>
 
 
-            <section
-                class="
-                    detail-section
-                "
-            >
+            <section class="detail-section">
 
                 <h4>
                     Order History
                 </h4>
 
 
-                <div
-                    class="
-                        order-history
-                    "
-                >
+                <div class="order-history">
 
                     ${
                         sortedOrders.length
@@ -1611,16 +1646,13 @@ function openDetails(
                                 .map(
                                     order => `
 
-                                        <div
-                                            class="
-                                                order-row
-                                            "
-                                        >
+                                        <div class="order-row">
 
                                             <strong>
 
                                                 ${escapeHTML(
                                                     order?.orderId ||
+                                                    order?.id ||
                                                     "—"
                                                 )}
 
@@ -1654,11 +1686,7 @@ function openDetails(
 
                             : `
 
-                                <div
-                                    class="
-                                        no-orders
-                                    "
-                                >
+                                <div class="no-orders">
 
                                     No orders found.
 
@@ -1682,21 +1710,13 @@ function openDetails(
 
                 <button
                     type="button"
-                    class="
-                        action-btn
-                        restore
-                    "
+                    class="action-btn restore"
                     data-detail-restore="${escapeHTML(
                         customer.key
                     )}"
                 >
 
-                    <i
-                        class="
-                            fa-solid
-                            fa-rotate-left
-                        "
-                    ></i>
+                    <i class="fa-solid fa-rotate-left"></i>
 
                     Restore Customer
 
@@ -1747,6 +1767,39 @@ function openDetails(
 
 
 /* =========================================================
+   INFO ITEM
+========================================================= */
+
+function createInfoItem(
+    label,
+    value
+) {
+
+    return `
+
+        <div class="info-item">
+
+            <span>
+                ${escapeHTML(label)}
+            </span>
+
+
+            <strong>
+
+                ${escapeHTML(
+                    value || "—"
+                )}
+
+            </strong>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
    RESTORE MODAL
 ========================================================= */
 
@@ -1757,8 +1810,7 @@ function openRestoreModal(
     const customer =
         archivedCustomerRecords.find(
             item =>
-                item.key ===
-                customerKey
+                item.key === customerKey
         );
 
 
@@ -1810,7 +1862,7 @@ function openRestoreModal(
 
 
 /* =========================================================
-   RESTORE CUSTOMER
+   CONFIRM RESTORE
 ========================================================= */
 
 confirmRestoreCustomer?.addEventListener(
@@ -1829,10 +1881,6 @@ confirmRestoreCustomer?.addEventListener(
         loadData();
 
 
-        /*
-           Find archived customer.
-        */
-
         const archiveIndex =
             archivedCustomers.findIndex(
                 customer =>
@@ -1842,8 +1890,7 @@ confirmRestoreCustomer?.addEventListener(
 
 
         if (
-            archiveIndex ===
-            -1
+            archiveIndex === -1
         ) {
 
             showToast(
@@ -1869,10 +1916,7 @@ confirmRestoreCustomer?.addEventListener(
 
 
         /*
-           --------------------------------------------------
            Add restore audit to related orders.
-           Orders themselves are NOT modified otherwise.
-           --------------------------------------------------
         */
 
         orders.forEach(
@@ -1880,8 +1924,7 @@ confirmRestoreCustomer?.addEventListener(
 
                 const key =
                     createCustomerKey(
-                        order?.customer ||
-                        {}
+                        order?.customer || {}
                     );
 
 
@@ -1935,7 +1978,7 @@ confirmRestoreCustomer?.addEventListener(
 
 
         /*
-           Remove customer from archive.
+           Remove from archive.
         */
 
         archivedCustomers.splice(
@@ -1957,7 +2000,7 @@ confirmRestoreCustomer?.addEventListener(
 
 
         /*
-           Save updated orders.
+           Save orders.
         */
 
         localStorage.setItem(
@@ -1968,15 +2011,11 @@ confirmRestoreCustomer?.addEventListener(
         );
 
 
-        /*
-           Close restore modal.
-        */
-
         closeRestoreModal();
 
 
         /*
-           Reload page data.
+           Rebuild page.
         */
 
         loadData();
@@ -1989,10 +2028,6 @@ confirmRestoreCustomer?.addEventListener(
 
         saveStorageSnapshot();
 
-
-        /*
-           Show confirmation.
-        */
 
         showToast(
             `${
@@ -2078,17 +2113,54 @@ function closeRestoreModal() {
 function setupEvents() {
 
     /*
-       Search
+       ADMIN TOPBAR REFRESH
     */
 
-    archivedCustomerSearch?.addEventListener(
-        "input",
-        renderArchivedCustomers
+    adminPageRefresh?.addEventListener(
+        "click",
+        async () => {
+
+            adminPageRefresh.disabled =
+                true;
+
+
+            const icon =
+                adminPageRefresh.querySelector(
+                    "i"
+                );
+
+
+            icon?.classList.add(
+                "fa-spin"
+            );
+
+
+            syncArchivedCustomers(
+                true
+            );
+
+
+            setTimeout(
+                () => {
+
+                    icon?.classList.remove(
+                        "fa-spin"
+                    );
+
+
+                    adminPageRefresh.disabled =
+                        false;
+
+                },
+                350
+            );
+
+        }
     );
 
 
     /*
-       Refresh
+       Archive panel refresh
     */
 
     refreshArchivedCustomers?.addEventListener(
@@ -2100,6 +2172,16 @@ function setupEvents() {
             );
 
         }
+    );
+
+
+    /*
+       Search
+    */
+
+    archivedCustomerSearch?.addEventListener(
+        "input",
+        renderArchivedCustomers
     );
 
 
@@ -2140,7 +2222,7 @@ function setupEvents() {
 
 
     /*
-       Escape key
+       Escape
     */
 
     document.addEventListener(
@@ -2148,8 +2230,7 @@ function setupEvents() {
         event => {
 
             if (
-                event.key ===
-                "Escape"
+                event.key === "Escape"
             ) {
 
                 closeDetails();
@@ -2161,42 +2242,6 @@ function setupEvents() {
         }
     );
 
-
-    /*
-       Global header search
-    */
-
-    document
-        .getElementById(
-            "globalSearchBtn"
-        )
-        ?.addEventListener(
-            "click",
-            () => {
-
-                const query =
-                    document
-                        .getElementById(
-                            "globalSearch"
-                        )
-                        ?.value
-                        ?.trim();
-
-
-                if (
-                    query
-                ) {
-
-                    window.location.href =
-                        `shop.html?search=${encodeURIComponent(
-                            query
-                        )}`;
-
-                }
-
-            }
-        );
-
 }
 
 
@@ -2206,22 +2251,8 @@ function setupEvents() {
 
 
 /*
-   ----------------------------------------------------------
-   A) Cross-tab storage event
-   ----------------------------------------------------------
-
-   Example:
-
-   Tab 1:
-   customers.html
-
-   Tab 2:
-   archivedCustomers.html
-
-   Archive customer in Tab 1.
-
-   Browser fires "storage" event in Tab 2.
-   */
+   Cross-tab
+*/
 
 window.addEventListener(
     "storage",
@@ -2245,12 +2276,8 @@ window.addEventListener(
 
 
 /*
-   ----------------------------------------------------------
-   B) Page becomes visible
-   ----------------------------------------------------------
-
-   Useful when switching back to the archive tab.
-   */
+   Visibility
+*/
 
 document.addEventListener(
     "visibilitychange",
@@ -2272,9 +2299,7 @@ document.addEventListener(
 
 
 /*
-   ----------------------------------------------------------
-   C) Window focus
-   ----------------------------------------------------------
+   Focus
 */
 
 window.addEventListener(
@@ -2290,9 +2315,7 @@ window.addEventListener(
 
 
 /*
-   ----------------------------------------------------------
-   D) pageshow
-   ----------------------------------------------------------
+   Pageshow
 */
 
 window.addEventListener(
@@ -2308,16 +2331,7 @@ window.addEventListener(
 
 
 /*
-   ----------------------------------------------------------
-   E) Safety polling
-
-   Every 1000ms we compare localStorage snapshot.
-
-   This is intentionally lightweight.
-   It makes the archive page update even when a
-   browser/environment does not behave perfectly
-   with storage events.
-   ----------------------------------------------------------
+   Safety polling
 */
 
 setInterval(
@@ -2344,7 +2358,7 @@ setInterval(
 
 
 /* =========================================================
-   SYNC FUNCTION
+   SYNC
 ========================================================= */
 
 function syncArchivedCustomers(
@@ -2434,9 +2448,7 @@ function formatDate(
 
 
     const date =
-        new Date(
-            value
-        );
+        new Date(value);
 
 
     if (
@@ -2453,18 +2465,11 @@ function formatDate(
     return new Intl.DateTimeFormat(
         "en-US",
         {
-            month:
-                "short",
-
-            day:
-                "numeric",
-
-            year:
-                "numeric"
+            month: "short",
+            day: "numeric",
+            year: "numeric"
         }
-    ).format(
-        date
-    );
+    ).format(date);
 
 }
 
@@ -2487,9 +2492,7 @@ function formatDateTime(
 
 
     const date =
-        new Date(
-            value
-        );
+        new Date(value);
 
 
     if (
@@ -2506,24 +2509,13 @@ function formatDateTime(
     return new Intl.DateTimeFormat(
         "en-US",
         {
-            month:
-                "short",
-
-            day:
-                "numeric",
-
-            year:
-                "numeric",
-
-            hour:
-                "numeric",
-
-            minute:
-                "2-digit"
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+            hour: "numeric",
+            minute: "2-digit"
         }
-    ).format(
-        date
-    );
+    ).format(date);
 
 }
 
@@ -2538,16 +2530,14 @@ function formatStatus(
 
     const status =
         String(
-            value ||
-            ""
+            value || ""
         )
             .trim()
             .toLowerCase();
 
 
     if (
-        status ===
-        "processing"
+        status === "processing"
     ) {
 
         return "Processing";
@@ -2556,8 +2546,7 @@ function formatStatus(
 
 
     if (
-        status ===
-        "shipped"
+        status === "shipped"
     ) {
 
         return "Shipped";
@@ -2566,8 +2555,7 @@ function formatStatus(
 
 
     if (
-        status ===
-        "out for delivery"
+        status === "out for delivery"
     ) {
 
         return "Out for Delivery";
@@ -2576,8 +2564,7 @@ function formatStatus(
 
 
     if (
-        status ===
-        "delivered"
+        status === "delivered"
     ) {
 
         return "Delivered";
@@ -2599,10 +2586,7 @@ function formatMoney(
 ) {
 
     const amount =
-        Number(
-            value
-        ) ||
-        0;
+        Number(value) || 0;
 
 
     return `$${amount.toFixed(2)}`;
@@ -2620,21 +2604,15 @@ function getInitials(
 
     const parts =
         String(
-            name ||
-            "Guest"
+            name || "Guest"
         )
             .trim()
-            .split(
-                /\s+/
-            )
-            .filter(
-                Boolean
-            );
+            .split(/\s+/)
+            .filter(Boolean);
 
 
     if (
-        parts.length ===
-        0
+        parts.length === 0
     ) {
 
         return "G";
@@ -2643,8 +2621,7 @@ function getInitials(
 
 
     if (
-        parts.length ===
-        1
+        parts.length === 1
     ) {
 
         return parts[0]
@@ -2655,16 +2632,11 @@ function getInitials(
 
 
     return (
-        parts[0]
-            .charAt(0)
-        +
+        parts[0].charAt(0) +
         parts[
-            parts.length -
-            1
-        ]
-            .charAt(0)
-    )
-        .toUpperCase();
+            parts.length - 1
+        ].charAt(0)
+    ).toUpperCase();
 
 }
 
@@ -2678,8 +2650,7 @@ function escapeHTML(
 ) {
 
     return String(
-        value ??
-        ""
+        value ?? ""
     )
         .replace(
             /&/g,
@@ -2731,9 +2702,7 @@ function readArray(
 
 
         const parsed =
-            JSON.parse(
-                raw
-            );
+            JSON.parse(raw);
 
 
         return Array.isArray(
@@ -2790,31 +2759,31 @@ function showToast(
 
         toast.style.cssText = `
 
-            position:fixed;
+            position: fixed;
 
-            right:20px;
+            right: 20px;
 
-            bottom:20px;
+            bottom: 20px;
 
-            z-index:11000;
+            z-index: 11000;
 
-            max-width:330px;
+            max-width: 330px;
 
-            padding:13px 16px;
+            padding: 13px 16px;
 
-            border-radius:9px;
+            border-radius: 9px;
 
-            background:${
+            background: ${
                 isError
                     ? "#c74444"
                     : "#15213b"
             };
 
-            color:#ffffff;
+            color: #ffffff;
 
-            font-size:10px;
+            font-size: 10px;
 
-            font-weight:800;
+            font-weight: 800;
 
             box-shadow:
                 0 15px 40px
