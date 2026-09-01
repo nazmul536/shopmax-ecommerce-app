@@ -2,6 +2,7 @@
    SHOPMAX
    SHOP PAGE - COMPLETE JAVASCRIPT
    Search + Filter + Sort + Cart + Wishlist + Modal
+   API UPDATED → DummyJSON Products
 ========================================================= */
 
 
@@ -9,8 +10,15 @@
    API
 ========================================================= */
 
+/*
+   DummyJSON provides a large product catalog.
+
+   limit=0
+   → load all available products
+*/
+
 const API_URL =
-    "https://fakestoreapi.com/products";
+    "https://dummyjson.com/products?limit=0";
 
 
 /* =========================================================
@@ -334,7 +342,9 @@ function setupShop() {
 
     shopSearchBtn?.addEventListener(
         "click",
-        () => {
+        event => {
+
+            event.preventDefault();
 
             currentSearch =
                 shopSearch
@@ -495,49 +505,153 @@ async function loadProducts() {
 
         const response =
             await fetch(
-                API_URL
+                API_URL,
+                {
+                    method: "GET",
+                    headers: {
+                        "Accept":
+                            "application/json"
+                    }
+                }
             );
 
 
         if (!response.ok) {
 
             throw new Error(
-                "Failed to load products"
+                `API request failed: ${response.status}`
             );
 
         }
 
 
-        products =
+        const data =
             await response.json();
 
 
-        products =
-            products.map(
-                product => ({
+        /*
+           DummyJSON response:
 
-                    ...product,
+           {
+               products: [],
+               total: 194,
+               skip: 0,
+               limit: 0
+           }
+        */
 
-                    id:
-                        Number(
-                            product.id
-                        ),
 
-                    price:
-                        Number(
-                            product.price
-                        )
+        if (
+            !data ||
+            !Array.isArray(
+                data.products
+            )
+        ) {
 
-                })
+            throw new Error(
+                "Invalid API response"
             );
 
+        }
+
+
+        /*
+           Normalize DummyJSON data
+           so the rest of ShopMax
+           can continue using the
+           existing structure.
+        */
+
+        products =
+            data.products.map(
+                product => {
+
+                    const reviewCount =
+                        Array.isArray(
+                            product.reviews
+                        )
+                            ? product.reviews.length
+                            : 0;
+
+
+                    return {
+
+                        id:
+                            Number(
+                                product.id
+                            ),
+
+                        title:
+                            product.title ||
+                            "Untitled Product",
+
+                        price:
+                            Number(
+                                product.price
+                            ) || 0,
+
+                        description:
+                            product.description ||
+                            "No description available.",
+
+                        category:
+                            product.category ||
+                            "general",
+
+                        image:
+                            product.thumbnail ||
+                            (
+                                Array.isArray(
+                                    product.images
+                                )
+                                    ? product.images[0]
+                                    : ""
+                            ),
+
+                        rating: {
+
+                            rate:
+                                Number(
+                                    product.rating
+                                ) || 0,
+
+                            count:
+                                reviewCount
+
+                        },
+
+                        stock:
+                            Number(
+                                product.stock
+                            ) || 0,
+
+                        brand:
+                            product.brand ||
+                            "",
+
+                        discountPercentage:
+                            Number(
+                                product.discountPercentage
+                            ) || 0
+
+                    };
+
+                }
+            );
+
+
+        /*
+           Keep only wishlist IDs
+           that exist in the new API.
+        */
 
         wishlist =
             wishlist.filter(
                 id =>
                     products.some(
                         product =>
-                            product.id === id
+                            product.id ===
+                            Number(id)
                     )
             );
 
@@ -545,7 +659,20 @@ async function loadProducts() {
         saveWishlist();
 
 
+        /*
+           Populate category dropdowns
+           from API products.
+        */
+
+        populateCategoryOptions();
+
+
+        /*
+           Render products.
+        */
+
         applyShopFilters();
+
 
         updateCart();
 
@@ -561,6 +688,156 @@ async function loadProducts() {
         );
 
         showShopError();
+
+    }
+
+}
+
+
+/* =========================================================
+   POPULATE CATEGORY OPTIONS
+========================================================= */
+
+function populateCategoryOptions() {
+
+    const categorySet =
+        new Set();
+
+
+    products.forEach(
+        product => {
+
+            if (
+                product.category
+            ) {
+
+                categorySet.add(
+                    String(
+                        product.category
+                    )
+                );
+
+            }
+
+        }
+    );
+
+
+    const categories =
+        [
+            ...categorySet
+        ].sort(
+            (a, b) =>
+                a.localeCompare(b)
+        );
+
+
+    const selects = [
+        shopCategory,
+        shopHeaderCategory
+    ];
+
+
+    selects.forEach(
+        select => {
+
+            if (!select) {
+                return;
+            }
+
+
+            /*
+               Preserve existing
+               selected value.
+            */
+
+            const selected =
+                select.value ||
+                currentCategory ||
+                "all";
+
+
+            /*
+               Keep "All Categories".
+            */
+
+            select.innerHTML = `
+
+                <option value="all">
+                    All Categories
+                </option>
+
+            `;
+
+
+            categories.forEach(
+                category => {
+
+                    const option =
+                        document.createElement(
+                            "option"
+                        );
+
+
+                    option.value =
+                        category;
+
+                    option.textContent =
+                        formatCategory(
+                            category
+                        );
+
+
+                    select.appendChild(
+                        option
+                    );
+
+                }
+            );
+
+
+            /*
+               Restore selected value
+               if it still exists.
+            */
+
+            const exists =
+                [
+                    ...select.options
+                ].some(
+                    option =>
+                        option.value ===
+                        selected
+                );
+
+
+            select.value =
+                exists
+                    ? selected
+                    : "all";
+
+        }
+    );
+
+
+    /*
+       If category was removed
+       from the new API, reset it.
+    */
+
+    const categoryExists =
+        categories.includes(
+            currentCategory
+        );
+
+
+    if (
+        currentCategory !== "all" &&
+        !categoryExists
+    ) {
+
+        currentCategory =
+            "all";
 
     }
 
@@ -710,7 +987,7 @@ function showShopError() {
 
             <button
                 type="button"
-                onclick="loadProducts()"
+                id="shopRetryBtn"
                 style="
                     margin-top:18px;
                     border:0;
@@ -728,6 +1005,16 @@ function showShopError() {
         </div>
 
     `;
+
+
+    document
+        .getElementById(
+            "shopRetryBtn"
+        )
+        ?.addEventListener(
+            "click",
+            loadProducts
+        );
 
 }
 
@@ -776,11 +1063,17 @@ function applyShopFilters() {
                             product.description || ""
                         ).toLowerCase();
 
+                    const brand =
+                        String(
+                            product.brand || ""
+                        ).toLowerCase();
+
 
                     return (
                         title.includes(search) ||
                         category.includes(search) ||
-                        description.includes(search)
+                        description.includes(search) ||
+                        brand.includes(search)
                     );
 
                 }
@@ -854,7 +1147,7 @@ function sortProducts(
         case "price-low":
 
             return sorted.sort(
-                (a,b) =>
+                (a, b) =>
                     Number(a.price) -
                     Number(b.price)
             );
@@ -863,7 +1156,7 @@ function sortProducts(
         case "price-high":
 
             return sorted.sort(
-                (a,b) =>
+                (a, b) =>
                     Number(b.price) -
                     Number(a.price)
             );
@@ -872,7 +1165,7 @@ function sortProducts(
         case "rating":
 
             return sorted.sort(
-                (a,b) => {
+                (a, b) => {
 
                     const aRate =
                         Number(
@@ -914,7 +1207,7 @@ function sortProducts(
         case "name":
 
             return sorted.sort(
-                (a,b) =>
+                (a, b) =>
                     String(
                         a.title
                     ).localeCompare(
@@ -928,7 +1221,7 @@ function sortProducts(
         case "popular":
 
             return sorted.sort(
-                (a,b) => {
+                (a, b) => {
 
                     const aRating =
                         Number(
@@ -1070,13 +1363,25 @@ function createShopProductCard(
 
 
     const discounts = [
-        12,20,15,10,
-        19,11,17,23,
-        14,18,13,22
+        12, 20, 15, 10,
+        19, 11, 17, 23,
+        14, 18, 13, 22
     ];
 
 
-    const discount =
+    /*
+       Use API discount when available.
+       Otherwise use existing ShopMax
+       fallback discount.
+    */
+
+    const apiDiscount =
+        Number(
+            product.discountPercentage || 0
+        );
+
+
+    const fallbackDiscount =
         discounts[
             (
                 Number(
@@ -1086,6 +1391,14 @@ function createShopProductCard(
             ) %
             discounts.length
         ];
+
+
+    const discount =
+        apiDiscount > 0
+            ? Math.round(
+                apiDiscount
+            )
+            : fallbackDiscount;
 
 
     const oldPrice =
@@ -1127,7 +1440,9 @@ function createShopProductCard(
 
 
                 <img
-                    src="${product.image}"
+                    src="${escapeHTML(
+                        product.image
+                    )}"
                     alt="${escapeHTML(
                         product.title
                     )}"
@@ -1356,12 +1671,6 @@ function handleShopProductAction(
             );
 
 
-            /*
-               IMPORTANT:
-               Shop Add To Cart
-               → Open Cart
-            */
-
             openCart();
 
             break;
@@ -1377,6 +1686,11 @@ function handleShopProductAction(
 
 
         case "view":
+
+            /*
+               Keep existing product
+               details behavior.
+            */
 
             window.location.href =
                 `productDetails.html?id=${product.id}`;
@@ -2112,7 +2426,9 @@ function createCartItem(
             >
 
                 <img
-                    src="${item.image}"
+                    src="${escapeHTML(
+                        item.image
+                    )}"
                     alt="${escapeHTML(
                         item.title
                     )}"
@@ -2696,7 +3012,9 @@ function renderWishlist() {
                         >
 
                             <img
-                                src="${product.image}"
+                                src="${escapeHTML(
+                                    product.image
+                                )}"
                                 alt="${escapeHTML(
                                     product.title
                                 )}"
@@ -2832,11 +3150,6 @@ function handleWishlistAction(
             1
         );
 
-
-        /*
-           Wishlist Add To Cart
-           → Open Cart
-        */
 
         openCart();
 
@@ -3193,6 +3506,10 @@ function formatCategory(
     return String(
         value
     )
+        .replace(
+            /[-_]/g,
+            " "
+        )
         .replace(
             /'/g,
             ""
