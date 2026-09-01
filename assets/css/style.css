@@ -4738,58 +4738,42 @@ img {
 
 
 /* =========================================================
-   MOBILE MODAL - FINAL OVERFLOW FIX
-   Put this at the VERY END of CSS
+   MOBILE PRODUCT MODAL — FINAL HEIGHT / OVERFLOW FIX
    ========================================================= */
 
 @media (max-width: 768px) {
 
-    /* Modal itself will scroll */
+    /* Main modal = only scroll container */
     .modal-product {
-        width: calc(100% - 12px) !important;
+        width: calc(100% - 20px) !important;
+        max-width: 560px !important;
 
         height: auto !important;
         min-height: 0 !important;
-
         max-height: calc(100dvh - 20px) !important;
-
-        overflow-y: auto !important;
-        overflow-x: hidden !important;
 
         display: block !important;
 
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+
         box-sizing: border-box !important;
-
-        position: relative !important;
-
-        overscroll-behavior: contain !important;
-
-        -webkit-overflow-scrolling: touch !important;
     }
 
-
-    /* Image area */
+    /* Product image area */
     .modal-product-image-section {
         width: 100% !important;
-
         height: 210px !important;
         min-height: 210px !important;
-
-        max-height: 210px !important;
 
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
 
         overflow: hidden !important;
-
-        position: relative !important;
-
         flex-shrink: 0 !important;
     }
 
-
-    /* Product image */
     .modal-product-image-section img {
         width: auto !important;
         height: auto !important;
@@ -4798,12 +4782,9 @@ img {
         max-height: 175px !important;
 
         object-fit: contain !important;
-
-        display: block !important;
     }
 
-
-    /* Content */
+    /* Content must NOT create another scroll area */
     .modal-product-content {
         width: 100% !important;
 
@@ -4813,42 +4794,41 @@ img {
 
         overflow: visible !important;
 
-        padding: 20px 18px 25px !important;
+        padding: 18px 18px 20px !important;
 
         box-sizing: border-box !important;
 
-        position: relative !important;
+        flex: none !important;
     }
-
 
     /* Category */
     .modal-product-content .modal-category,
     .modal-product-content .modal-product-category {
+        display: block !important;
+        visibility: visible !important;
+
         margin: 0 0 7px !important;
 
-        font-size: 10px !important;
+        font-size: 11px !important;
         line-height: 1.2 !important;
     }
 
-
-    /* Title */
+    /* Product title */
     .modal-product-content h2 {
+        display: block !important;
+        visibility: visible !important;
+
         margin: 0 0 8px !important;
 
         font-size: 23px !important;
         line-height: 1.2 !important;
-
-        word-break: normal !important;
     }
-
 
     /* Rating */
     .modal-rating {
         margin: 0 0 8px !important;
-
         font-size: 12px !important;
     }
-
 
     /* Price */
     .modal-price {
@@ -4857,7 +4837,6 @@ img {
         font-size: 31px !important;
         line-height: 1 !important;
     }
-
 
     /* Description */
     .modal-product-content p,
@@ -4868,118 +4847,103 @@ img {
         line-height: 1.5 !important;
     }
 
-
     /* Quantity */
     .modal-quantity-area {
         margin-bottom: 12px !important;
     }
 
-
     .modal-quantity {
         width: 185px !important;
         height: 45px !important;
-
-        min-height: 45px !important;
     }
-
 
     .modal-quantity button {
         width: 47px !important;
         height: 45px !important;
     }
 
-
     /* Buttons */
     .modal-add-cart,
     .modal-buy-now {
         width: 100% !important;
 
-        height: 48px !important;
-        min-height: 48px !important;
+        height: 47px !important;
+        min-height: 47px !important;
 
         font-size: 13px !important;
-
-        box-sizing: border-box !important;
     }
-
 
     .modal-add-cart {
         margin-bottom: 7px !important;
     }
 
-
     /* Features */
     .modal-features {
-        width: 100% !important;
-
         display: grid !important;
 
-        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        grid-template-columns: repeat(3, 1fr) !important;
 
         gap: 7px !important;
 
         margin-top: 10px !important;
+        padding-top: 9px !important;
 
-        padding-top: 10px !important;
-
-        box-sizing: border-box !important;
+        flex: none !important;
     }
 
-
     .modal-features > div {
-        width: 100% !important;
-
         height: 54px !important;
         min-height: 54px !important;
 
-        box-sizing: border-box !important;
+        flex: none !important;
     }
 }
 
 
 /* =========================================================
-   VERY SMALL MOBILE
+   SMALL PHONES
    ========================================================= */
 
 @media (max-width: 400px) {
 
     .modal-product {
-        width: calc(100% - 10px) !important;
-
-        max-height: calc(100dvh - 12px) !important;
+        width: calc(100% - 16px) !important;
+        max-height: calc(100dvh - 16px) !important;
     }
-
 
     .modal-product-image-section {
         height: 195px !important;
         min-height: 195px !important;
-        max-height: 195px !important;
     }
 
-
     .modal-product-image-section img {
-        max-width: 76% !important;
+        max-width: 78% !important;
         max-height: 165px !important;
     }
 
-
     .modal-product-content {
-        padding: 18px 15px 25px !important;
+        padding: 16px 15px 18px !important;
     }
-
 
     .modal-product-content h2 {
         font-size: 21px !important;
     }
 
-
     .modal-price {
         font-size: 29px !important;
     }
 
-
     .modal-product-content p,
     .modal-description {
         font-size: 10.5px !important;
+    }
+
+    .modal-quantity {
+        width: 180px !important;
+    }
+
+    .modal-features > div {
+        height: 50px !important;
+        min-height: 50px !important;
     }
 }
