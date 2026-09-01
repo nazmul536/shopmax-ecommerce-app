@@ -2426,8 +2426,11 @@ img {
     }
 
     .top-links {
-        display: none;
+        display: flex;
+        align-items: center;
+        gap: 22px;
     }
+
 
     .header-main {
         min-width: 0 !important;
@@ -3821,6 +3824,10 @@ img {
         width: 35px;
         height: 35px;
         font-size: 13px;
+    }
+
+    .top-links {
+        display: none !important;
     }
 
 }
