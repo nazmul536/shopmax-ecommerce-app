@@ -4738,53 +4738,146 @@ img {
 
 
 /* =========================================================
-   MOBILE PRODUCT MODAL — FINAL HEIGHT / OVERFLOW FIX
-   ========================================================= */
+   SHOPMAX — FINAL MOBILE PRODUCT MODAL
+   OUTER MODAL SCROLL / NO EMPTY SPACE
+========================================================= */
 
 @media (max-width: 768px) {
 
-    /* Main modal = only scroll container */
-    .modal-product {
-        width: calc(100% - 20px) !important;
-        max-width: 560px !important;
+    /* =========================================
+       OUTER MODAL
+    ========================================= */
 
-        height: auto !important;
-        min-height: 0 !important;
-        max-height: calc(100dvh - 20px) !important;
+    .product-modal {
+        position: fixed !important;
+        inset: 0 !important;
 
-        display: block !important;
-
-        overflow-x: hidden !important;
-        overflow-y: auto !important;
-
-        box-sizing: border-box !important;
-    }
-
-    /* Product image area */
-    .modal-product-image-section {
         width: 100% !important;
-        height: 210px !important;
-        min-height: 210px !important;
+        height: 100% !important;
+
+        padding: 8px !important;
 
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
 
         overflow: hidden !important;
-        flex-shrink: 0 !important;
+        box-sizing: border-box !important;
     }
+
+
+    /* =========================================
+       ACTUAL WHITE MODAL
+       THIS IS THE SCROLL CONTAINER
+    ========================================= */
+
+    .product-modal-content {
+        position: relative !important;
+
+        width: 100% !important;
+        max-width: 560px !important;
+
+        height: auto !important;
+        min-height: 0 !important;
+
+        /*
+           Important:
+           Don't force viewport height
+        */
+        max-height: calc(100dvh - 16px) !important;
+
+        display: grid !important;
+
+        grid-template-columns: 1fr !important;
+
+        /*
+           Image gets fixed space,
+           content gets natural height
+        */
+        grid-template-rows: 210px auto !important;
+
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+
+        border-radius: 14px !important;
+
+        box-sizing: border-box !important;
+
+        align-self: center !important;
+    }
+
+
+    /* =========================================
+       IMAGE
+    ========================================= */
+
+    .modal-product-image-section {
+        width: 100% !important;
+
+        height: 210px !important;
+        min-height: 210px !important;
+        max-height: 210px !important;
+
+        display: flex !important;
+
+        align-items: center !important;
+        justify-content: center !important;
+
+        padding: 12px 25px !important;
+
+        overflow: hidden !important;
+
+        box-sizing: border-box !important;
+    }
+
 
     .modal-product-image-section img {
         width: auto !important;
         height: auto !important;
 
-        max-width: 78% !important;
+        max-width: 190px !important;
         max-height: 175px !important;
 
         object-fit: contain !important;
+
+        margin: 0 !important;
     }
 
-    /* Content must NOT create another scroll area */
+
+    /* =========================================
+       BADGE
+    ========================================= */
+
+    .modal-image-badge {
+        top: 12px !important;
+        left: 12px !important;
+
+        padding: 7px 10px !important;
+
+        font-size: 7px !important;
+    }
+
+
+    /* =========================================
+       CLOSE BUTTON
+    ========================================= */
+
+    .modal-close {
+        top: 8px !important;
+        right: 8px !important;
+
+        width: 40px !important;
+        height: 40px !important;
+
+        font-size: 16px !important;
+    }
+
+
+    /* =========================================
+       CONTENT
+       NO INTERNAL SCROLL
+    ========================================= */
+
     .modal-product-content {
         width: 100% !important;
 
@@ -4801,68 +4894,109 @@ img {
         flex: none !important;
     }
 
-    /* Category */
-    .modal-product-content .modal-category,
-    .modal-product-content .modal-product-category {
-        display: block !important;
-        visibility: visible !important;
 
-        margin: 0 0 7px !important;
+    /* CATEGORY */
 
-        font-size: 11px !important;
+    .modal-product-category {
+        margin-bottom: 7px !important;
+
+        font-size: 10px !important;
         line-height: 1.2 !important;
     }
 
-    /* Product title */
+
+    /* TITLE */
+
     .modal-product-content h2 {
-        display: block !important;
-        visibility: visible !important;
+        width: 100% !important;
+        max-width: 100% !important;
 
         margin: 0 0 8px !important;
 
-        font-size: 23px !important;
+        padding-right: 35px !important;
+
+        font-size: 22px !important;
         line-height: 1.2 !important;
     }
 
-    /* Rating */
+
+    /* RATING */
+
     .modal-rating {
-        margin: 0 0 8px !important;
+        margin-bottom: 8px !important;
+
         font-size: 12px !important;
     }
 
-    /* Price */
-    .modal-price {
-        margin: 0 0 11px !important;
+    .modal-rating i {
+        font-size: 17px !important;
+    }
 
-        font-size: 31px !important;
+
+    /* PRICE */
+
+    .modal-price {
+        margin-bottom: 11px !important;
+
+        font-size: 30px !important;
         line-height: 1 !important;
     }
 
-    /* Description */
+
+    /* DESCRIPTION */
+
     .modal-product-content p,
     .modal-description {
-        margin: 0 0 12px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+
+        margin-bottom: 12px !important;
 
         font-size: 11px !important;
         line-height: 1.5 !important;
     }
 
-    /* Quantity */
+
+    /* QUANTITY */
+
     .modal-quantity-area {
         margin-bottom: 12px !important;
     }
 
+    .modal-quantity-area > strong {
+        margin-bottom: 6px !important;
+
+        font-size: 13px !important;
+    }
+
     .modal-quantity {
         width: 185px !important;
+        min-width: 185px !important;
+
         height: 45px !important;
     }
 
     .modal-quantity button {
-        width: 47px !important;
+        width: 46px !important;
+        min-width: 46px !important;
+
         height: 45px !important;
+
+        font-size: 19px !important;
     }
 
-    /* Buttons */
+
+    /* BUTTONS */
+
+    .modal-actions {
+        width: 100% !important;
+
+        display: flex !important;
+        flex-direction: column !important;
+
+        gap: 7px !important;
+    }
+
     .modal-add-cart,
     .modal-buy-now {
         width: 100% !important;
@@ -4870,54 +5004,74 @@ img {
         height: 47px !important;
         min-height: 47px !important;
 
-        font-size: 13px !important;
+        font-size: 12px !important;
     }
 
-    .modal-add-cart {
-        margin-bottom: 7px !important;
+    .modal-buy-now {
+        margin-top: 0 !important;
     }
 
-    /* Features */
+
+    /* FEATURES */
+
     .modal-features {
+        width: 100% !important;
+
         display: grid !important;
 
-        grid-template-columns: repeat(3, 1fr) !important;
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
 
         gap: 7px !important;
 
-        margin-top: 10px !important;
-        padding-top: 9px !important;
-
-        flex: none !important;
+        margin-top: 11px !important;
+        padding-top: 10px !important;
     }
 
     .modal-features > div {
-        height: 54px !important;
-        min-height: 54px !important;
+        width: 100% !important;
 
-        flex: none !important;
+        height: 52px !important;
+        min-height: 52px !important;
+
+        padding: 6px 3px !important;
+    }
+
+    .modal-features i {
+        font-size: 16px !important;
+    }
+
+    .modal-features span {
+        font-size: 7px !important;
     }
 }
 
 
 /* =========================================================
-   SMALL PHONES
-   ========================================================= */
+   SMALL PHONE — 400px
+========================================================= */
 
 @media (max-width: 400px) {
 
-    .modal-product {
-        width: calc(100% - 16px) !important;
+    .product-modal {
+        padding: 8px !important;
+    }
+
+    .product-modal-content {
         max-height: calc(100dvh - 16px) !important;
+
+        grid-template-rows: 195px auto !important;
+
+        border-radius: 13px !important;
     }
 
     .modal-product-image-section {
         height: 195px !important;
         min-height: 195px !important;
+        max-height: 195px !important;
     }
 
     .modal-product-image-section img {
-        max-width: 78% !important;
+        max-width: 180px !important;
         max-height: 165px !important;
     }
 
@@ -4940,6 +5094,7 @@ img {
 
     .modal-quantity {
         width: 180px !important;
+        min-width: 180px !important;
     }
 
     .modal-features > div {
