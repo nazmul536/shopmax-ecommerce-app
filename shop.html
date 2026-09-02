@@ -35,7 +35,6 @@
         href="assets/css/style.css"
     >
 
-
     <!-- =====================================================
          SHOP CSS
     ====================================================== -->
@@ -51,43 +50,33 @@
 <body>
 
 
-<!-- =========================================================
+<!-- =====================================================
      TOP BAR
-========================================================= -->
+===================================================== -->
 
 <div class="top-bar">
 
     <div class="container top-bar-inner">
 
         <div class="top-sale">
-
             <i class="fa-solid fa-fire"></i>
-
             Hot Deals
-
             <span>
                 Summer Sale For All Products - Up To 50% Off
             </span>
-
         </div>
-
 
         <div class="top-links">
 
-            <a href="#">
-                Track Order
-            </a>
+            <a href="#">Track Order</a>
+            <a href="#">Help Center</a>
 
-            <a href="#">
-                Help Center
-            </a>
-
-            <button type="button">
+            <button>
                 English
                 <i class="fa-solid fa-chevron-down"></i>
             </button>
 
-            <button type="button">
+            <button>
                 USD
                 <i class="fa-solid fa-chevron-down"></i>
             </button>
@@ -100,9 +89,9 @@
 
 
 
-<!-- =========================================================
+<!-- =====================================================
      HEADER
-========================================================= -->
+===================================================== -->
 
 <header class="header">
 
@@ -112,7 +101,7 @@
         <!-- LOGO -->
 
         <a
-            href="index.html"
+            href="#"
             class="logo"
         >
 
@@ -127,14 +116,12 @@
         </a>
 
 
-
         <!-- SEARCH -->
 
         <div class="search-box">
 
             <select
-                id="shopHeaderCategory"
-                aria-label="Search category"
+                id="categorySelect"
             >
 
                 <option value="all">
@@ -162,16 +149,14 @@
 
             <input
                 type="text"
-                id="shopSearch"
+                id="searchInput"
                 placeholder="Search for products..."
-                autocomplete="off"
             >
 
 
             <button
+                id="searchBtn"
                 type="button"
-                id="shopSearchBtn"
-                aria-label="Search"
             >
 
                 <i class="fa-solid fa-magnifying-glass"></i>
@@ -181,59 +166,39 @@
         </div>
 
 
-
         <!-- HEADER ACTIONS -->
 
         <div class="header-actions">
 
-
-            <!-- WISHLIST -->
-
-            <button
-                type="button"
-                class="header-action"
-                id="wishlistHeader"
-            >
+           <button class="header-action wishlist-header-btn" id="wishlistHeader">
 
                 <span class="wishlist-icon-wrap">
 
                     <i class="fa-regular fa-heart"></i>
 
+                    <b id="wishlistCount">
+                        0
+                    </b>
+
                 </span>
 
-                <span>
-                    Wishlist
-                </span>
-
-                <b id="wishlistCount">
-                    0
-                </b>
+                <span>Wishlist</span>
 
             </button>
 
 
-
-            <!-- ACCOUNT -->
-
             <button
-                type="button"
                 class="header-action"
             >
 
                 <i class="fa-regular fa-user"></i>
 
-                <span>
-                    Account
-                </span>
+                <span>Account</span>
 
             </button>
 
 
-
-            <!-- CART -->
-
             <button
-                type="button"
                 class="header-action cart-header-btn"
                 id="cartBtn"
             >
@@ -248,21 +213,17 @@
 
                 </span>
 
-                <span>
-                    Cart
-                </span>
+                <span>Cart</span>
 
             </button>
 
         </div>
 
+
     </div>
 
 
-
-    <!-- =====================================================
-         NAVIGATION
-    ====================================================== -->
+    <!-- NAVIGATION -->
 
     <div class="navigation">
 
@@ -274,18 +235,16 @@
             <div class="categories-wrapper">
 
                 <button
-                    type="button"
                     class="categories-btn"
                     id="categoriesBtn"
+                    type="button"
                 >
 
                     <i class="fa-solid fa-bars"></i>
 
                     All Categories
 
-                    <i
-                        class="fa-solid fa-chevron-down arrow"
-                    ></i>
+                    <i class="fa-solid fa-chevron-down arrow"></i>
 
                 </button>
 
@@ -298,168 +257,137 @@
                 >
 
                     <div class="category-dropdown-title">
-
                         <i class="fa-solid fa-layer-group"></i>
-
                         Shop By Category
-
                     </div>
 
-
-                    <!-- ELECTRONICS -->
-
                     <div class="category-item has-submenu">
-
-                        <button type="button">
-
+                        <button type="button" data-category="electronics">
                             <span>
-
                                 <i class="fa-solid fa-laptop"></i>
-
                                 Electronics
-
                             </span>
-
-                            <i
-                                class="fa-solid fa-chevron-right"
-                            ></i>
-
+                            <i class="fa-solid fa-chevron-right"></i>
                         </button>
-
-
                         <div class="category-submenu">
-
-                            <a
-                                href="#"
-                                data-category="electronics"
-                            >
-                                Laptops
-                            </a>
-
-                            <a href="#">
-                                Smartphones
-                            </a>
-
-                            <a href="#">
-                                Headphones
-                            </a>
-
-                            <a href="#">
-                                Cameras
-                            </a>
-
-                            <a href="#">
-                                Accessories
-                            </a>
-
+                            <a href="#" data-category="laptops">Laptops</a>
+                            <a href="#" data-category="smartphones">Smartphones</a>
+                            <a href="#" data-category="tablets">Tablets</a>
+                            <a href="#" data-category="mobile-accessories">Mobile Accessories</a>
                         </div>
-
                     </div>
-
-
-
-                    <!-- FASHION -->
 
                     <div class="category-item has-submenu">
-
-                        <button type="button">
-
+                        <button type="button" data-category="fashion">
                             <span>
-
                                 <i class="fa-solid fa-shirt"></i>
-
                                 Fashion
-
                             </span>
-
-                            <i
-                                class="fa-solid fa-chevron-right"
-                            ></i>
-
+                            <i class="fa-solid fa-chevron-right"></i>
                         </button>
-
-
                         <div class="category-submenu">
-
-                            <a
-                                href="#"
-                                data-category="men's clothing"
-                            >
-                                Men's Clothing
-                            </a>
-
-                            <a
-                                href="#"
-                                data-category="women's clothing"
-                            >
-                                Women's Clothing
-                            </a>
-
+                            <a href="#" data-category="mens-shirts">Men's Shirts</a>
+                            <a href="#" data-category="mens-shoes">Men's Shoes</a>
+                            <a href="#" data-category="mens-watches">Men's Watches</a>
+                            <a href="#" data-category="womens-dresses">Women's Dresses</a>
+                            <a href="#" data-category="womens-shoes">Women's Shoes</a>
+                            <a href="#" data-category="womens-watches">Women's Watches</a>
+                            <a href="#" data-category="tops">Tops</a>
+                            <a href="#" data-category="sunglasses">Sunglasses</a>
                         </div>
-
                     </div>
 
-
-
-                    <!-- JEWELLERY -->
-
-                    <div class="category-item">
-
-                        <button
-                            type="button"
-                            data-category="jewelery"
-                        >
-
+                    <div class="category-item has-submenu">
+                        <button type="button" data-category="home-kitchen">
                             <span>
-
-                                <i class="fa-solid fa-gem"></i>
-
-                                Jewellery
-
-                            </span>
-
-                        </button>
-
-                    </div>
-
-
-
-                    <!-- HOME -->
-
-                    <div class="category-item">
-
-                        <button type="button">
-
-                            <span>
-
                                 <i class="fa-solid fa-house"></i>
-
                                 Home & Kitchen
-
                             </span>
-
+                            <i class="fa-solid fa-chevron-right"></i>
                         </button>
-
+                        <div class="category-submenu">
+                            <a href="#" data-category="furniture">Furniture</a>
+                            <a href="#" data-category="home-decoration">Home Decoration</a>
+                            <a href="#" data-category="kitchen-accessories">Kitchen Accessories</a>
+                        </div>
                     </div>
 
+                    <div class="category-item has-submenu">
+                        <button type="button" data-category="beauty-health">
+                            <span>
+                                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                Beauty & Health
+                            </span>
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                        <div class="category-submenu">
+                            <a href="#" data-category="beauty">Beauty</a>
+                            <a href="#" data-category="fragrances">Fragrances</a>
+                            <a href="#" data-category="skin-care">Skin Care</a>
+                        </div>
+                    </div>
 
+                    <div class="category-item has-submenu">
+                        <button type="button" data-category="sports-outdoors">
+                            <span>
+                                <i class="fa-solid fa-futbol"></i>
+                                Sports & Outdoors
+                            </span>
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                        <div class="category-submenu">
+                            <a href="#" data-category="sports-accessories">Sports Accessories</a>
+                        </div>
+                    </div>
 
-                    <!-- SPORTS -->
+                    <div class="category-item has-submenu">
+                        <button type="button" data-category="toys-games">
+                            <span>
+                                <i class="fa-solid fa-gamepad"></i>
+                                Toys & Games
+                            </span>
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                        <div class="category-submenu">
+                            <a href="#" data-category="toys">Toys & Games</a>
+                        </div>
+                    </div>
+
+                    <div class="category-item has-submenu">
+                        <button type="button" data-category="automotive">
+                            <span>
+                                <i class="fa-solid fa-car"></i>
+                                Automotive
+                            </span>
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                        <div class="category-submenu">
+                            <a href="#" data-category="vehicle">Vehicle</a>
+                            <a href="#" data-category="motorcycle">Motorcycle</a>
+                        </div>
+                    </div>
+
+                    <div class="category-item has-submenu">
+                        <button type="button" data-category="books-media">
+                            <span>
+                                <i class="fa-solid fa-book"></i>
+                                Books & Media
+                            </span>
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                        <div class="category-submenu">
+                            <a href="#" data-category="books">Books</a>
+                        </div>
+                    </div>
 
                     <div class="category-item">
-
-                        <button type="button">
-
+                        <button type="button" data-category="groceries">
                             <span>
-
-                                <i class="fa-solid fa-futbol"></i>
-
-                                Sports
-
+                                <i class="fa-solid fa-basket-shopping"></i>
+                                Groceries
                             </span>
-
+                            <i class="fa-solid fa-chevron-right"></i>
                         </button>
-
                     </div>
 
                 </div>
@@ -467,12 +395,13 @@
             </div>
 
 
-
             <!-- NAV LINKS -->
 
             <nav class="nav-links">
 
-                <a href="index.html">
+                <a
+                    href="index.html"
+                >
                     Home
                 </a>
 
@@ -502,7 +431,6 @@
             </nav>
 
 
-
             <!-- HOTLINE -->
 
             <div class="hotline">
@@ -510,7 +438,6 @@
                 <i class="fa-solid fa-headset"></i>
 
                 Hotline:
-
                 <strong>
                     (800) 123-4567
                 </strong>
@@ -522,6 +449,8 @@
     </div>
 
 </header>
+
+
 
 
 

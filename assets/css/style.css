@@ -2126,7 +2126,7 @@ img {
 }
 
 
-@media (min-width: 769px) {
+@media (min-width: 1025px) {
 
     .category-item.has-submenu:hover > .category-submenu {
         opacity: 1;
@@ -2143,6 +2143,160 @@ img {
 
 }
 
+
+
+/* =========================================================
+   TABLET CATEGORY MENU
+   769px - 1024px
+   CLICK TO OPEN SUBMENU
+========================================================= */
+
+@media (min-width: 769px) and (max-width: 1024px) {
+
+    .header,
+    .navigation,
+    .navigation-inner,
+    .categories-wrapper {
+        overflow: visible !important;
+    }
+
+    .navigation {
+        z-index: 6000 !important;
+    }
+
+    .navigation-inner {
+        position: relative;
+        z-index: 6001;
+    }
+
+    .categories-wrapper {
+        position: relative;
+        z-index: 6002;
+    }
+
+    .category-dropdown {
+        position: absolute !important;
+        top: calc(100% + 1px) !important;
+        left: 0 !important;
+        z-index: 9990 !important;
+
+        width: 278px !important;
+        max-width: min(278px, calc(100vw - 20px)) !important;
+
+        overflow: visible !important;
+
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+        transform: translateY(6px) !important;
+    }
+
+    .category-dropdown.show {
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+        transform: translateY(0) !important;
+    }
+
+    .category-item {
+        position: relative !important;
+        overflow: visible !important;
+    }
+
+    .category-item > button {
+        position: relative;
+        z-index: 1;
+    }
+
+    .category-item.mobile-open > button {
+        background: #f5f8ff !important;
+        border-color: #e2eafe !important;
+        color: #2864e8 !important;
+    }
+
+    .category-item.mobile-open > button span i,
+    .category-item.mobile-open > button > i {
+        color: #2864e8 !important;
+    }
+
+    .category-item.mobile-open > button > i:last-child {
+        transform: rotate(90deg) !important;
+    }
+
+    .category-submenu {
+        position: absolute !important;
+        top: -1px !important;
+        left: calc(100% + 5px) !important;
+        z-index: 10000 !important;
+
+        width: 190px !important;
+        max-width: 190px !important;
+        max-height: min(60vh, 520px) !important;
+
+        display: none !important;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+
+        padding: 7px !important;
+        margin: 0 !important;
+
+        border: 1px solid #e3e8ef !important;
+        border-radius: 8px !important;
+
+        background: #fff !important;
+        box-shadow: 0 12px 30px rgba(20,32,55,.14) !important;
+
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+        transform: translateX(5px) !important;
+    }
+
+    .category-item.mobile-open > .category-submenu {
+        display: block !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+        transform: translateX(0) !important;
+    }
+
+    .category-submenu a {
+        min-height: 35px !important;
+        padding: 0 10px !important;
+        border-radius: 6px !important;
+        font-size: 10px !important;
+    }
+
+}
+
+
+/* =========================================================
+   TABLET HEADER
+   Keep the 820px - 1024px header clean
+========================================================= */
+
+@media (min-width: 769px) and (max-width: 992px) {
+
+    .header-main {
+        flex-wrap: wrap;
+        padding: 13px 0;
+    }
+
+    .logo {
+        order: 1;
+    }
+
+    .header-actions {
+        order: 2;
+    }
+
+    .search-box {
+        order: 3;
+        width: 100%;
+        max-width: none;
+    }
+
+}
 
 @media (max-width: 1200px) {
 
@@ -2701,29 +2855,41 @@ img {
         overflow: hidden;
     }
 
-    .category-dropdown {
-        position: absolute !important;
-        top: calc(100% + 1px) !important;
-        left: 0 !important;
-        width: min(300px, calc(100vw - 24px)) !important;
-        max-width: calc(100vw - 24px) !important;
-        max-height: calc(100svh - 120px) !important;
-        overflow-x: hidden !important;
-        overflow-y: auto !important;
-        padding: 9px !important;
-        border: 1px solid #e3e8ef !important;
-        border-radius: 0 0 10px 10px !important;
-        background: #fff !important;
-        box-shadow: 0 15px 35px rgba(20,32,55,.18) !important;
-        display: block !important;
-        opacity: 0 !important;
-        visibility: hidden !important;
-        pointer-events: none !important;
-        transform: translateY(6px) !important;
-        transition: opacity .18s ease,
-                visibility .18s ease,
-                transform .18s ease !important;
-    }
+   .category-dropdown {
+    position: absolute !important;
+    top: calc(100% + 1px) !important;
+    left: 0 !important;
+
+    width: min(300px, calc(100vw - 24px)) !important;
+    max-width: calc(100vw - 24px) !important;
+
+    max-height: calc(100svh - 120px) !important;
+
+    overflow-y: auto !important;
+
+    padding: 9px !important;
+
+    border: 1px solid #e3e8ef !important;
+    border-radius: 0 0 10px 10px !important;
+
+    background: #fff !important;
+
+    box-shadow:
+        0 15px 35px rgba(20,32,55,.18) !important;
+
+    display: block !important;
+
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+
+    transform: translateY(6px) !important;
+
+    transition:
+        opacity .18s ease,
+        visibility .18s ease,
+        transform .18s ease !important;
+}
 
     .category-dropdown.show {
         opacity: 1 !important;
@@ -2832,6 +2998,43 @@ img {
         transform: rotate(90deg) !important;
         color: #2864e8 !important;
     }
+
+    .category-dropdown {
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+    }
+
+    .category-item.mobile-open >
+    .category-submenu {
+
+        position: static !important;
+
+        top: auto !important;
+        left: auto !important;
+
+        width: 100% !important;
+        max-width: 100% !important;
+
+        margin-top: 4px !important;
+
+        padding: 4px 0 4px 14px !important;
+
+        border: 0 !important;
+        border-left: 2px solid #dce8ff !important;
+
+        border-radius: 0 !important;
+
+        background: #fbfcff !important;
+
+        box-shadow: none !important;
+
+        transform: none !important;
+
+        max-height: none !important;
+
+        overflow: visible !important;
+    }
+
 
     .hero-section {
         width: 100%;
@@ -4678,6 +4881,90 @@ img {
     .modal-features > div {
         height: 50px !important;
         min-height: 50px !important;
+    }
+
+}
+/* =========================================================
+   TABLET CATEGORY MENU
+   769px - 1024px
+========================================================= */
+
+@media (min-width: 769px) and (max-width: 1024px) {
+
+    .header,
+    .navigation {
+        overflow: visible !important;
+    }
+
+    .navigation-inner {
+        overflow: visible !important;
+    }
+
+    .categories-wrapper {
+        position: relative;
+        z-index: 9000;
+    }
+
+    .category-dropdown {
+        z-index: 9999 !important;
+
+        width: 278px !important;
+        max-width: 278px !important;
+
+        overflow: visible !important;
+    }
+
+    .category-submenu {
+        position: absolute !important;
+
+        top: -1px !important;
+        left: calc(100% + 5px) !important;
+
+        width: 190px !important;
+        max-width: 190px !important;
+
+        padding: 7px !important;
+
+        border: 1px solid #e3e8ef !important;
+        border-radius: 8px !important;
+
+        background: #fff !important;
+
+        box-shadow:
+            0 12px 30px rgba(20,32,55,.14) !important;
+
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+
+        transform: translateX(5px) !important;
+
+        z-index: 10000 !important;
+    }
+
+    .category-item.mobile-open >
+    .category-submenu {
+
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+
+        transform: translateX(0) !important;
+    }
+
+    .category-item.mobile-open >
+    button {
+
+        background: #f5f8ff !important;
+        border-color: #e2eafe !important;
+        color: #2864e8 !important;
+    }
+
+    .category-item.mobile-open >
+    button > i:last-child {
+
+        transform: rotate(90deg) !important;
+        color: #2864e8 !important;
     }
 
 }

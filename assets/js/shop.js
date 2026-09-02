@@ -2,20 +2,13 @@
    SHOPMAX
    SHOP PAGE - COMPLETE JAVASCRIPT
    Search + Filter + Sort + Cart + Wishlist + Modal
-   API UPDATED → DummyJSON Products
+   Shared Header + Mobile Category Submenu
 ========================================================= */
 
 
 /* =========================================================
    API
 ========================================================= */
-
-/*
-   DummyJSON provides a large product catalog.
-
-   limit=0
-   → load all available products
-*/
 
 const API_URL =
     "https://dummyjson.com/products?limit=0";
@@ -41,20 +34,17 @@ let wishlist =
         )
     ) || [];
 
-
 wishlist = [
     ...new Set(
         wishlist.map(Number)
     )
 ];
 
-
 let currentSearch = "";
 
 let currentCategory = "all";
 
 let currentSort = "default";
-
 
 let currentModalProduct = null;
 
@@ -72,12 +62,12 @@ const shopProducts =
 
 const shopSearch =
     document.getElementById(
-        "shopSearch"
+        "searchInput"
     );
 
 const shopSearchBtn =
     document.getElementById(
-        "shopSearchBtn"
+        "searchBtn"
     );
 
 const shopCategory =
@@ -87,7 +77,7 @@ const shopCategory =
 
 const shopHeaderCategory =
     document.getElementById(
-        "shopHeaderCategory"
+        "categorySelect"
     );
 
 const shopSort =
@@ -117,7 +107,7 @@ const clearShopFilters =
 
 
 /* =========================================================
-   CATEGORY
+   CATEGORY MENU DOM
 ========================================================= */
 
 const categoriesBtn =
@@ -217,7 +207,7 @@ const wishlistCount =
 
 
 /* =========================================================
-   MODAL DOM
+   PRODUCT MODAL DOM
 ========================================================= */
 
 const productModal =
@@ -292,7 +282,7 @@ const modalBuyNow =
 
 
 /* =========================================================
-   INIT
+   INITIALIZE
 ========================================================= */
 
 document.addEventListener(
@@ -325,6 +315,8 @@ document.addEventListener(
 
 function setupShop() {
 
+    /* Search */
+
     shopSearch?.addEventListener(
         "input",
         () => {
@@ -339,6 +331,8 @@ function setupShop() {
         }
     );
 
+
+    /* Search button */
 
     shopSearchBtn?.addEventListener(
         "click",
@@ -357,6 +351,8 @@ function setupShop() {
         }
     );
 
+
+    /* Search Enter */
 
     shopSearch?.addEventListener(
         "keydown",
@@ -381,6 +377,8 @@ function setupShop() {
     );
 
 
+    /* Shop category */
+
     shopCategory?.addEventListener(
         "change",
         () => {
@@ -402,6 +400,8 @@ function setupShop() {
         }
     );
 
+
+    /* Shared header category */
 
     shopHeaderCategory?.addEventListener(
         "change",
@@ -425,6 +425,8 @@ function setupShop() {
     );
 
 
+    /* Sort */
+
     shopSort?.addEventListener(
         "change",
         () => {
@@ -437,6 +439,8 @@ function setupShop() {
         }
     );
 
+
+    /* Clear filters */
 
     clearShopFilters?.addEventListener(
         "click",
@@ -460,7 +464,7 @@ function setupSortOptions() {
     }
 
 
-    const exists =
+    const popularExists =
         [
             ...shopSort.options
         ].some(
@@ -470,7 +474,9 @@ function setupSortOptions() {
         );
 
 
-    if (!exists) {
+    if (
+        !popularExists
+    ) {
 
         const option =
             document.createElement(
@@ -508,15 +514,18 @@ async function loadProducts() {
                 API_URL,
                 {
                     method: "GET",
+
                     headers: {
-                        "Accept":
+                        Accept:
                             "application/json"
                     }
                 }
             );
 
 
-        if (!response.ok) {
+        if (
+            !response.ok
+        ) {
 
             throw new Error(
                 `API request failed: ${response.status}`
@@ -527,18 +536,6 @@ async function loadProducts() {
 
         const data =
             await response.json();
-
-
-        /*
-           DummyJSON response:
-
-           {
-               products: [],
-               total: 194,
-               skip: 0,
-               limit: 0
-           }
-        */
 
 
         if (
@@ -554,13 +551,6 @@ async function loadProducts() {
 
         }
 
-
-        /*
-           Normalize DummyJSON data
-           so the rest of ShopMax
-           can continue using the
-           existing structure.
-        */
 
         products =
             data.products.map(
@@ -640,10 +630,7 @@ async function loadProducts() {
             );
 
 
-        /*
-           Keep only wishlist IDs
-           that exist in the new API.
-        */
+        /* Remove invalid wishlist IDs */
 
         wishlist =
             wishlist.filter(
@@ -659,17 +646,8 @@ async function loadProducts() {
         saveWishlist();
 
 
-        /*
-           Populate category dropdowns
-           from API products.
-        */
-
         populateCategoryOptions();
 
-
-        /*
-           Render products.
-        */
 
         applyShopFilters();
 
@@ -695,7 +673,7 @@ async function loadProducts() {
 
 
 /* =========================================================
-   POPULATE CATEGORY OPTIONS
+   POPULATE CATEGORY SELECTS
 ========================================================= */
 
 function populateCategoryOptions() {
@@ -733,8 +711,11 @@ function populateCategoryOptions() {
 
 
     const selects = [
+
         shopCategory,
+
         shopHeaderCategory
+
     ];
 
 
@@ -746,20 +727,11 @@ function populateCategoryOptions() {
             }
 
 
-            /*
-               Preserve existing
-               selected value.
-            */
-
             const selected =
                 select.value ||
                 currentCategory ||
                 "all";
 
-
-            /*
-               Keep "All Categories".
-            */
 
             select.innerHTML = `
 
@@ -782,6 +754,7 @@ function populateCategoryOptions() {
                     option.value =
                         category;
 
+
                     option.textContent =
                         formatCategory(
                             category
@@ -795,11 +768,6 @@ function populateCategoryOptions() {
                 }
             );
 
-
-            /*
-               Restore selected value
-               if it still exists.
-            */
 
             const exists =
                 [
@@ -820,20 +788,11 @@ function populateCategoryOptions() {
     );
 
 
-    /*
-       If category was removed
-       from the new API, reset it.
-    */
-
-    const categoryExists =
-        categories.includes(
-            currentCategory
-        );
-
-
     if (
         currentCategory !== "all" &&
-        !categoryExists
+        !categories.includes(
+            currentCategory
+        )
     ) {
 
         currentCategory =
@@ -1020,7 +979,7 @@ function showShopError() {
 
 
 /* =========================================================
-   FILTERS
+   FILTER PRODUCTS
 ========================================================= */
 
 function applyShopFilters() {
@@ -1028,12 +987,16 @@ function applyShopFilters() {
     if (
         !products.length
     ) {
+
         return;
+
     }
 
 
     let result =
-        [...products];
+        [
+            ...products
+        ];
 
 
     const search =
@@ -1041,6 +1004,8 @@ function applyShopFilters() {
             .trim()
             .toLowerCase();
 
+
+    /* Search */
 
     if (search) {
 
@@ -1051,29 +1016,49 @@ function applyShopFilters() {
                     const title =
                         String(
                             product.title || ""
-                        ).toLowerCase();
+                        )
+                            .toLowerCase();
+
 
                     const category =
                         String(
                             product.category || ""
-                        ).toLowerCase();
+                        )
+                            .toLowerCase();
+
 
                     const description =
                         String(
                             product.description || ""
-                        ).toLowerCase();
+                        )
+                            .toLowerCase();
+
 
                     const brand =
                         String(
                             product.brand || ""
-                        ).toLowerCase();
+                        )
+                            .toLowerCase();
 
 
                     return (
-                        title.includes(search) ||
-                        category.includes(search) ||
-                        description.includes(search) ||
-                        brand.includes(search)
+
+                        title.includes(
+                            search
+                        ) ||
+
+                        category.includes(
+                            search
+                        ) ||
+
+                        description.includes(
+                            search
+                        ) ||
+
+                        brand.includes(
+                            search
+                        )
+
                     );
 
                 }
@@ -1082,8 +1067,12 @@ function applyShopFilters() {
     }
 
 
+    /* Category */
+
     const category =
-        currentCategory
+        String(
+            currentCategory || "all"
+        )
             .trim()
             .toLowerCase();
 
@@ -1098,12 +1087,16 @@ function applyShopFilters() {
                 product =>
                     String(
                         product.category
-                    ).toLowerCase() ===
+                    )
+                        .trim()
+                        .toLowerCase() ===
                     category
             );
 
     }
 
+
+    /* Sort */
 
     result =
         sortProducts(
@@ -1128,7 +1121,7 @@ function applyShopFilters() {
 
 
 /* =========================================================
-   SORT
+   SORT PRODUCTS
 ========================================================= */
 
 function sortProducts(
@@ -1137,7 +1130,9 @@ function sortProducts(
 ) {
 
     const sorted =
-        [...list];
+        [
+            ...list
+        ];
 
 
     switch (
@@ -1148,8 +1143,12 @@ function sortProducts(
 
             return sorted.sort(
                 (a, b) =>
-                    Number(a.price) -
-                    Number(b.price)
+                    Number(
+                        a.price
+                    ) -
+                    Number(
+                        b.price
+                    )
             );
 
 
@@ -1157,8 +1156,12 @@ function sortProducts(
 
             return sorted.sort(
                 (a, b) =>
-                    Number(b.price) -
-                    Number(a.price)
+                    Number(
+                        b.price
+                    ) -
+                    Number(
+                        a.price
+                    )
             );
 
 
@@ -1233,6 +1236,7 @@ function sortProducts(
                             b.rating?.rate || 0
                         );
 
+
                     const aReviews =
                         Number(
                             a.rating?.count || 0
@@ -1281,7 +1285,7 @@ function sortProducts(
 
 
 /* =========================================================
-   RENDER SHOP PRODUCTS
+   RENDER PRODUCTS
 ========================================================= */
 
 function renderShopProducts(
@@ -1301,7 +1305,9 @@ function renderShopProducts(
             "";
 
 
-        if (shopNoResults) {
+        if (
+            shopNoResults
+        ) {
 
             shopNoResults.hidden =
                 false;
@@ -1313,7 +1319,9 @@ function renderShopProducts(
     }
 
 
-    if (shopNoResults) {
+    if (
+        shopNoResults
+    ) {
 
         shopNoResults.hidden =
             true;
@@ -1363,17 +1371,22 @@ function createShopProductCard(
 
 
     const discounts = [
-        12, 20, 15, 10,
-        19, 11, 17, 23,
-        14, 18, 13, 22
+
+        12,
+        20,
+        15,
+        10,
+        19,
+        11,
+        17,
+        23,
+        14,
+        18,
+        13,
+        22
+
     ];
 
-
-    /*
-       Use API discount when available.
-       Otherwise use existing ShopMax
-       fallback discount.
-    */
 
     const apiDiscount =
         Number(
@@ -1599,8 +1612,12 @@ function createShopProductCard(
 
 function attachShopProductEvents() {
 
-    if (!shopProducts) {
+    if (
+        !shopProducts
+    ) {
+
         return;
+
     }
 
 
@@ -1670,7 +1687,6 @@ function handleShopProductAction(
                 1
             );
 
-
             openCart();
 
             break;
@@ -1688,8 +1704,8 @@ function handleShopProductAction(
         case "view":
 
             /*
-               Keep existing product
-               details behavior.
+               Existing ShopMax behavior:
+               Product opens details page.
             */
 
             window.location.href =
@@ -1728,15 +1744,21 @@ function updateShopResultCount(
 
 function renderActiveFilters() {
 
-    if (!shopActiveFilter) {
+    if (
+        !shopActiveFilter
+    ) {
+
         return;
+
     }
 
 
     const chips = [];
 
 
-    if (currentSearch) {
+    if (
+        currentSearch
+    ) {
 
         chips.push(`
 
@@ -1872,9 +1894,14 @@ function handleActiveFilterClear(
         currentSearch =
             "";
 
-        if (shopSearch) {
+
+        if (
+            shopSearch
+        ) {
+
             shopSearch.value =
                 "";
+
         }
 
     }
@@ -1887,14 +1914,24 @@ function handleActiveFilterClear(
         currentCategory =
             "all";
 
-        if (shopCategory) {
+
+        if (
+            shopCategory
+        ) {
+
             shopCategory.value =
                 "all";
+
         }
 
-        if (shopHeaderCategory) {
+
+        if (
+            shopHeaderCategory
+        ) {
+
             shopHeaderCategory.value =
                 "all";
+
         }
 
     }
@@ -1907,9 +1944,14 @@ function handleActiveFilterClear(
         currentSort =
             "default";
 
-        if (shopSort) {
+
+        if (
+            shopSort
+        ) {
+
             shopSort.value =
                 "default";
+
         }
 
     }
@@ -1972,27 +2014,43 @@ function clearAllShopFilters() {
         "default";
 
 
-    if (shopSearch) {
+    if (
+        shopSearch
+    ) {
+
         shopSearch.value =
             "";
+
     }
 
 
-    if (shopCategory) {
+    if (
+        shopCategory
+    ) {
+
         shopCategory.value =
             "all";
+
     }
 
 
-    if (shopHeaderCategory) {
+    if (
+        shopHeaderCategory
+    ) {
+
         shopHeaderCategory.value =
             "all";
+
     }
 
 
-    if (shopSort) {
+    if (
+        shopSort
+    ) {
+
         shopSort.value =
             "default";
+
     }
 
 
@@ -2003,6 +2061,7 @@ function clearAllShopFilters() {
 
 /* =========================================================
    CATEGORY MENU
+   DESKTOP + MOBILE SUBMENU
 ========================================================= */
 
 function setupCategoryMenu() {
@@ -2011,9 +2070,15 @@ function setupCategoryMenu() {
         !categoriesBtn ||
         !categoryDropdown
     ) {
+
         return;
+
     }
 
+
+    /* -----------------------------------------------------
+       ALL CATEGORIES BUTTON
+    ----------------------------------------------------- */
 
     categoriesBtn.addEventListener(
         "click",
@@ -2024,97 +2089,27 @@ function setupCategoryMenu() {
             event.stopPropagation();
 
 
-            categoryDropdown.classList.toggle(
-                "show"
-            );
-
-
-            categoriesBtn.classList.toggle(
-                "active"
-            );
-
-        }
-    );
-
-
-    categoryDropdown.addEventListener(
-        "click",
-        event => {
-
-            const item =
-                event.target.closest(
-                    "[data-category]"
-                );
-
-
-            if (!item) {
-                return;
-            }
-
-
-            event.preventDefault();
-
-            event.stopPropagation();
-
-
-            const category =
-                item.dataset.category;
-
-
-            if (!category) {
-                return;
-            }
-
-
-            currentCategory =
-                category;
-
-
-            if (shopCategory) {
-                shopCategory.value =
-                    category;
-            }
-
-
-            if (shopHeaderCategory) {
-                shopHeaderCategory.value =
-                    category;
-            }
-
-
-            applyShopFilters();
-
-
-            categoryDropdown.classList.remove(
-                "show"
-            );
-
-            categoriesBtn.classList.remove(
-                "active"
-            );
-
-        }
-    );
-
-
-    document.addEventListener(
-        "click",
-        event => {
-
-            if (
-                !categoryDropdown.contains(
-                    event.target
-                ) &&
-                !categoriesBtn.contains(
-                    event.target
-                )
-            ) {
-
-                categoryDropdown.classList.remove(
+            const isOpen =
+                categoryDropdown.classList.contains(
                     "show"
                 );
 
-                categoriesBtn.classList.remove(
+
+            if (
+                isOpen
+            ) {
+
+                closeCategoryMenu();
+
+            }
+
+            else {
+
+                categoryDropdown.classList.add(
+                    "show"
+                );
+
+                categoriesBtn.classList.add(
                     "active"
                 );
 
@@ -2122,6 +2117,455 @@ function setupCategoryMenu() {
 
         }
     );
+
+
+    /* -----------------------------------------------------
+       CATEGORY DROPDOWN CLICK
+    ----------------------------------------------------- */
+
+    categoryDropdown.addEventListener(
+        "click",
+        event => {
+
+            event.stopPropagation();
+
+
+            /* =================================================
+               SUBMENU LINK
+            ================================================= */
+
+            const submenuLink =
+                event.target.closest(
+                    ".category-submenu a[data-category]"
+                );
+
+
+            if (
+                submenuLink
+            ) {
+
+                event.preventDefault();
+
+
+                const category =
+                    submenuLink.dataset.category;
+
+
+                if (
+                    !category
+                ) {
+
+                    return;
+
+                }
+
+
+                currentCategory =
+                    normalizeCategory(
+                        category
+                    );
+
+
+                if (
+                    shopCategory
+                ) {
+
+                    shopCategory.value =
+                        currentCategory;
+
+                }
+
+
+                if (
+                    shopHeaderCategory
+                ) {
+
+                    shopHeaderCategory.value =
+                        currentCategory;
+
+                }
+
+
+                applyShopFilters();
+
+
+                closeCategoryMenu();
+
+
+                return;
+
+            }
+
+
+            /* =================================================
+               PARENT CATEGORY BUTTON
+            ================================================= */
+
+            const categoryButton =
+                event.target.closest(
+                    ".category-item > button"
+                );
+
+
+            if (
+                !categoryButton
+            ) {
+
+                return;
+
+            }
+
+
+            const item =
+                categoryButton.closest(
+                    ".category-item"
+                );
+
+
+            if (
+                !item
+            ) {
+
+                return;
+
+            }
+
+
+            const submenu =
+                item.querySelector(
+                    ":scope > .category-submenu"
+                );
+
+
+            /* =================================================
+               MOBILE
+               Parent = submenu toggle
+            ================================================= */
+
+            if (
+                submenu &&
+                window.innerWidth <= 768
+            ) {
+
+                event.preventDefault();
+
+
+                const shouldOpen =
+                    !item.classList.contains(
+                        "mobile-open"
+                    );
+
+
+                /*
+                   Close every other
+                   mobile submenu.
+                */
+
+                categoryDropdown
+                    .querySelectorAll(
+                        ".category-item.mobile-open"
+                    )
+                    .forEach(
+                        otherItem => {
+
+                            if (
+                                otherItem !==
+                                item
+                            ) {
+
+                                otherItem.classList.remove(
+                                    "mobile-open"
+                                );
+
+                            }
+
+                        }
+                    );
+
+
+                /*
+                   Open current submenu.
+                */
+
+                item.classList.toggle(
+                    "mobile-open",
+                    shouldOpen
+                );
+
+
+                return;
+
+            }
+
+
+            /* =================================================
+               DESKTOP
+            ================================================= */
+
+            const category =
+                categoryButton.dataset.category;
+
+
+            if (
+                !category
+            ) {
+
+                return;
+
+            }
+
+
+            event.preventDefault();
+
+
+            const normalized =
+                normalizeCategory(
+                    category
+                );
+
+
+            /*
+               If this is a parent group
+               and it has submenu, open it.
+            */
+
+            const hasMatchingProductCategory =
+                products.some(
+                    product =>
+                        normalizeCategory(
+                            product.category
+                        ) ===
+                        normalized
+                );
+
+
+            if (
+                normalized !== "all" &&
+                !hasMatchingProductCategory
+            ) {
+
+                if (
+                    submenu
+                ) {
+
+                    const shouldOpen =
+                        !item.classList.contains(
+                            "desktop-open"
+                        );
+
+
+                    categoryDropdown
+                        .querySelectorAll(
+                            ".category-item.desktop-open"
+                        )
+                        .forEach(
+                            otherItem => {
+
+                                if (
+                                    otherItem !==
+                                    item
+                                ) {
+
+                                    otherItem.classList.remove(
+                                        "desktop-open"
+                                    );
+
+                                }
+
+                            }
+                        );
+
+
+                    item.classList.toggle(
+                        "desktop-open",
+                        shouldOpen
+                    );
+
+                }
+
+
+                return;
+
+            }
+
+
+            currentCategory =
+                normalized;
+
+
+            if (
+                shopCategory
+            ) {
+
+                shopCategory.value =
+                    normalized;
+
+            }
+
+
+            if (
+                shopHeaderCategory
+            ) {
+
+                shopHeaderCategory.value =
+                    normalized;
+
+            }
+
+
+            applyShopFilters();
+
+
+            closeCategoryMenu();
+
+        }
+    );
+
+
+    /* -----------------------------------------------------
+       OUTSIDE CLICK
+    ----------------------------------------------------- */
+
+    document.addEventListener(
+        "click",
+        event => {
+
+            if (
+                categoryDropdown.contains(
+                    event.target
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            if (
+                categoriesBtn.contains(
+                    event.target
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            closeCategoryMenu();
+
+        }
+    );
+
+
+    /* -----------------------------------------------------
+       RESIZE
+       Reset mobile submenu state when switching
+       between mobile and desktop.
+    ----------------------------------------------------- */
+
+    window.addEventListener(
+        "resize",
+        () => {
+
+            if (
+                window.innerWidth > 768
+            ) {
+
+                categoryDropdown
+                    .querySelectorAll(
+                        ".category-item.mobile-open"
+                    )
+                    .forEach(
+                        item => {
+
+                            item.classList.remove(
+                                "mobile-open"
+                            );
+
+                        }
+                    );
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   CLOSE CATEGORY MENU
+========================================================= */
+
+function closeCategoryMenu() {
+
+    categoryDropdown?.classList.remove(
+        "show"
+    );
+
+
+    categoriesBtn?.classList.remove(
+        "active"
+    );
+
+
+    categoryDropdown
+        ?.querySelectorAll(
+            ".category-item.mobile-open, .category-item.desktop-open"
+        )
+        .forEach(
+            item => {
+
+                item.classList.remove(
+                    "mobile-open",
+                    "desktop-open"
+                );
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   CATEGORY NORMALIZE
+========================================================= */
+
+function normalizeCategory(
+    value
+) {
+
+    if (
+        !value
+    ) {
+
+        return "all";
+
+    }
+
+
+    return String(
+        value
+    )
+        .trim()
+        .toLowerCase()
+        .replace(
+            /&/g,
+            "and"
+        )
+        .replace(
+            /'/g,
+            ""
+        )
+        .replace(
+            /\s+/g,
+            "-"
+        )
+        .replace(
+            /-+/g,
+            "-"
+        );
 
 }
 
@@ -2137,6 +2581,8 @@ function setupCart() {
         event => {
 
             event.preventDefault();
+
+            event.stopPropagation();
 
             openCart();
 
@@ -2179,8 +2625,12 @@ function addToCart(
     quantity = 1
 ) {
 
-    if (!product) {
+    if (
+        !product
+    ) {
+
         return;
+
     }
 
 
@@ -2208,7 +2658,9 @@ function addToCart(
         );
 
 
-    if (existing) {
+    if (
+        existing
+    ) {
 
         existing.quantity =
             Number(
@@ -2223,20 +2675,25 @@ function addToCart(
         cart.push({
 
             id:
+
                 id,
 
             title:
+
                 product.title,
 
             price:
+
                 Number(
                     product.price
                 ),
 
             image:
+
                 product.image,
 
             quantity:
+
                 qty
 
         });
@@ -2288,8 +2745,12 @@ function updateCart() {
 
 function updateCartCount() {
 
-    if (!cartCount) {
+    if (
+        !cartCount
+    ) {
+
         return;
+
     }
 
 
@@ -2319,8 +2780,12 @@ function updateCartCount() {
 
 function updateCartTotal() {
 
-    if (!cartTotal) {
+    if (
+        !cartTotal
+    ) {
+
         return;
+
     }
 
 
@@ -2355,8 +2820,12 @@ function updateCartTotal() {
 
 function renderCart() {
 
-    if (!cartItems) {
+    if (
+        !cartItems
+    ) {
+
         return;
+
     }
 
 
@@ -2545,8 +3014,12 @@ function handleCartAction(
         );
 
 
-    if (!button) {
+    if (
+        !button
+    ) {
+
         return;
+
     }
 
 
@@ -2574,8 +3047,12 @@ function handleCartAction(
         );
 
 
-    if (!item) {
+    if (
+        !item
+    ) {
+
         return;
+
     }
 
 
@@ -2765,7 +3242,9 @@ function toggleWishlist(
     wishlist =
         [
             ...new Set(
-                wishlist
+                wishlist.map(
+                    Number
+                )
             )
         ];
 
@@ -2794,12 +3273,14 @@ function saveWishlist() {
 
 
 /* =========================================================
-   UPDATE WISHLIST UI
+   UPDATE WISHLIST
 ========================================================= */
 
 function updateWishlistUI() {
 
-    if (wishlistCount) {
+    if (
+        wishlistCount
+    ) {
 
         wishlistCount.textContent =
             wishlist.length;
@@ -2863,7 +3344,9 @@ function refreshVisibleWishlistButtons() {
                     );
 
 
-                if (icon) {
+                if (
+                    icon
+                ) {
 
                     icon.classList.toggle(
                         "fa-solid",
@@ -2890,6 +3373,7 @@ function refreshVisibleWishlistButtons() {
 function openWishlist() {
 
     closeCart();
+
 
     renderWishlist();
 
@@ -2940,8 +3424,12 @@ function closeWishlist() {
 
 function renderWishlist() {
 
-    if (!wishlistItems) {
+    if (
+        !wishlistItems
+    ) {
+
         return;
+
     }
 
 
@@ -3107,8 +3595,12 @@ function handleWishlistAction(
         );
 
 
-    if (!button) {
+    if (
+        !button
+    ) {
+
         return;
+
     }
 
 
@@ -3136,8 +3628,12 @@ function handleWishlistAction(
         );
 
 
-    if (!product) {
+    if (
+        !product
+    ) {
+
         return;
+
     }
 
 
@@ -3227,7 +3723,9 @@ function setupModal() {
             if (
                 !currentModalProduct
             ) {
+
                 return;
+
             }
 
 
@@ -3252,7 +3750,9 @@ function setupModal() {
             if (
                 !currentModalProduct
             ) {
+
                 return;
+
             }
 
 
@@ -3284,6 +3784,8 @@ function setupModal() {
 
                 closeWishlist();
 
+                closeCategoryMenu();
+
             }
 
         }
@@ -3293,7 +3795,7 @@ function setupModal() {
 
 
 /* =========================================================
-   OPEN MODAL
+   OPEN PRODUCT MODAL
 ========================================================= */
 
 function openProductModal(
@@ -3304,7 +3806,9 @@ function openProductModal(
         !productModal ||
         !product
     ) {
+
         return;
+
     }
 
 
@@ -3316,7 +3820,9 @@ function openProductModal(
         1;
 
 
-    if (modalProductImage) {
+    if (
+        modalProductImage
+    ) {
 
         modalProductImage.src =
             product.image;
@@ -3426,7 +3932,7 @@ function openProductModal(
 
 
 /* =========================================================
-   CLOSE MODAL
+   CLOSE PRODUCT MODAL
 ========================================================= */
 
 function closeProductModal() {
@@ -3480,10 +3986,6 @@ function checkout() {
     }
 
 
-    /*
-       Checkout page will be connected later.
-    */
-
     window.location.href =
         "checkout.html";
 
@@ -3498,8 +4000,66 @@ function formatCategory(
     value
 ) {
 
-    if (!value) {
+    if (
+        !value
+    ) {
+
         return "";
+
+    }
+
+
+    const specialNames = {
+
+        "mens-shirts":
+            "Men's Shirts",
+
+        "mens-shoes":
+            "Men's Shoes",
+
+        "mens-watches":
+            "Men's Watches",
+
+        "womens-dresses":
+            "Women's Dresses",
+
+        "womens-shoes":
+            "Women's Shoes",
+
+        "womens-watches":
+            "Women's Watches",
+
+        "home-decoration":
+            "Home Decoration",
+
+        "kitchen-accessories":
+            "Kitchen Accessories",
+
+        "mobile-accessories":
+            "Mobile Accessories",
+
+        "sports-accessories":
+            "Sports Accessories"
+
+    };
+
+
+    const normalized =
+        normalizeCategory(
+            value
+        );
+
+
+    if (
+        specialNames[
+            normalized
+        ]
+    ) {
+
+        return specialNames[
+            normalized
+        ];
+
     }
 
 
@@ -3509,10 +4069,6 @@ function formatCategory(
         .replace(
             /[-_]/g,
             " "
-        )
-        .replace(
-            /'/g,
-            ""
         )
         .replace(
             /\b\w/g,
@@ -3560,35 +4116,35 @@ function escapeHTML(
 
 
 /* =========================================================
-   GLOBAL
+   GLOBAL FUNCTIONS
 ========================================================= */
 
 window.openCart =
     openCart;
 
-
 window.closeCart =
     closeCart;
-
 
 window.openWishlist =
     openWishlist;
 
-
 window.closeWishlist =
     closeWishlist;
-
 
 window.addToCart =
     addToCart;
 
-
 window.toggleWishlist =
     toggleWishlist;
 
-
 window.loadProducts =
     loadProducts;
+
+window.openProductModal =
+    openProductModal;
+
+window.closeProductModal =
+    closeProductModal;
 
 
 /* =========================================================

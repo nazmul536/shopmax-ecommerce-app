@@ -648,15 +648,38 @@ function syncCategoryMenu() {
 
 
 /* =========================================================
-   APPLY INITIAL FILTER
+   APPLY INITIAL HOME FILTER
+   ---------------------------------------------------------
+   IMPORTANT:
+   Category selected before reload will be restored
+   from the URL after reload.
 ========================================================= */
 
 function applyInitialHomeFilter() {
 
-    if (!products.length) {
+    /*
+       Products must be loaded first
+    */
+
+    if (
+        !products ||
+        products.length === 0
+    ) {
+
         return;
+
     }
 
+
+    /*
+       =====================================================
+       READ CATEGORY FROM URL
+       Example:
+       ?category=smartphones
+       ?category=furniture
+       ?category=beauty-health
+       =====================================================
+    */
 
     const params =
         new URLSearchParams(
@@ -665,54 +688,236 @@ function applyInitialHomeFilter() {
 
 
     const urlCategory =
-        params.get("category");
+        params.get(
+            "category"
+        );
 
+
+    /*
+       =====================================================
+       NO CATEGORY IN URL
+       =====================================================
+    */
 
     if (
-        urlCategory
+        !urlCategory
     ) {
 
-        const normalized =
-            normalizeCategory(
-                urlCategory
-            );
+        if (
+            categorySelect
+        ) {
 
-
-        const exists =
-            categories.includes(
-                normalized
-            );
-
-
-        if (exists) {
-
-            if (categorySelect) {
-
-                categorySelect.value =
-                    normalized;
-
-            }
-
-
-            renderHomeProducts(
-                normalized,
-                ""
-            );
-
-
-            return;
+            categorySelect.value =
+                "all";
 
         }
+
+
+        if (
+            searchInput
+        ) {
+
+            searchInput.value =
+                "";
+
+        }
+
+
+        renderHomeProducts(
+            "all",
+            ""
+        );
+
+
+        return;
 
     }
 
 
-    renderHomeProducts(
-        "all",
+    /*
+       =====================================================
+       NORMALIZE URL CATEGORY
+       =====================================================
+    */
+
+    const normalizedCategory =
+        normalizeCategory(
+            decodeURIComponent(
+                urlCategory
+            )
+        );
+
+
+    /*
+       =====================================================
+       FIND REAL API CATEGORY
+       =====================================================
+    */
+
+    const matchedCategory =
+        categories.find(
+            category =>
+                normalizeCategory(
+                    category
+                ) ===
+                normalizedCategory
+        );
+
+
+    /*
+       =====================================================
+       CATEGORY NOT FOUND
+       =====================================================
+    */
+
+    if (
+        !matchedCategory
+    ) {
+
+        /*
+           Invalid category হলে
+           URL থেকে remove করবো.
+        */
+
+        try {
+
+            const url =
+                new URL(
+                    window.location.href
+                );
+
+
+            url.searchParams.delete(
+                "category"
+            );
+
+
+            window.history.replaceState(
+                {},
+                "",
+                url
+            );
+
+        }
+        catch (error) {
+
+            console.warn(
+                "Unable to clean category URL:",
+                error
+            );
+
+        }
+
+
+        if (
+            categorySelect
+        ) {
+
+            categorySelect.value =
+                "all";
+
+        }
+
+
+        if (
+            searchInput
+        ) {
+
+            searchInput.value =
+                "";
+
+        }
+
+
+        renderHomeProducts(
+            "all",
+            ""
+        );
+
+
+        return;
+
+    }
+
+
+    /*
+       =====================================================
+       RESTORE SELECTED CATEGORY
+       =====================================================
+    */
+
+    if (
+        categorySelect
+    ) {
+
+        categorySelect.value =
+            matchedCategory;
+
+    }
+
+
+    /*
+       Clear search input
+       because category is active.
+    */
+
+    if (
         searchInput
-            ? searchInput.value
-            : ""
+    ) {
+
+        searchInput.value =
+            "";
+
+    }
+
+
+    /*
+       =====================================================
+       RENDER SAME CATEGORY AFTER RELOAD
+       =====================================================
+    */
+
+    renderHomeProducts(
+        matchedCategory,
+        ""
     );
+
+
+    /*
+       =====================================================
+       KEEP URL IN SYNC
+       =====================================================
+    */
+
+    try {
+
+        const url =
+            new URL(
+                window.location.href
+            );
+
+
+        url.searchParams.set(
+            "category",
+            matchedCategory
+        );
+
+
+        window.history.replaceState(
+            {},
+            "",
+            url
+        );
+
+    }
+    catch (error) {
+
+        console.warn(
+            "Unable to restore category URL:",
+            error
+        );
+
+    }
 
 }
 
@@ -2516,6 +2721,10 @@ function setupCategoryMenu() {
     }
 
 
+    /* =====================================================
+       MAIN CATEGORY BUTTON
+    ===================================================== */
+
     categoriesBtn.addEventListener(
         "click",
         event => {
@@ -2554,6 +2763,10 @@ function setupCategoryMenu() {
     );
 
 
+    /* =====================================================
+       CATEGORY DROPDOWN CLICK
+    ===================================================== */
+
     categoryDropdown.addEventListener(
         "click",
         event => {
@@ -2561,9 +2774,9 @@ function setupCategoryMenu() {
             event.stopPropagation();
 
 
-            /*
+            /* =================================================
                SUBMENU LINK
-            */
+            ================================================= */
 
             const submenuLink =
                 event.target.closest(
@@ -2594,9 +2807,9 @@ function setupCategoryMenu() {
             }
 
 
-            /*
+            /* =================================================
                CATEGORY BUTTON
-            */
+            ================================================= */
 
             const categoryButton =
                 event.target.closest(
@@ -2605,94 +2818,281 @@ function setupCategoryMenu() {
 
 
             if (
-                categoryButton
+                !categoryButton
             ) {
 
-                const item =
-                    categoryButton.closest(
-                        ".category-item"
-                    );
+                return;
+
+            }
 
 
-                if (!item) {
-                    return;
-                }
+            const item =
+                categoryButton.closest(
+                    ".category-item"
+                );
 
 
-                const submenu =
-                    item.querySelector(
-                        ":scope > .category-submenu"
-                    );
+            if (!item) {
+
+                return;
+
+            }
 
 
-                /*
-                   Mobile submenu
-                */
-
-                if (
-                    submenu &&
-                    window.innerWidth <= 768
-                ) {
-
-                    event.preventDefault();
+            const submenu =
+                item.querySelector(
+                    ":scope > .category-submenu"
+                );
 
 
-                    categoryDropdown
-                        .querySelectorAll(
-                            ".category-item.mobile-open"
-                        )
-                        .forEach(
-                            otherItem => {
+            /* =================================================
+               MOBILE + TABLET
+               0px - 1024px
 
-                                if (
-                                    otherItem !== item
-                                ) {
+               IMPORTANT:
+               এখানে আর <=950 নেই
+            ================================================= */
 
-                                    otherItem.classList.remove(
-                                        "mobile-open"
-                                    );
+            if (
+                submenu &&
+                window.innerWidth <= 1024
+            ) {
 
-                                }
-
-                            }
-                        );
+                event.preventDefault();
 
 
-                    item.classList.toggle(
+                const isOpen =
+                    item.classList.contains(
                         "mobile-open"
                     );
 
 
+                /* =============================================
+                   CLOSE OTHER OPEN SUBMENUS
+                ============================================= */
+
+                categoryDropdown
+                    .querySelectorAll(
+                        ".category-item.mobile-open"
+                    )
+                    .forEach(
+                        otherItem => {
+
+                            if (
+                                otherItem === item
+                            ) {
+
+                                return;
+
+                            }
+
+
+                            otherItem.classList.remove(
+                                "mobile-open"
+                            );
+
+
+                            const otherSubmenu =
+                                otherItem.querySelector(
+                                    ":scope > .category-submenu"
+                                );
+
+
+                            if (
+                                otherSubmenu
+                            ) {
+
+                                otherSubmenu.style.display =
+                                    "none";
+
+                                otherSubmenu.style.visibility =
+                                    "hidden";
+
+                                otherSubmenu.style.opacity =
+                                    "0";
+
+                                otherSubmenu.style.pointerEvents =
+                                    "none";
+
+                            }
+
+                        }
+                    );
+
+
+                /* =============================================
+                   CLOSE CURRENT SUBMENU
+                ============================================= */
+
+                if (
+                    isOpen
+                ) {
+
+                    item.classList.remove(
+                        "mobile-open"
+                    );
+
+
+                    submenu.style.display =
+                        "none";
+
+                    submenu.style.visibility =
+                        "hidden";
+
+                    submenu.style.opacity =
+                        "0";
+
+                    submenu.style.pointerEvents =
+                        "none";
+
+
                     return;
 
                 }
 
 
-                const category =
-                    categoryButton.dataset.category;
+                /* =============================================
+                   OPEN CURRENT SUBMENU
+                ============================================= */
 
+                item.classList.add(
+                    "mobile-open"
+                );
+
+
+                submenu.style.display =
+                    "block";
+
+                submenu.style.visibility =
+                    "visible";
+
+                submenu.style.opacity =
+                    "1";
+
+                submenu.style.pointerEvents =
+                    "auto";
+
+                submenu.style.transform =
+                    "translateX(0)";
+
+
+                /* =============================================
+                   MOBILE
+                   0px - 768px
+
+                   Submenu নিচে যাবে
+                ============================================= */
 
                 if (
-                    category
+                    window.innerWidth <= 768
                 ) {
 
-                    event.preventDefault();
+                    submenu.style.position =
+                        "static";
 
+                    submenu.style.left =
+                        "auto";
 
-                    selectHomeCategory(
-                        category
-                    );
+                    submenu.style.top =
+                        "auto";
 
+                    submenu.style.width =
+                        "100%";
 
-                    closeCategoryMenu();
+                    submenu.style.maxWidth =
+                        "100%";
+
+                    submenu.style.marginTop =
+                        "4px";
+
+                    submenu.style.transform =
+                        "none";
+
+                    submenu.style.maxHeight =
+                        "none";
+
+                    submenu.style.overflow =
+                        "visible";
 
                 }
+
+
+                /* =============================================
+                   TABLET
+                   769px - 1024px
+
+                   Submenu ডান পাশে যাবে
+                ============================================= */
+
+                else {
+
+                    submenu.style.position =
+                        "absolute";
+
+                    submenu.style.left =
+                        "calc(100% + 5px)";
+
+                    submenu.style.top =
+                        "-1px";
+
+                    submenu.style.width =
+                        "190px";
+
+                    submenu.style.maxWidth =
+                        "190px";
+
+                    submenu.style.marginTop =
+                        "0";
+
+                    submenu.style.transform =
+                        "translateX(0)";
+
+                    submenu.style.maxHeight =
+                        "60vh";
+
+                    submenu.style.overflowY =
+                        "auto";
+
+                }
+
+
+                return;
+
+            }
+
+
+            /* =================================================
+               DESKTOP
+               1025px+
+            ================================================= */
+
+            const category =
+                categoryButton.dataset.category;
+
+
+            if (
+                category
+            ) {
+
+                event.preventDefault();
+
+
+                selectHomeCategory(
+                    category
+                );
+
+
+                closeCategoryMenu();
 
             }
 
         }
     );
 
+
+    /* =====================================================
+       CLICK OUTSIDE
+    ===================================================== */
 
     document.addEventListener(
         "click",
@@ -2703,7 +3103,9 @@ function setupCategoryMenu() {
                     event.target
                 )
             ) {
+
                 return;
+
             }
 
 
@@ -2712,7 +3114,9 @@ function setupCategoryMenu() {
                     event.target
                 )
             ) {
+
                 return;
+
             }
 
 
@@ -2724,6 +3128,7 @@ function setupCategoryMenu() {
 }
 
 
+
 /* =========================================================
    SELECT HOME CATEGORY
 ========================================================= */
@@ -2732,8 +3137,12 @@ function selectHomeCategory(
     category
 ) {
 
-    if (!category) {
+    if (
+        !category
+    ) {
+
         return;
+
     }
 
 
@@ -2744,7 +3153,9 @@ function selectHomeCategory(
 
 
     /*
-       "All Categories"
+       =====================================================
+       ALL CATEGORIES
+       =====================================================
     */
 
     if (
@@ -2767,6 +3178,40 @@ function selectHomeCategory(
         }
 
 
+        /*
+           Remove category from URL
+        */
+
+        try {
+
+            const url =
+                new URL(
+                    window.location.href
+                );
+
+
+            url.searchParams.delete(
+                "category"
+            );
+
+
+            window.history.replaceState(
+                {},
+                "",
+                url
+            );
+
+        }
+        catch (error) {
+
+            console.warn(
+                "Unable to update URL:",
+                error
+            );
+
+        }
+
+
         renderHomeProducts(
             "all",
             ""
@@ -2775,13 +3220,16 @@ function selectHomeCategory(
 
         scrollToFlashSale();
 
+
         return;
 
     }
 
 
     /*
-       Find exact API category
+       =====================================================
+       FIND CATEGORY
+       =====================================================
     */
 
     const matchedCategory =
@@ -2789,21 +3237,29 @@ function selectHomeCategory(
             item =>
                 normalizeCategory(
                     item
-                ) === normalized
+                ) ===
+                normalized
         );
 
 
-    if (!matchedCategory) {
+    if (
+        !matchedCategory
+    ) {
 
         console.warn(
             "Category not found:",
             category
         );
 
+
         return;
 
     }
 
+
+    /*
+       Update dropdown
+    */
 
     if (categorySelect) {
 
@@ -2814,8 +3270,7 @@ function selectHomeCategory(
 
 
     /*
-       Clear search when user
-       selects a category.
+       Clear search
     */
 
     if (searchInput) {
@@ -2826,6 +3281,10 @@ function selectHomeCategory(
     }
 
 
+    /*
+       Render category
+    */
+
     renderHomeProducts(
         matchedCategory,
         ""
@@ -2833,7 +3292,10 @@ function selectHomeCategory(
 
 
     /*
-       Update URL without reload
+       =====================================================
+       SAVE CATEGORY IN URL
+       WITHOUT PAGE RELOAD
+       =====================================================
     */
 
     try {
