@@ -19,7 +19,7 @@
 ========================================================= */
 
 const API_URL =
-    "https://fakestoreapi.com/products";
+    "https://dummyjson.com/products?limit=0";
 
 
 /* =========================================================
@@ -511,25 +511,22 @@ async function loadProductsFromAPI() {
 
     showLoading();
 
-
     try {
 
         const response =
             await fetch(
                 API_URL,
                 {
-                    method:
-                        "GET",
-
-                    cache:
-                        "no-store"
+                    method: "GET",
+                    cache: "no-store",
+                    headers: {
+                        Accept: "application/json"
+                    }
                 }
             );
 
 
-        if (
-            !response.ok
-        ) {
+        if (!response.ok) {
 
             throw new Error(
                 `API request failed: ${response.status}`
@@ -542,32 +539,65 @@ async function loadProductsFromAPI() {
             await response.json();
 
 
+        /*
+           DummyJSON response:
+
+           {
+               products: [],
+               total: 194,
+               skip: 0,
+               limit: 0
+           }
+        */
+
         if (
+            !data ||
             !Array.isArray(
-                data
+                data.products
             )
         ) {
 
             throw new Error(
-                "Invalid product data received from API."
+                "Invalid product data received from DummyJSON API."
             );
 
         }
 
 
+        /*
+           IMPORTANT
+
+           DummyJSON products are inside:
+
+           data.products
+
+           NOT:
+
+           data
+        */
+
         apiProducts =
-            data.map(
+            data.products.map(
                 normalizeAPIProduct
             );
 
 
         /*
-           Rebuild active admin product list
-           from API + local admin state.
+           Rebuild:
+
+           API products
+           +
+           local admin overrides
+           +
+           archived products
         */
 
         rebuildProducts();
 
+
+        /*
+           Render admin page
+        */
 
         renderEverything();
 
@@ -582,7 +612,6 @@ async function loadProductsFromAPI() {
             error
         );
 
-
         showAPIError();
 
     }
@@ -590,65 +619,276 @@ async function loadProductsFromAPI() {
 }
 
 
+
 /* =========================================================
-   NORMALIZE API PRODUCT
+   NORMALIZE DUMMYJSON PRODUCT
 ========================================================= */
 
 function normalizeAPIProduct(
     product
 ) {
 
+    if (
+        !product
+    ) {
+
+        return {
+
+            id: "",
+
+            title:
+                "Untitled Product",
+
+            category:
+                "Uncategorized",
+
+            price:
+                0,
+
+            image:
+                "",
+
+            thumbnail:
+                "",
+
+            images:
+                [],
+
+            description:
+                "",
+
+            brand:
+                "",
+
+            stock:
+                null,
+
+            discountPercentage:
+                0,
+
+            sales:
+                0,
+
+            rating: {
+
+                rate:
+                    0,
+
+                count:
+                    0
+
+            }
+
+        };
+
+    }
+
+
+    /* ---------------------------------------------------------
+       RATING
+
+       DummyJSON:
+
+       rating: 4.5
+    --------------------------------------------------------- */
+
+    const rating =
+        Number(
+            product.rating
+        ) || 0;
+
+
+    /* ---------------------------------------------------------
+       REVIEWS
+
+       DummyJSON uses:
+
+       reviews: []
+    --------------------------------------------------------- */
+
+    const reviewCount =
+        Array.isArray(
+            product.reviews
+        )
+            ? product.reviews.length
+            : 0;
+
+
+    /* ---------------------------------------------------------
+       IMAGE
+
+       Prefer thumbnail.
+       Fallback to first image.
+    --------------------------------------------------------- */
+
+    const images =
+        Array.isArray(
+            product.images
+        )
+            ? product.images
+            : [];
+
+
+    const image =
+        product.thumbnail ||
+        images[0] ||
+        "";
+
+
+    /* ---------------------------------------------------------
+       STOCK
+
+       DummyJSON provides real stock.
+    --------------------------------------------------------- */
+
+    const stockNumber =
+        Number(
+            product.stock
+        );
+
+
+    const stock =
+        Number.isFinite(
+            stockNumber
+        )
+            ? Math.max(
+                0,
+                Math.floor(
+                    stockNumber
+                )
+            )
+            : null;
+
+
+    /* ---------------------------------------------------------
+       PRICE
+    --------------------------------------------------------- */
+
+    const priceNumber =
+        Number(
+            product.price
+        );
+
+
+    const price =
+        Number.isFinite(
+            priceNumber
+        )
+            ? priceNumber
+            : 0;
+
+
+    /* ---------------------------------------------------------
+       DISCOUNT
+    --------------------------------------------------------- */
+
+    const discountNumber =
+        Number(
+            product.discountPercentage
+        );
+
+
+    const discountPercentage =
+        Number.isFinite(
+            discountNumber
+        )
+            ? discountNumber
+            : 0;
+
+
+    /* ---------------------------------------------------------
+       FINAL SHOPMAX PRODUCT
+    --------------------------------------------------------- */
+
     return {
 
         id:
             String(
-                product?.id ??
+                product.id ??
                 ""
             ),
+
 
         title:
             String(
-                product?.title ??
+                product.title ||
                 "Untitled Product"
             ),
 
+
         category:
             String(
-                product?.category ??
+                product.category ||
                 "Uncategorized"
             ),
 
+
         price:
-            Number(
-                product?.price
-            ) || 0,
+            price,
+
 
         image:
             String(
-                product?.image ??
-                ""
+                image
             ),
+
+
+        thumbnail:
+            String(
+                product.thumbnail ||
+                image
+            ),
+
+
+        images:
+            images.map(
+                item =>
+                    String(
+                        item
+                    )
+            ),
+
 
         description:
             String(
-                product?.description ??
+                product.description ||
                 ""
             ),
 
-        rating:
-            {
 
-                rate:
-                    Number(
-                        product?.rating?.rate
-                    ) || 0,
+        brand:
+            String(
+                product.brand ||
+                ""
+            ),
 
-                count:
-                    Number(
-                        product?.rating?.count
-                    ) || 0
 
-            }
+        stock:
+            stock,
+
+
+        discountPercentage:
+            discountPercentage,
+
+
+        rating: {
+
+            rate:
+                rating,
+
+            count:
+                reviewCount
+
+        },
+
+
+        /*
+           DummyJSON does not provide
+           ShopMax sales counter.
+        */
+
+        sales:
+            0
 
     };
 
@@ -697,31 +937,19 @@ function rebuildProducts() {
                         {};
 
 
-                    const hasStockOverride =
+                   const hasStockOverride =
                         Object.prototype.hasOwnProperty.call(
                             override,
                             "stock"
-                        )
-                        &&
-                        override.stock !== null
-                        &&
-                        override.stock !== ""
-                        &&
+                        ) &&
+                        override.stock !== null &&
+                        override.stock !== "" &&
                         Number.isFinite(
                             Number(
                                 override.stock
                             )
                         );
 
-
-                    /*
-                       IMPORTANT FIX:
-
-                       Fake Store API has no stock field.
-
-                       Therefore default stock MUST be null,
-                       not 0.
-                    */
 
                     const stock =
                         hasStockOverride
@@ -733,8 +961,19 @@ function rebuildProducts() {
                                     )
                                 )
                             )
-                            : null;
-
+                            : (
+                                apiProduct.stock !== null &&
+                                apiProduct.stock !== undefined
+                                    ? Math.max(
+                                        0,
+                                        Math.floor(
+                                            Number(
+                                                apiProduct.stock
+                                            )
+                                        )
+                                    )
+                                    : null
+                            );
 
                     const calculatedSales =
                         calculateProductSales(

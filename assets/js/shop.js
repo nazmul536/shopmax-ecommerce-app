@@ -51,6 +51,14 @@ let currentModalProduct = null;
 let modalQuantity = 1;
 
 
+//pagination
+const PRODUCTS_PER_PAGE = 12;
+
+let currentPage = 1;
+
+let currentFilteredProducts = [];
+
+
 /* =========================================================
    SHOP DOM
 ========================================================= */
@@ -281,6 +289,25 @@ const modalBuyNow =
     );
 
 
+    /* =========================================================
+   MOBILE NAVIGATION DOM
+========================================================= */
+
+let mobileMenuToggle = null;
+
+let mobileNav = null;
+
+let mobileNavOverlay = null;
+
+let mobileNavClose = null;
+
+
+//pagination DOM
+const shopPagination =
+    document.getElementById(
+        "shopPagination"
+    );
+
 /* =========================================================
    INITIALIZE
 ========================================================= */
@@ -290,6 +317,10 @@ document.addEventListener(
     () => {
 
         setupShop();
+
+        setupCustomSelects();
+
+        setupMobileNavigation();
 
         setupCategoryMenu();
 
@@ -315,7 +346,12 @@ document.addEventListener(
 
 function setupShop() {
 
-    /* Search */
+    setupSearchSuggestions();
+
+
+    /* =====================================================
+       SEARCH
+    ===================================================== */
 
     shopSearch?.addEventListener(
         "input",
@@ -332,7 +368,9 @@ function setupShop() {
     );
 
 
-    /* Search button */
+    /* =====================================================
+       SEARCH BUTTON
+    ===================================================== */
 
     shopSearchBtn?.addEventListener(
         "click",
@@ -352,7 +390,9 @@ function setupShop() {
     );
 
 
-    /* Search Enter */
+    /* =====================================================
+       SEARCH ENTER
+    ===================================================== */
 
     shopSearch?.addEventListener(
         "keydown",
@@ -377,14 +417,22 @@ function setupShop() {
     );
 
 
-    /* Shop category */
+    /* =====================================================
+       SHOP CATEGORY
+    ===================================================== */
 
     shopCategory?.addEventListener(
         "change",
         () => {
 
             currentCategory =
-                shopCategory.value;
+                shopCategory.value ||
+                "all";
+
+
+            /* ---------------------------------------------
+               SYNC HEADER CATEGORY
+            --------------------------------------------- */
 
             if (
                 shopHeaderCategory
@@ -395,20 +443,70 @@ function setupShop() {
 
             }
 
+
+            /* ---------------------------------------------
+               UPDATE URL
+               Example:
+               shop.html?category=beauty
+               shop.html?category=furniture
+            --------------------------------------------- */
+
+            const url =
+                new URL(
+                    window.location.href
+                );
+
+
+            if (
+                currentCategory &&
+                currentCategory !== "all"
+            ) {
+
+                url.searchParams.set(
+                    "category",
+                    currentCategory
+                );
+
+            }
+
+            else {
+
+                url.searchParams.delete(
+                    "category"
+                );
+
+            }
+
+
+            window.history.replaceState(
+                {},
+                "",
+                url
+            );
+
+
+            /* ---------------------------------------------
+               APPLY FILTER
+            --------------------------------------------- */
+
             applyShopFilters();
 
         }
     );
 
 
-    /* Shared header category */
+    /* =========================================================
+       HEADER CATEGORY → SHOP CATEGORY SYNC
+    ========================================================= */
 
     shopHeaderCategory?.addEventListener(
         "change",
         () => {
 
             currentCategory =
-                shopHeaderCategory.value;
+                shopHeaderCategory.value ||
+                "all";
+
 
             if (
                 shopCategory
@@ -417,7 +515,33 @@ function setupShop() {
                 shopCategory.value =
                     currentCategory;
 
+
+                /*
+                   IMPORTANT:
+                   Custom dropdown needs the
+                   change event to update its
+                   visible button text.
+
+                   This also triggers the
+                   Shop Category change handler,
+                   which updates the URL.
+                */
+
+                shopCategory.dispatchEvent(
+                    new Event(
+                        "change",
+                        {
+                            bubbles: true
+                        }
+                    )
+                );
+
             }
+
+
+            /*
+               Keep existing filtering behavior.
+            */
 
             applyShopFilters();
 
@@ -425,7 +549,9 @@ function setupShop() {
     );
 
 
-    /* Sort */
+    /* =====================================================
+       SORT
+    ===================================================== */
 
     shopSort?.addEventListener(
         "change",
@@ -440,7 +566,9 @@ function setupShop() {
     );
 
 
-    /* Clear filters */
+    /* =====================================================
+       CLEAR FILTERS
+    ===================================================== */
 
     clearShopFilters?.addEventListener(
         "click",
@@ -448,10 +576,1849 @@ function setupShop() {
     );
 
 
+    /* =====================================================
+       SORT OPTIONS
+    ===================================================== */
+
     setupSortOptions();
 
 }
 
+
+
+/* =========================================================
+   LIVE SEARCH SUGGESTIONS
+   Added without changing existing search/filter logic
+========================================================= */
+
+let shopSearchSuggestions = null;
+let activeSearchSuggestion = -1;
+
+
+/* =========================================================
+   SETUP SEARCH SUGGESTIONS
+========================================================= */
+
+function setupSearchSuggestions() {
+
+    if (!shopSearch) {
+        return;
+    }
+
+    createShopSearchSuggestions();
+
+
+    /* ---------------------------------------------------------
+       INPUT
+    --------------------------------------------------------- */
+
+    shopSearch.addEventListener(
+        "input",
+        () => {
+
+            const value =
+                shopSearch.value
+                    .trim();
+
+            activeSearchSuggestion = -1;
+
+            if (value) {
+
+                showShopSearchSuggestions(
+                    value
+                );
+
+            } else {
+
+                hideShopSearchSuggestions();
+
+            }
+
+        }
+    );
+
+
+    /* ---------------------------------------------------------
+       FOCUS
+    --------------------------------------------------------- */
+
+    shopSearch.addEventListener(
+        "focus",
+        () => {
+
+            const value =
+                shopSearch.value
+                    .trim();
+
+            if (value) {
+
+                showShopSearchSuggestions(
+                    value
+                );
+
+            }
+
+        }
+    );
+
+
+    /* ---------------------------------------------------------
+       KEYBOARD
+    --------------------------------------------------------- */
+
+    shopSearch.addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                !shopSearchSuggestions ||
+                shopSearchSuggestions.style.display ===
+                    "none"
+            ) {
+                return;
+            }
+
+
+            const items =
+                shopSearchSuggestions
+                    .querySelectorAll(
+                        ".shop-search-suggestion-item"
+                    );
+
+
+            if (!items.length) {
+                return;
+            }
+
+
+            /* Arrow Down */
+
+            if (
+                event.key === "ArrowDown"
+            ) {
+
+                event.preventDefault();
+
+                activeSearchSuggestion++;
+
+                if (
+                    activeSearchSuggestion >=
+                    items.length
+                ) {
+
+                    activeSearchSuggestion = 0;
+
+                }
+
+                updateActiveSearchSuggestion(
+                    items
+                );
+
+            }
+
+
+            /* Arrow Up */
+
+            else if (
+                event.key === "ArrowUp"
+            ) {
+
+                event.preventDefault();
+
+                activeSearchSuggestion--;
+
+                if (
+                    activeSearchSuggestion < 0
+                ) {
+
+                    activeSearchSuggestion =
+                        items.length - 1;
+
+                }
+
+                updateActiveSearchSuggestion(
+                    items
+                );
+
+            }
+
+
+            /* Enter */
+
+            else if (
+                event.key === "Enter"
+            ) {
+
+                if (
+                    activeSearchSuggestion >= 0 &&
+                    items[
+                        activeSearchSuggestion
+                    ]
+                ) {
+
+                    event.preventDefault();
+
+                    items[
+                        activeSearchSuggestion
+                    ].click();
+
+                }
+
+            }
+
+
+            /* Escape */
+
+            else if (
+                event.key === "Escape"
+            ) {
+
+                hideShopSearchSuggestions();
+
+            }
+
+        }
+    );
+
+
+    /* ---------------------------------------------------------
+       OUTSIDE CLICK
+    --------------------------------------------------------- */
+
+    document.addEventListener(
+        "click",
+        event => {
+
+            if (
+                !shopSearchSuggestions
+            ) {
+                return;
+            }
+
+
+            if (
+                event.target === shopSearch ||
+                shopSearchSuggestions.contains(
+                    event.target
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            hideShopSearchSuggestions();
+
+        }
+    );
+
+
+    /* ---------------------------------------------------------
+       RESIZE
+    --------------------------------------------------------- */
+
+    window.addEventListener(
+        "resize",
+        positionShopSearchSuggestions
+    );
+
+
+    /* ---------------------------------------------------------
+       SCROLL
+    --------------------------------------------------------- */
+
+    window.addEventListener(
+        "scroll",
+        positionShopSearchSuggestions,
+        true
+    );
+
+}
+
+
+/* =========================================================
+   CREATE SEARCH SUGGESTION BOX
+========================================================= */
+
+function createShopSearchSuggestions() {
+
+    if (
+        shopSearchSuggestions
+    ) {
+
+        return;
+
+    }
+
+
+    shopSearchSuggestions =
+        document.createElement(
+            "div"
+        );
+
+
+    shopSearchSuggestions.id =
+        "shopSearchSuggestions";
+
+
+    shopSearchSuggestions.className =
+        "shop-search-suggestions";
+
+
+    shopSearchSuggestions.setAttribute(
+        "role",
+        "listbox"
+    );
+
+
+    document.body.appendChild(
+        shopSearchSuggestions
+    );
+
+
+    addShopSearchSuggestionStyles();
+
+}
+
+
+/* =========================================================
+   SHOW SEARCH SUGGESTIONS
+========================================================= */
+
+function showShopSearchSuggestions(
+    value
+) {
+
+    if (
+        !shopSearchSuggestions ||
+        !products.length
+    ) {
+
+        return;
+
+    }
+
+
+    const search =
+        String(value)
+            .trim()
+            .toLowerCase();
+
+
+    if (!search) {
+
+        hideShopSearchSuggestions();
+
+        return;
+
+    }
+
+
+    let matches =
+        products.filter(
+            product => {
+
+                const title =
+                    String(
+                        product.title || ""
+                    )
+                        .toLowerCase();
+
+
+                const category =
+                    String(
+                        product.category || ""
+                    )
+                        .toLowerCase();
+
+
+                const brand =
+                    String(
+                        product.brand || ""
+                    )
+                        .toLowerCase();
+
+
+                const description =
+                    String(
+                        product.description || ""
+                    )
+                        .toLowerCase();
+
+
+                return (
+
+                    title.includes(
+                        search
+                    ) ||
+
+                    category.includes(
+                        search
+                    ) ||
+
+                    brand.includes(
+                        search
+                    ) ||
+
+                    description.includes(
+                        search
+                    )
+
+                );
+
+            }
+        );
+
+
+    /* ---------------------------------------------------------
+       CURRENT CATEGORY FILTER
+    --------------------------------------------------------- */
+
+    if (
+        currentCategory &&
+        currentCategory !== "all"
+    ) {
+
+        const selectedCategory =
+            normalizeCategory(
+                currentCategory
+            );
+
+
+        matches =
+            matches.filter(
+                product =>
+                    normalizeCategory(
+                        product.category
+                    ) ===
+                    selectedCategory
+            );
+
+    }
+
+
+    /* ---------------------------------------------------------
+       MAXIMUM 6 SUGGESTIONS
+    --------------------------------------------------------- */
+
+    matches =
+        matches.slice(
+            0,
+            6
+        );
+
+
+    activeSearchSuggestion =
+        -1;
+
+
+    /* ---------------------------------------------------------
+       NO RESULTS
+    --------------------------------------------------------- */
+
+    if (
+        !matches.length
+    ) {
+
+        shopSearchSuggestions.innerHTML = `
+
+            <div
+                class="
+                    shop-search-no-results
+                "
+            >
+
+                <i
+                    class="
+                        fa-solid
+                        fa-magnifying-glass
+                    "
+                ></i>
+
+                <span>
+                    No products found
+                </span>
+
+            </div>
+
+        `;
+
+    }
+
+
+    /* ---------------------------------------------------------
+       RESULTS
+    --------------------------------------------------------- */
+
+    else {
+
+        shopSearchSuggestions.innerHTML =
+            matches
+                .map(
+                    product =>
+                        createShopSearchSuggestion(
+                            product
+                        )
+                )
+                .join("");
+
+
+        shopSearchSuggestions
+            .querySelectorAll(
+                ".shop-search-suggestion-item"
+            )
+            .forEach(
+                item => {
+
+                    item.addEventListener(
+                        "click",
+                        event => {
+
+                            event.preventDefault();
+
+                            event.stopPropagation();
+
+
+                            /* ---------------------------------
+                               PRODUCT ID
+                            --------------------------------- */
+
+                            const id =
+                                Number(
+                                    item.dataset.productId
+                                );
+
+
+                            const product =
+                                products.find(
+                                    product =>
+                                        Number(
+                                            product.id
+                                        ) === id
+                                );
+
+
+                            if (!product) {
+
+                                return;
+
+                            }
+
+
+                            /* ---------------------------------
+                               HIDE SEARCH SUGGESTIONS
+                            --------------------------------- */
+
+                            hideShopSearchSuggestions();
+
+
+                            /* ---------------------------------
+                               OPEN PRODUCT DETAILS PAGE
+                               NO MODAL
+                            --------------------------------- */
+
+                            window.location.href =
+                                `productDetails.html?id=${product.id}`;
+
+                        }
+                    );
+
+                }
+            );
+
+    }
+
+
+    /* ---------------------------------------------------------
+       SHOW DROPDOWN
+    --------------------------------------------------------- */
+
+    shopSearchSuggestions.style.display =
+        "block";
+
+
+    /* ---------------------------------------------------------
+       POSITION DROPDOWN
+    --------------------------------------------------------- */
+
+    positionShopSearchSuggestions();
+
+}
+
+/* =========================================================
+   CREATE SINGLE SEARCH SUGGESTION
+========================================================= */
+
+function createShopSearchSuggestion(
+    product
+) {
+
+    const rating =
+        Number(
+            product.rating?.rate || 0
+        );
+
+
+    const reviewCount =
+        Number(
+            product.rating?.count || 0
+        );
+
+
+    return `
+
+        <button
+            type="button"
+            class="
+                shop-search-suggestion-item
+            "
+            data-product-id="${product.id}"
+            role="option"
+        >
+
+            <div
+                class="
+                    shop-search-suggestion-image
+                "
+            >
+
+                <img
+                    src="${escapeHTML(
+                        product.image
+                    )}"
+                    alt="${escapeHTML(
+                        product.title
+                    )}"
+                >
+
+            </div>
+
+
+            <div
+                class="
+                    shop-search-suggestion-info
+                "
+            >
+
+                <strong
+                    class="
+                        shop-search-suggestion-title
+                    "
+                >
+                    ${escapeHTML(
+                        product.title
+                    )}
+                </strong>
+
+
+                <span
+                    class="
+                        shop-search-suggestion-category
+                    "
+                >
+                    ${formatCategory(
+                        product.category
+                    )}
+                </span>
+
+
+                <div
+                    class="
+                        shop-search-suggestion-meta
+                    "
+                >
+
+                    <span
+                        class="
+                            shop-search-suggestion-price
+                        "
+                    >
+                        $${Number(
+                            product.price
+                        ).toFixed(2)}
+                    </span>
+
+
+                    <span
+                        class="
+                            shop-search-suggestion-rating
+                        "
+                    >
+
+                        <i
+                            class="
+                                fa-solid
+                                fa-star
+                            "
+                        ></i>
+
+                        ${rating.toFixed(1)}
+
+                        <small>
+                            (${reviewCount})
+                        </small>
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <i
+                class="
+                    fa-solid
+                    fa-chevron-right
+                    shop-search-suggestion-arrow
+                "
+            ></i>
+
+        </button>
+
+    `;
+
+}
+
+
+/* =========================================================
+   POSITION SEARCH SUGGESTIONS
+========================================================= */
+
+function positionShopSearchSuggestions() {
+
+    if (
+        !shopSearchSuggestions ||
+        shopSearchSuggestions.style.display === "none" ||
+        !shopSearch
+    ) {
+        return;
+    }
+
+
+    /*
+       IMPORTANT:
+       Search suggestion width should match
+       the FULL .search-box
+
+       .search-box contains:
+       Category + Search Input + Search Button
+    */
+
+    const searchBox =
+        shopSearch.closest(".search-box") ||
+        shopSearch.parentElement;
+
+
+    if (!searchBox) {
+        return;
+    }
+
+
+    const rect =
+        searchBox.getBoundingClientRect();
+
+
+    const viewportWidth =
+        window.innerWidth;
+
+
+    const viewportHeight =
+        window.innerHeight;
+
+
+    /* =====================================================
+       DESKTOP
+    ===================================================== */
+
+    if (
+        viewportWidth > 768
+    ) {
+
+        shopSearchSuggestions.style.position =
+            "fixed";
+
+        shopSearchSuggestions.style.left =
+            `${rect.left}px`;
+
+        shopSearchSuggestions.style.top =
+            `${rect.bottom + 8}px`;
+
+        shopSearchSuggestions.style.width =
+            `${rect.width}px`;
+
+        shopSearchSuggestions.style.maxWidth =
+            `${rect.width}px`;
+
+    }
+
+
+    /* =====================================================
+       MOBILE
+    ===================================================== */
+
+    else {
+
+        const horizontalSpace =
+            10;
+
+
+        let left =
+            rect.left;
+
+
+        let width =
+            rect.width;
+
+
+        if (
+            width >
+            viewportWidth -
+            horizontalSpace * 2
+        ) {
+
+            width =
+                viewportWidth -
+                horizontalSpace * 2;
+
+        }
+
+
+        left =
+            Math.max(
+                horizontalSpace,
+                Math.min(
+                    left,
+                    viewportWidth -
+                        width -
+                        horizontalSpace
+                )
+            );
+
+
+        const maxHeight =
+            350;
+
+
+        let top =
+            rect.bottom + 6;
+
+
+        if (
+            top + maxHeight >
+            viewportHeight -
+            horizontalSpace
+        ) {
+
+            top =
+                rect.top -
+                maxHeight -
+                6;
+
+        }
+
+
+        if (
+            top < horizontalSpace
+        ) {
+
+            top =
+                horizontalSpace;
+
+        }
+
+
+        shopSearchSuggestions.style.position =
+            "fixed";
+
+        shopSearchSuggestions.style.left =
+            `${left}px`;
+
+        shopSearchSuggestions.style.top =
+            `${top}px`;
+
+        shopSearchSuggestions.style.width =
+            `${width}px`;
+
+        shopSearchSuggestions.style.maxWidth =
+            `${width}px`;
+
+    }
+
+}
+
+/* =========================================================
+   HIDE SEARCH SUGGESTIONS
+========================================================= */
+
+function hideShopSearchSuggestions() {
+
+    if (
+        !shopSearchSuggestions
+    ) {
+
+        return;
+
+    }
+
+
+    shopSearchSuggestions.style.display =
+        "none";
+
+
+    activeSearchSuggestion =
+        -1;
+
+}
+
+
+/* =========================================================
+   KEYBOARD ACTIVE ITEM
+========================================================= */
+
+function updateActiveSearchSuggestion(
+    items
+) {
+
+    items.forEach(
+        (
+            item,
+            index
+        ) => {
+
+            item.classList.toggle(
+                "active",
+                index ===
+                    activeSearchSuggestion
+            );
+
+        }
+    );
+
+
+    if (
+        activeSearchSuggestion >= 0 &&
+        items[
+            activeSearchSuggestion
+        ]
+    ) {
+
+        items[
+            activeSearchSuggestion
+        ].scrollIntoView({
+            block: "nearest"
+        });
+
+    }
+
+}
+
+
+/* =========================================================
+   SEARCH SUGGESTION STYLES
+========================================================= */
+
+function addShopSearchSuggestionStyles() {
+
+    if (
+        document.getElementById(
+            "shopSearchSuggestionStyles"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    const style =
+        document.createElement(
+            "style"
+        );
+
+
+    style.id =
+        "shopSearchSuggestionStyles";
+
+
+    style.textContent = `
+
+        /* =====================================================
+           SEARCH BOX
+        ===================================================== */
+
+        .shop-search-suggestions {
+
+            position: fixed;
+
+            display: none;
+
+            z-index: 99999;
+
+            background: #ffffff;
+
+            border:
+                1px solid
+                #e2e8f0;
+
+            border-radius: 10px;
+
+            box-shadow:
+                0 15px 40px
+                rgba(
+                    15,
+                    23,
+                    42,
+                    .15
+                );
+
+            overflow-x: hidden;
+
+            overflow-y: auto;
+
+            max-height: 420px;
+
+            scrollbar-width: thin;
+
+            scrollbar-color:
+                #cbd5e1
+                transparent;
+
+        }
+
+
+        /* =====================================================
+           ITEM
+        ===================================================== */
+
+        .shop-search-suggestion-item {
+
+            width: 100%;
+
+            min-height: 72px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            padding:
+                10px 12px;
+
+            margin: 0;
+
+            border: 0;
+
+            border-bottom:
+                1px solid
+                #f1f5f9;
+
+            background: #ffffff;
+
+            color: #172033;
+
+            text-align: left;
+
+            cursor: pointer;
+
+            transition:
+                background .18s ease;
+
+        }
+
+
+        .shop-search-suggestion-item:last-child {
+
+            border-bottom: 0;
+
+        }
+
+
+        .shop-search-suggestion-item:hover,
+        .shop-search-suggestion-item.active {
+
+            background:
+                #f8fafc;
+
+        }
+
+
+        /* =====================================================
+           IMAGE
+        ===================================================== */
+
+        .shop-search-suggestion-image {
+
+            width: 48px;
+
+            height: 48px;
+
+            flex:
+                0 0 48px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background:
+                #f8fafc;
+
+            border-radius: 7px;
+
+            overflow: hidden;
+
+        }
+
+
+        .shop-search-suggestion-image img {
+
+            width: 100%;
+
+            height: 100%;
+
+            object-fit: contain;
+
+        }
+
+
+        /* =====================================================
+           INFO
+        ===================================================== */
+
+        .shop-search-suggestion-info {
+
+            min-width: 0;
+
+            flex: 1;
+
+        }
+
+
+        .shop-search-suggestion-title {
+
+            display: block;
+
+            width: 100%;
+
+            overflow: hidden;
+
+            white-space: nowrap;
+
+            text-overflow: ellipsis;
+
+            color:
+                #172033;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            line-height: 1.35;
+
+        }
+
+
+        .shop-search-suggestion-category {
+
+            display: block;
+
+            margin-top: 3px;
+
+            color:
+                #94a3b8;
+
+            font-size: 11px;
+
+            line-height: 1.3;
+
+        }
+
+
+        /* =====================================================
+           META
+        ===================================================== */
+
+        .shop-search-suggestion-meta {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 9px;
+
+            margin-top: 4px;
+
+        }
+
+
+        .shop-search-suggestion-price {
+
+            color:
+                #16a34a;
+
+            font-size: 12px;
+
+            font-weight: 800;
+
+        }
+
+
+        .shop-search-suggestion-rating {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 3px;
+
+            color:
+                #f59e0b;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+        }
+
+
+        .shop-search-suggestion-rating i {
+
+            font-size: 9px;
+
+        }
+
+
+        .shop-search-suggestion-rating small {
+
+            color:
+                #94a3b8;
+
+            font-size: 10px;
+
+            font-weight: 500;
+
+        }
+
+
+        /* =====================================================
+           ARROW
+        ===================================================== */
+
+        .shop-search-suggestion-arrow {
+
+            flex:
+                0 0 auto;
+
+            color:
+                #94a3b8;
+
+            font-size: 10px;
+
+            margin-left: 3px;
+
+        }
+
+
+        /* =====================================================
+           NO RESULTS
+        ===================================================== */
+
+        .shop-search-no-results {
+
+            min-height: 85px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            flex-direction: column;
+
+            gap: 7px;
+
+            padding: 18px;
+
+            color:
+                #64748b;
+
+            font-size: 12px;
+
+        }
+
+
+        .shop-search-no-results i {
+
+            color:
+                #94a3b8;
+
+            font-size: 18px;
+
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 768px) {
+
+            .shop-search-suggestions {
+
+                max-height: 350px;
+
+                border-radius: 9px;
+
+            }
+
+
+            .shop-search-suggestion-item {
+
+                min-height: 62px;
+
+                padding:
+                    8px 10px;
+
+                gap: 9px;
+
+            }
+
+
+            .shop-search-suggestion-image {
+
+                width: 44px;
+
+                height: 44px;
+
+                flex:
+                    0 0 44px;
+
+            }
+
+
+            .shop-search-suggestion-title {
+
+                font-size: 12px;
+
+            }
+
+
+            .shop-search-suggestion-category {
+
+                font-size: 10px;
+
+            }
+
+
+            .shop-search-suggestion-price {
+
+                font-size: 11px;
+
+            }
+
+        }
+
+    `;
+
+
+    document.head.appendChild(
+        style
+    );
+
+}
+
+
+/* =========================================================
+   CUSTOM SHOP DROPDOWNS
+========================================================= */
+
+function setupCustomSelects() {
+
+    document
+        .querySelectorAll(
+            ".shop-control .select-wrap"
+        )
+        .forEach(
+            selectWrap => {
+
+                const select =
+                    selectWrap.querySelector(
+                        "select"
+                    );
+
+                if (!select) {
+                    return;
+                }
+
+
+                /* Remove old Font Awesome arrow */
+
+                const oldArrow =
+                    selectWrap.querySelector(
+                        ":scope > i"
+                    );
+
+                if (oldArrow) {
+                    oldArrow.remove();
+                }
+
+
+                /* Prevent duplicate setup */
+
+                if (
+                    selectWrap.querySelector(
+                        ".custom-select-button"
+                    )
+                ) {
+                    return;
+                }
+
+
+                /* -------------------------------------------------
+                   BUTTON
+                ------------------------------------------------- */
+
+                const button =
+                    document.createElement(
+                        "button"
+                    );
+
+                button.type =
+                    "button";
+
+                button.className =
+                    "custom-select-button";
+
+                button.setAttribute(
+                    "aria-haspopup",
+                    "listbox"
+                );
+
+                button.setAttribute(
+                    "aria-expanded",
+                    "false"
+                );
+
+
+                /* -------------------------------------------------
+                   BUTTON CONTENT
+                ------------------------------------------------- */
+
+                const text =
+                    document.createElement(
+                        "span"
+                    );
+
+                text.className =
+                    "custom-select-text";
+
+
+                const arrow =
+                    document.createElement(
+                        "i"
+                    );
+
+                arrow.className =
+                    "fa-solid fa-chevron-down custom-select-arrow";
+
+
+                button.appendChild(
+                    text
+                );
+
+                button.appendChild(
+                    arrow
+                );
+
+
+                /* -------------------------------------------------
+                   DROPDOWN
+                ------------------------------------------------- */
+
+                const dropdown =
+                    document.createElement(
+                        "div"
+                    );
+
+                dropdown.className =
+                    "custom-select-dropdown";
+
+                dropdown.setAttribute(
+                    "role",
+                    "listbox"
+                );
+
+
+                selectWrap.appendChild(
+                    button
+                );
+
+                selectWrap.appendChild(
+                    dropdown
+                );
+
+
+                /* Hide original select */
+
+                select.classList.add(
+                    "custom-select-native"
+                );
+
+
+                /* -------------------------------------------------
+                   BUILD OPTIONS
+                ------------------------------------------------- */
+
+                function buildOptions() {
+
+                    dropdown.innerHTML =
+                        "";
+
+
+                    [
+                        ...select.options
+                    ]
+                        .forEach(
+                            option => {
+
+                                const item =
+                                    document.createElement(
+                                        "button"
+                                    );
+
+                                item.type =
+                                    "button";
+
+                                item.className =
+                                    "custom-select-option";
+
+                                item.dataset.value =
+                                    option.value;
+
+                                item.setAttribute(
+                                    "role",
+                                    "option"
+                                );
+
+                                item.textContent =
+                                    option.textContent.trim();
+
+
+                                if (
+                                    option.value ===
+                                    select.value
+                                ) {
+
+                                    item.classList.add(
+                                        "selected"
+                                    );
+
+                                    item.setAttribute(
+                                        "aria-selected",
+                                        "true"
+                                    );
+
+                                }
+
+
+                                item.addEventListener(
+                                    "click",
+                                    event => {
+
+                                        event.preventDefault();
+
+                                        event.stopPropagation();
+
+
+                                        select.value =
+                                            option.value;
+
+
+                                        select.dispatchEvent(
+                                            new Event(
+                                                "change",
+                                                {
+                                                    bubbles: true
+                                                }
+                                            )
+                                        );
+
+
+                                        updateButton();
+
+                                        closeDropdown();
+
+                                    }
+                                );
+
+
+                                dropdown.appendChild(
+                                    item
+                                );
+
+                            }
+                        );
+
+
+                    updateButton();
+
+                }
+
+
+                /* -------------------------------------------------
+                   UPDATE BUTTON
+                ------------------------------------------------- */
+
+                function updateButton() {
+
+                    const selected =
+                        select.options[
+                            select.selectedIndex
+                        ];
+
+
+                    if (selected) {
+
+                        text.textContent =
+                            selected.textContent.trim();
+
+                    }
+
+
+                    dropdown
+                        .querySelectorAll(
+                            ".custom-select-option"
+                        )
+                        .forEach(
+                            item => {
+
+                                const isSelected =
+                                    item.dataset.value ===
+                                    select.value;
+
+
+                                item.classList.toggle(
+                                    "selected",
+                                    isSelected
+                                );
+
+
+                                item.setAttribute(
+                                    "aria-selected",
+                                    isSelected
+                                        ? "true"
+                                        : "false"
+                                );
+
+                            }
+                        );
+
+                }
+
+
+                /* -------------------------------------------------
+                   OPEN
+                ------------------------------------------------- */
+
+                function openDropdown() {
+
+                    closeAllCustomSelects(
+                        selectWrap
+                    );
+
+
+                    selectWrap.classList.add(
+                        "custom-select-open"
+                    );
+
+
+                    button.setAttribute(
+                        "aria-expanded",
+                        "true"
+                    );
+
+                }
+
+
+                /* -------------------------------------------------
+                   CLOSE
+                ------------------------------------------------- */
+
+                function closeDropdown() {
+
+                    selectWrap.classList.remove(
+                        "custom-select-open"
+                    );
+
+
+                    button.setAttribute(
+                        "aria-expanded",
+                        "false"
+                    );
+
+                }
+
+
+                /* -------------------------------------------------
+                   BUTTON CLICK
+                ------------------------------------------------- */
+
+                button.addEventListener(
+                    "click",
+                    event => {
+
+                        event.preventDefault();
+
+                        event.stopPropagation();
+
+
+                        if (
+                            selectWrap.classList.contains(
+                                "custom-select-open"
+                            )
+                        ) {
+
+                            closeDropdown();
+
+                        }
+
+                        else {
+
+                            openDropdown();
+
+                        }
+
+                    }
+                );
+
+
+                /* -------------------------------------------------
+                   SELECT CHANGE
+                ------------------------------------------------- */
+
+                select.addEventListener(
+                    "change",
+                    () => {
+
+                        updateButton();
+
+                    }
+                );
+
+
+                /* -------------------------------------------------
+                   WATCH DYNAMIC OPTIONS
+                   API category options are rebuilt later.
+                ------------------------------------------------- */
+
+                const observer =
+                    new MutationObserver(
+                        () => {
+
+                            buildOptions();
+
+                        }
+                    );
+
+
+                observer.observe(
+                    select,
+                    {
+                        childList: true
+                    }
+                );
+
+
+                /* Initial */
+
+                buildOptions();
+
+            }
+        );
+
+
+    /* ---------------------------------------------------------
+       OUTSIDE CLICK
+    --------------------------------------------------------- */
+
+    document.addEventListener(
+        "click",
+        () => {
+
+            closeAllCustomSelects();
+
+        }
+    );
+
+
+    /* ---------------------------------------------------------
+       ESCAPE
+    --------------------------------------------------------- */
+
+    document.addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Escape"
+            ) {
+
+                closeAllCustomSelects();
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   CLOSE ALL CUSTOM SELECTS
+========================================================= */
+
+function closeAllCustomSelects(
+    except = null
+) {
+
+    document
+        .querySelectorAll(
+            ".shop-control .select-wrap.custom-select-open"
+        )
+        .forEach(
+            selectWrap => {
+
+                if (
+                    selectWrap ===
+                    except
+                ) {
+                    return;
+                }
+
+
+                selectWrap.classList.remove(
+                    "custom-select-open"
+                );
+
+
+                const button =
+                    selectWrap.querySelector(
+                        ".custom-select-button"
+                    );
+
+
+                button?.setAttribute(
+                    "aria-expanded",
+                    "false"
+                );
+
+            }
+        );
+
+}
 
 /* =========================================================
    SORT OPTIONS
@@ -646,8 +2613,96 @@ async function loadProducts() {
         saveWishlist();
 
 
+       /* =====================================================
+        READ URL FILTERS
+        Product Details / Other pages
+        → Shop page
+        ===================================================== */
+
+        const params =
+        new URLSearchParams(
+            window.location.search
+        );
+
+
+        const urlCategory =
+        params.get("category");
+
+
+        const urlSearch =
+        params.get("search");
+
+
+        /* -----------------------------------------------------
+        CATEGORY FROM URL
+        ----------------------------------------------------- */
+
+        if (urlCategory) {
+
+        currentCategory =
+            normalizeCategory(
+                urlCategory
+            );
+
+        }
+
+
+        /* -----------------------------------------------------
+        SEARCH FROM URL
+        ----------------------------------------------------- */
+
+        if (urlSearch) {
+
+        currentSearch =
+            urlSearch
+                .trim()
+                .toLowerCase();
+
+        }
+
+
+        /* -----------------------------------------------------
+        POPULATE DROPDOWNS
+        ----------------------------------------------------- */
+
         populateCategoryOptions();
 
+
+        /* -----------------------------------------------------
+        SYNC SELECT VALUES
+        ----------------------------------------------------- */
+
+        if (shopCategory) {
+
+        shopCategory.value =
+            currentCategory;
+
+        }
+
+
+        if (shopHeaderCategory) {
+
+        shopHeaderCategory.value =
+            currentCategory;
+
+        }
+
+
+        /* -----------------------------------------------------
+        SEARCH INPUT
+        ----------------------------------------------------- */
+
+        if (shopSearch) {
+
+        shopSearch.value =
+            currentSearch;
+
+        }
+
+
+        /* -----------------------------------------------------
+        APPLY FILTER
+        ----------------------------------------------------- */
 
         applyShopFilters();
 
@@ -982,14 +3037,14 @@ function showShopError() {
    FILTER PRODUCTS
 ========================================================= */
 
+/* =========================================================
+   FILTER PRODUCTS
+========================================================= */
+
 function applyShopFilters() {
 
-    if (
-        !products.length
-    ) {
-
+    if (!products.length) {
         return;
-
     }
 
 
@@ -1005,7 +3060,9 @@ function applyShopFilters() {
             .toLowerCase();
 
 
-    /* Search */
+    /* =====================================================
+       SEARCH
+    ===================================================== */
 
     if (search) {
 
@@ -1043,21 +3100,13 @@ function applyShopFilters() {
 
                     return (
 
-                        title.includes(
-                            search
-                        ) ||
+                        title.includes(search) ||
 
-                        category.includes(
-                            search
-                        ) ||
+                        category.includes(search) ||
 
-                        description.includes(
-                            search
-                        ) ||
+                        description.includes(search) ||
 
-                        brand.includes(
-                            search
-                        )
+                        brand.includes(search)
 
                     );
 
@@ -1067,14 +3116,14 @@ function applyShopFilters() {
     }
 
 
-    /* Category */
+    /* =====================================================
+       CATEGORY
+    ===================================================== */
 
     const category =
-        String(
+        normalizeCategory(
             currentCategory || "all"
-        )
-            .trim()
-            .toLowerCase();
+        );
 
 
     if (
@@ -1085,18 +3134,17 @@ function applyShopFilters() {
         result =
             result.filter(
                 product =>
-                    String(
+                    normalizeCategory(
                         product.category
-                    )
-                        .trim()
-                        .toLowerCase() ===
-                    category
+                    ) === category
             );
 
     }
 
 
-    /* Sort */
+    /* =====================================================
+       SORT
+    ===================================================== */
 
     result =
         sortProducts(
@@ -1105,19 +3153,264 @@ function applyShopFilters() {
         );
 
 
+    /* =====================================================
+       STORE FILTERED PRODUCTS
+    ===================================================== */
+
+    currentFilteredProducts =
+        result;
+
+
+    /* =====================================================
+       RENDER PRODUCTS
+    ===================================================== */
+
     renderShopProducts(
         result
     );
 
+
+    /* =====================================================
+       RESULT COUNT
+    ===================================================== */
 
     updateShopResultCount(
         result.length
     );
 
 
+    /* =====================================================
+       ACTIVE FILTERS
+    ===================================================== */
+
     renderActiveFilters();
 
 }
+
+
+
+function renderShopProducts(list) {
+
+    if (!shopProducts) {
+        return;
+    }
+
+
+    currentFilteredProducts =
+        list;
+
+
+    const totalPages =
+        Math.ceil(
+            list.length /
+            PRODUCTS_PER_PAGE
+        );
+
+
+    if (
+        currentPage > totalPages
+    ) {
+
+        currentPage =
+            totalPages || 1;
+
+    }
+
+
+    const start =
+        (
+            currentPage - 1
+        ) *
+        PRODUCTS_PER_PAGE;
+
+
+    const pageProducts =
+        list.slice(
+            start,
+            start + PRODUCTS_PER_PAGE
+        );
+
+
+    shopProducts.innerHTML =
+        pageProducts
+            .map(
+                product =>
+                    createShopProductCard(
+                        product
+                    )
+            )
+            .join("");
+
+
+    attachShopProductEvents();
+
+
+    renderPagination(
+        totalPages
+    );
+
+}
+
+function renderPagination(totalPages) {
+
+    if (!shopPagination) {
+        return;
+    }
+
+    if (totalPages <= 1) {
+        shopPagination.innerHTML = "";
+        return;
+    }
+
+
+    let pages = [];
+
+
+    /* =====================================================
+       5 OR FEWER PAGES
+    ===================================================== */
+
+    if (totalPages <= 5) {
+
+        for (
+            let i = 1;
+            i <= totalPages;
+            i++
+        ) {
+            pages.push(i);
+        }
+
+    }
+
+
+    /* =====================================================
+       MORE THAN 5 PAGES
+    ===================================================== */
+
+    else {
+
+        let startPage;
+
+        /*
+         * First 3 pages
+         * 1 2 3 ... 16 17
+         */
+        if (currentPage <= 3) {
+
+            startPage = 1;
+
+        }
+
+        /*
+         * Sliding pages
+         * 2 3 4 5 ... 16 17
+         */
+        else {
+
+            startPage =
+                currentPage - 2;
+
+        }
+
+
+        /*
+         * Don't go beyond the last section
+         */
+        if (
+            startPage >
+            totalPages - 4
+        ) {
+
+            startPage =
+                totalPages - 4;
+
+        }
+
+
+        /*
+         * Add 5-page sliding window
+         */
+        for (
+            let i = startPage;
+            i <= startPage + 4;
+            i++
+        ) {
+
+            pages.push(i);
+
+        }
+
+    }
+
+
+    shopPagination.innerHTML = `
+
+        <button
+            type="button"
+            ${currentPage === 1 ? "disabled" : ""}
+            onclick="changeShopPage(${currentPage - 1})"
+        >
+            ‹
+        </button>
+
+
+        ${pages.map(
+            page => `
+
+                <button
+                    type="button"
+                    class="${
+                        currentPage === page
+                            ? "active"
+                            : ""
+                    }"
+                    onclick="changeShopPage(${page})"
+                >
+                    ${page}
+                </button>
+
+            `
+        ).join("")}
+
+
+        <button
+            type="button"
+            ${
+                currentPage === totalPages
+                    ? "disabled"
+                    : ""
+            }
+            onclick="changeShopPage(${currentPage + 1})"
+        >
+            ›
+        </button>
+
+    `;
+
+}
+
+
+function changeShopPage(page) {
+
+    currentPage =
+        page;
+
+
+    renderShopProducts(
+        currentFilteredProducts
+    );
+
+
+    window.scrollTo({
+        top:
+            shopProducts.offsetTop - 100,
+        behavior:
+            "smooth"
+    });
+
+}
+
+
 
 
 /* =========================================================
@@ -1284,69 +3577,19 @@ function sortProducts(
 }
 
 
-/* =========================================================
+/* =====================================================
    RENDER PRODUCTS
-========================================================= */
+===================================================== */
 
-function renderShopProducts(
-    list
-) {
+currentPage = 1;
 
-    if (!shopProducts) {
-        return;
-    }
+currentFilteredProducts = result;
 
+renderShopProducts(result);
 
-    if (
-        !list.length
-    ) {
+updateShopResultCount(result.length);
 
-        shopProducts.innerHTML =
-            "";
-
-
-        if (
-            shopNoResults
-        ) {
-
-            shopNoResults.hidden =
-                false;
-
-        }
-
-        return;
-
-    }
-
-
-    if (
-        shopNoResults
-    ) {
-
-        shopNoResults.hidden =
-            true;
-
-    }
-
-
-    shopProducts.innerHTML =
-        list
-            .map(
-                (
-                    product,
-                    index
-                ) =>
-                    createShopProductCard(
-                        product,
-                        index
-                    )
-            )
-            .join("");
-
-
-    attachShopProductEvents();
-
-}
+renderActiveFilters();
 
 
 /* =========================================================
@@ -2058,17 +4301,30 @@ function clearAllShopFilters() {
 
 }
 
-
 /* =========================================================
-   CATEGORY MENU
-   DESKTOP + MOBILE SUBMENU
+   MOBILE NAVIGATION
 ========================================================= */
 
-function setupCategoryMenu() {
+function setupMobileNavigation() {
+
+    const navigation =
+        document.querySelector(
+            ".navigation"
+        );
+
+    const navigationInner =
+        document.querySelector(
+            ".navigation-inner"
+        );
+
+    const desktopNav =
+        document.querySelector(
+            ".nav-links"
+        );
 
     if (
-        !categoriesBtn ||
-        !categoryDropdown
+        !navigation ||
+        !navigationInner
     ) {
 
         return;
@@ -2076,11 +4332,261 @@ function setupCategoryMenu() {
     }
 
 
-    /* -----------------------------------------------------
-       ALL CATEGORIES BUTTON
-    ----------------------------------------------------- */
+    /* =====================================================
+       MOBILE TOGGLE
+    ===================================================== */
 
-    categoriesBtn.addEventListener(
+    mobileMenuToggle =
+        document.getElementById(
+            "mobileMenuToggle"
+        );
+
+
+    if (!mobileMenuToggle) {
+
+        mobileMenuToggle =
+            document.createElement(
+                "button"
+            );
+
+        mobileMenuToggle.type =
+            "button";
+
+        mobileMenuToggle.className =
+            "mobile-menu-toggle";
+
+        mobileMenuToggle.id =
+            "mobileMenuToggle";
+
+        mobileMenuToggle.setAttribute(
+            "aria-label",
+            "Open navigation menu"
+        );
+
+        mobileMenuToggle.setAttribute(
+            "aria-expanded",
+            "false"
+        );
+
+        mobileMenuToggle.innerHTML =
+            `
+                <i class="fa-solid fa-bars"></i>
+            `;
+
+        navigationInner.appendChild(
+            mobileMenuToggle
+        );
+
+    }
+
+
+    /* =====================================================
+       MOBILE NAV
+    ===================================================== */
+
+    mobileNav =
+        document.getElementById(
+            "mobileNav"
+        );
+
+
+    if (!mobileNav) {
+
+        mobileNav =
+            document.createElement(
+                "nav"
+            );
+
+        mobileNav.id =
+            "mobileNav";
+
+        mobileNav.setAttribute(
+            "aria-label",
+            "Mobile Navigation"
+        );
+
+        navigation.appendChild(
+            mobileNav
+        );
+
+    }
+
+
+    /* =====================================================
+       OVERLAY
+    ===================================================== */
+
+    mobileNavOverlay =
+        document.getElementById(
+            "mobileNavOverlay"
+        );
+
+
+    if (!mobileNavOverlay) {
+
+        mobileNavOverlay =
+            document.createElement(
+                "div"
+            );
+
+        mobileNavOverlay.id =
+            "mobileNavOverlay";
+
+        document.body.appendChild(
+            mobileNavOverlay
+        );
+
+    }
+
+
+    /* =====================================================
+       COPY DESKTOP NAV LINKS
+    ===================================================== */
+
+    if (
+        desktopNav &&
+        mobileNav.children.length === 0
+    ) {
+
+        desktopNav
+            .querySelectorAll(
+                "a"
+            )
+            .forEach(
+                originalLink => {
+
+                    const link =
+                        document.createElement(
+                            "a"
+                        );
+
+                    link.href =
+                        originalLink.getAttribute(
+                            "href"
+                        ) || "#";
+
+                    link.textContent =
+                        originalLink.textContent
+                            .trim();
+
+                    mobileNav.appendChild(
+                        link
+                    );
+
+                }
+            );
+
+    }
+
+
+    /* =====================================================
+       OPEN
+    ===================================================== */
+
+    function openMobileMenu() {
+
+        mobileNav.classList.add(
+            "is-open"
+        );
+
+        mobileNavOverlay.classList.add(
+            "is-visible"
+        );
+
+        mobileMenuToggle.classList.add(
+            "is-active"
+        );
+
+        mobileMenuToggle.setAttribute(
+            "aria-expanded",
+            "true"
+        );
+
+        mobileMenuToggle.setAttribute(
+            "aria-label",
+            "Close navigation menu"
+        );
+
+        mobileMenuToggle.innerHTML =
+            `
+                <i class="fa-solid fa-xmark"></i>
+            `;
+
+        document.body.classList.add(
+            "mobile-menu-open"
+        );
+
+    }
+
+
+    /* =====================================================
+       CLOSE
+    ===================================================== */
+
+    function closeMobileMenu() {
+
+        mobileNav?.classList.remove(
+            "is-open"
+        );
+
+        mobileNavOverlay?.classList.remove(
+            "is-visible"
+        );
+
+        mobileMenuToggle?.classList.remove(
+            "is-active"
+        );
+
+        mobileMenuToggle?.setAttribute(
+            "aria-expanded",
+            "false"
+        );
+
+        mobileMenuToggle?.setAttribute(
+            "aria-label",
+            "Open navigation menu"
+        );
+
+        if (
+            mobileMenuToggle
+        ) {
+
+            mobileMenuToggle.innerHTML =
+                `
+                    <i class="fa-solid fa-bars"></i>
+                `;
+
+        }
+
+        document.body.classList.remove(
+            "mobile-menu-open"
+        );
+
+    }
+
+
+    /* =====================================================
+       PREVENT DUPLICATE LISTENER
+    ===================================================== */
+
+    if (
+        mobileMenuToggle.dataset.shopmaxBound ===
+        "true"
+    ) {
+
+        return;
+
+    }
+
+    mobileMenuToggle.dataset.shopmaxBound =
+        "true";
+
+
+    /* =====================================================
+       TOGGLE CLICK
+    ===================================================== */
+
+    mobileMenuToggle.addEventListener(
         "click",
         event => {
 
@@ -2090,8 +4596,8 @@ function setupCategoryMenu() {
 
 
             const isOpen =
-                categoryDropdown.classList.contains(
-                    "show"
+                mobileNav.classList.contains(
+                    "is-open"
                 );
 
 
@@ -2099,11 +4605,191 @@ function setupCategoryMenu() {
                 isOpen
             ) {
 
-                closeCategoryMenu();
+                closeMobileMenu();
 
             }
 
             else {
+
+                /* Close All Categories */
+
+                closeCategoryMenu();
+
+                openMobileMenu();
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       OVERLAY CLICK
+    ===================================================== */
+
+    mobileNavOverlay.addEventListener(
+        "click",
+        closeMobileMenu
+    );
+
+
+    /* =====================================================
+       MOBILE LINK CLICK
+    ===================================================== */
+
+    mobileNav.addEventListener(
+        "click",
+        event => {
+
+            const link =
+                event.target.closest(
+                    "a"
+                );
+
+
+            if (!link) {
+                return;
+            }
+
+
+            const href =
+                link.getAttribute(
+                    "href"
+                ) || "";
+
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+
+            closeMobileMenu();
+
+
+            if (
+                !href ||
+                href === "#"
+            ) {
+
+                return;
+
+            }
+
+
+            const currentPage =
+                location.pathname
+                    .split("/")
+                    .pop()
+                    .toLowerCase();
+
+
+            const targetPage =
+                href
+                    .split("/")
+                    .pop()
+                    .toLowerCase();
+
+
+            /* Same page */
+
+            if (
+                currentPage ===
+                targetPage
+            ) {
+
+                window.scrollTo({
+                    top: 0,
+                    behavior: "smooth"
+                });
+
+                return;
+
+            }
+
+
+            /* Other page */
+
+            window.location.href =
+                href;
+
+        }
+    );
+
+
+    /* =====================================================
+       ESCAPE
+    ===================================================== */
+
+    document.addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Escape"
+            ) {
+
+                closeMobileMenu();
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       RESIZE
+    ===================================================== */
+
+    window.addEventListener(
+        "resize",
+        () => {
+
+            if (
+                window.innerWidth > 768
+            ) {
+
+                closeMobileMenu();
+
+            }
+
+        }
+    );
+
+}
+
+
+
+function setupCategoryMenu() {
+
+    if (
+        !categoriesBtn ||
+        !categoryDropdown
+    ) {
+        return;
+    }
+
+
+    /* =====================================================
+       ALL CATEGORIES BUTTON
+    ===================================================== */
+
+    categoriesBtn.addEventListener(
+        "click",
+        event => {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            const isOpen =
+                categoryDropdown.classList.contains(
+                    "show"
+                );
+
+            if (isOpen) {
+
+                closeCategoryMenu();
+
+            } else {
 
                 categoryDropdown.classList.add(
                     "show"
@@ -2119,9 +4805,9 @@ function setupCategoryMenu() {
     );
 
 
-    /* -----------------------------------------------------
+    /* =====================================================
        CATEGORY DROPDOWN CLICK
-    ----------------------------------------------------- */
+    ===================================================== */
 
     categoryDropdown.addEventListener(
         "click",
@@ -2130,106 +4816,94 @@ function setupCategoryMenu() {
             event.stopPropagation();
 
 
-            /* =================================================
+            /* -------------------------------------------------
                SUBMENU LINK
-            ================================================= */
+            ------------------------------------------------- */
 
             const submenuLink =
                 event.target.closest(
                     ".category-submenu a[data-category]"
                 );
 
-
-            if (
-                submenuLink
-            ) {
+            if (submenuLink) {
 
                 event.preventDefault();
-
 
                 const category =
                     submenuLink.dataset.category;
 
-
-                if (
-                    !category
-                ) {
-
+                if (!category) {
                     return;
-
                 }
-
 
                 currentCategory =
                     normalizeCategory(
                         category
                     );
 
+                if (shopCategory) {
 
-                if (
-                    shopCategory
-                ) {
+    shopCategory.value =
+        currentCategory;
 
-                    shopCategory.value =
-                        currentCategory;
+    shopCategory.dispatchEvent(
+        new Event(
+            "change",
+            {
+                bubbles: true
+            }
+        )
+    );
 
-                }
-
-
-                if (
-                    shopHeaderCategory
-                ) {
-
-                    shopHeaderCategory.value =
-                        currentCategory;
-
-                }
+}
 
 
-                applyShopFilters();
+if (shopHeaderCategory) {
+
+    shopHeaderCategory.value =
+        currentCategory;
+
+    shopHeaderCategory.dispatchEvent(
+        new Event(
+            "change",
+            {
+                bubbles: true
+            }
+        )
+    );
+
+}
 
 
-                closeCategoryMenu();
+applyShopFilters();
 
+closeCategoryMenu();
 
-                return;
-
+return;
             }
 
 
-            /* =================================================
+            /* -------------------------------------------------
                PARENT CATEGORY BUTTON
-            ================================================= */
+            ------------------------------------------------- */
 
             const categoryButton =
                 event.target.closest(
                     ".category-item > button"
                 );
 
-
-            if (
-                !categoryButton
-            ) {
-
+            if (!categoryButton) {
                 return;
-
             }
-
 
             const item =
                 categoryButton.closest(
                     ".category-item"
                 );
 
-
-            if (
-                !item
-            ) {
-
+            if (!item) {
                 return;
-
             }
-
 
             const submenu =
                 item.querySelector(
@@ -2238,28 +4912,24 @@ function setupCategoryMenu() {
 
 
             /* =================================================
-               MOBILE
-               Parent = submenu toggle
+               MOBILE + TABLET
+               <= 1024px
             ================================================= */
 
             if (
                 submenu &&
-                window.innerWidth <= 768
+                window.innerWidth <= 1024
             ) {
 
                 event.preventDefault();
 
-
-                const shouldOpen =
-                    !item.classList.contains(
+                const isOpen =
+                    item.classList.contains(
                         "mobile-open"
                     );
 
 
-                /*
-                   Close every other
-                   mobile submenu.
-                */
+                /* Close other submenus */
 
                 categoryDropdown
                     .querySelectorAll(
@@ -2269,13 +4939,33 @@ function setupCategoryMenu() {
                         otherItem => {
 
                             if (
-                                otherItem !==
-                                item
+                                otherItem === item
                             ) {
+                                return;
+                            }
 
-                                otherItem.classList.remove(
-                                    "mobile-open"
+                            otherItem.classList.remove(
+                                "mobile-open"
+                            );
+
+                            const otherSubmenu =
+                                otherItem.querySelector(
+                                    ":scope > .category-submenu"
                                 );
+
+                            if (otherSubmenu) {
+
+                                otherSubmenu.style.display =
+                                    "none";
+
+                                otherSubmenu.style.visibility =
+                                    "hidden";
+
+                                otherSubmenu.style.opacity =
+                                    "0";
+
+                                otherSubmenu.style.pointerEvents =
+                                    "none";
 
                             }
 
@@ -2283,51 +4973,152 @@ function setupCategoryMenu() {
                     );
 
 
-                /*
-                   Open current submenu.
-                */
+                /* Close current */
 
-                item.classList.toggle(
-                    "mobile-open",
-                    shouldOpen
+                if (isOpen) {
+
+                    item.classList.remove(
+                        "mobile-open"
+                    );
+
+                    submenu.style.display =
+                        "none";
+
+                    submenu.style.visibility =
+                        "hidden";
+
+                    submenu.style.opacity =
+                        "0";
+
+                    submenu.style.pointerEvents =
+                        "none";
+
+                    return;
+                }
+
+
+                /* Open current */
+
+                item.classList.add(
+                    "mobile-open"
                 );
 
+                submenu.style.display =
+                    "block";
+
+                submenu.style.visibility =
+                    "visible";
+
+                submenu.style.opacity =
+                    "1";
+
+                submenu.style.pointerEvents =
+                    "auto";
+
+                submenu.style.transform =
+                    "translateX(0)";
+
+
+                /* =================================================
+                   MOBILE
+                   <= 768px
+                   submenu নিচে
+                ================================================= */
+
+                if (
+                    window.innerWidth <= 768
+                ) {
+
+                    submenu.style.position =
+                        "static";
+
+                    submenu.style.left =
+                        "auto";
+
+                    submenu.style.top =
+                        "auto";
+
+                    submenu.style.width =
+                        "100%";
+
+                    submenu.style.maxWidth =
+                        "100%";
+
+                    submenu.style.marginTop =
+                        "4px";
+
+                    submenu.style.transform =
+                        "none";
+
+                    submenu.style.maxHeight =
+                        "none";
+
+                    submenu.style.overflow =
+                        "visible";
+
+                }
+
+
+                /* =================================================
+                   TABLET
+                   769px - 1024px
+                   submenu ডান পাশে
+                ================================================= */
+
+                else {
+
+                    submenu.style.position =
+                        "absolute";
+
+                    submenu.style.left =
+                        "calc(100% + 5px)";
+
+                    submenu.style.top =
+                        "-1px";
+
+                    submenu.style.width =
+                        "190px";
+
+                    submenu.style.maxWidth =
+                        "190px";
+
+                    submenu.style.marginTop =
+                        "0";
+
+                    submenu.style.transform =
+                        "translateX(0)";
+
+                    submenu.style.maxHeight =
+                        "60vh";
+
+                    submenu.style.overflowY =
+                        "auto";
+
+                }
 
                 return;
-
             }
 
 
             /* =================================================
                DESKTOP
+               >= 1025px
             ================================================= */
 
             const category =
                 categoryButton.dataset.category;
 
-
-            if (
-                !category
-            ) {
-
+            if (!category) {
                 return;
-
             }
 
-
             event.preventDefault();
-
 
             const normalized =
                 normalizeCategory(
                     category
                 );
 
-
-            /*
-               If this is a parent group
-               and it has submenu, open it.
-            */
 
             const hasMatchingProductCategory =
                 products.some(
@@ -2339,82 +5130,70 @@ function setupCategoryMenu() {
                 );
 
 
+            /* Parent category */
+
             if (
                 normalized !== "all" &&
-                !hasMatchingProductCategory
+                !hasMatchingProductCategory &&
+                submenu
             ) {
 
-                if (
-                    submenu
-                ) {
-
-                    const shouldOpen =
-                        !item.classList.contains(
-                            "desktop-open"
-                        );
-
-
-                    categoryDropdown
-                        .querySelectorAll(
-                            ".category-item.desktop-open"
-                        )
-                        .forEach(
-                            otherItem => {
-
-                                if (
-                                    otherItem !==
-                                    item
-                                ) {
-
-                                    otherItem.classList.remove(
-                                        "desktop-open"
-                                    );
-
-                                }
-
-                            }
-                        );
-
-
-                    item.classList.toggle(
-                        "desktop-open",
-                        shouldOpen
+                const isOpen =
+                    item.classList.contains(
+                        "desktop-open"
                     );
 
-                }
 
+                categoryDropdown
+                    .querySelectorAll(
+                        ".category-item.desktop-open"
+                    )
+                    .forEach(
+                        otherItem => {
+
+                            if (
+                                otherItem !== item
+                            ) {
+
+                                otherItem.classList.remove(
+                                    "desktop-open"
+                                );
+
+                            }
+
+                        }
+                    );
+
+
+                item.classList.toggle(
+                    "desktop-open",
+                    !isOpen
+                );
 
                 return;
-
             }
 
+
+            /* Normal category */
 
             currentCategory =
                 normalized;
 
-
-            if (
-                shopCategory
-            ) {
+            if (shopCategory) {
 
                 shopCategory.value =
                     normalized;
 
             }
 
-
-            if (
-                shopHeaderCategory
-            ) {
+            if (shopHeaderCategory) {
 
                 shopHeaderCategory.value =
                     normalized;
 
             }
 
-
             applyShopFilters();
-
 
             closeCategoryMenu();
 
@@ -2422,9 +5201,9 @@ function setupCategoryMenu() {
     );
 
 
-    /* -----------------------------------------------------
+    /* =====================================================
        OUTSIDE CLICK
-    ----------------------------------------------------- */
+    ===================================================== */
 
     document.addEventListener(
         "click",
@@ -2435,22 +5214,16 @@ function setupCategoryMenu() {
                     event.target
                 )
             ) {
-
                 return;
-
             }
-
 
             if (
                 categoriesBtn.contains(
                     event.target
                 )
             ) {
-
                 return;
-
             }
-
 
             closeCategoryMenu();
 
@@ -2458,41 +5231,181 @@ function setupCategoryMenu() {
     );
 
 
-    /* -----------------------------------------------------
-       RESIZE
-       Reset mobile submenu state when switching
-       between mobile and desktop.
-    ----------------------------------------------------- */
+    /* =====================================================
+       ESCAPE
+    ===================================================== */
 
-    window.addEventListener(
-        "resize",
-        () => {
+    document.addEventListener(
+        "keydown",
+        event => {
 
             if (
-                window.innerWidth > 768
+                event.key === "Escape"
             ) {
 
-                categoryDropdown
-                    .querySelectorAll(
-                        ".category-item.mobile-open"
-                    )
-                    .forEach(
-                        item => {
-
-                            item.classList.remove(
-                                "mobile-open"
-                            );
-
-                        }
-                    );
+                closeCategoryMenu();
 
             }
 
         }
     );
 
-}
 
+    /* =====================================================
+       RESIZE
+    ===================================================== */
+    /* =====================================================
+   RESIZE
+   Tablet → Desktop / Desktop → Tablet
+===================================================== */
+
+window.addEventListener(
+    "resize",
+    () => {
+
+        const width =
+            window.innerWidth;
+
+
+        /* ===============================================
+           DESKTOP
+           1025px+
+        =============================================== */
+
+        if (
+            width > 1024
+        ) {
+
+            /*
+               Close old tablet/mobile submenu
+            */
+
+            categoryDropdown
+                .querySelectorAll(
+                    ".category-item.mobile-open"
+                )
+                .forEach(
+                    item => {
+
+                        item.classList.remove(
+                            "mobile-open"
+                        );
+
+                    }
+                );
+
+
+            /*
+               Remove old desktop-open state
+            */
+
+            categoryDropdown
+                .querySelectorAll(
+                    ".category-item.desktop-open"
+                )
+                .forEach(
+                    item => {
+
+                        item.classList.remove(
+                            "desktop-open"
+                        );
+
+                    }
+                );
+
+
+            /*
+               Remove inline styles
+               created by tablet/mobile mode
+            */
+
+            categoryDropdown
+                .querySelectorAll(
+                    ".category-submenu"
+                )
+                .forEach(
+                    submenu => {
+
+                        submenu.style.display =
+                            "";
+
+                        submenu.style.visibility =
+                            "";
+
+                        submenu.style.opacity =
+                            "";
+
+                        submenu.style.pointerEvents =
+                            "";
+
+                        submenu.style.position =
+                            "";
+
+                        submenu.style.left =
+                            "";
+
+                        submenu.style.top =
+                            "";
+
+                        submenu.style.width =
+                            "";
+
+                        submenu.style.maxWidth =
+                            "";
+
+                        submenu.style.marginTop =
+                            "";
+
+                        submenu.style.transform =
+                            "";
+
+                        submenu.style.maxHeight =
+                            "";
+
+                        submenu.style.overflow =
+                            "";
+
+                        submenu.style.overflowY =
+                            "";
+
+                    }
+                );
+
+        }
+
+
+        /* ===============================================
+           TABLET / MOBILE
+           0 - 1024px
+        =============================================== */
+
+        else {
+
+            /*
+               Desktop state যেন carry না করে
+            */
+
+            categoryDropdown
+                .querySelectorAll(
+                    ".category-item.desktop-open"
+                )
+                .forEach(
+                    item => {
+
+                        item.classList.remove(
+                            "desktop-open"
+                        );
+
+                    }
+                );
+
+        }
+
+    }
+);
+    
+
+}
 
 /* =========================================================
    CLOSE CATEGORY MENU

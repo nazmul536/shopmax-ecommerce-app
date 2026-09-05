@@ -1886,3 +1886,183 @@ body {
     }
 
 }
+
+/* =========================================================
+   FINAL TEXT SIZE UPDATE
+   Keep existing layout/functionality, improve readability.
+========================================================= */
+
+.checkout-card-heading h2 {
+    font-size: 20px;
+}
+
+.checkout-card-heading p {
+    font-size: 12px;
+}
+
+.form-group label {
+    font-size: 12px;
+}
+
+.form-group input,
+.form-group select {
+    height: 46px;
+    font-size: 14px;
+}
+
+.form-group input::placeholder {
+    font-size: 13px;
+}
+
+.payment-content strong {
+    font-size: 13px;
+}
+
+.payment-content small {
+    font-size: 11px;
+}
+
+.summary-heading h2 {
+    font-size: 21px;
+}
+
+.checkout-summary-item-info h4 {
+    font-size: 12px;
+}
+
+.checkout-summary-item-info span {
+    font-size: 10px;
+}
+
+.checkout-summary-item-price {
+    font-size: 13px;
+}
+
+.summary-row span {
+    font-size: 11px;
+}
+
+.summary-row strong {
+    font-size: 12px;
+}
+
+.checkout-help-card strong {
+    font-size: 13px;
+}
+
+.checkout-help-card p,
+.checkout-help-card a {
+    font-size: 11px;
+}
+
+.secure-checkout {
+    font-size: 10px;
+}
+
+.place-order-btn {
+    font-size: 14px;
+}
+
+.checkout-title p {
+    font-size: 14px;
+}
+
+.checkout-breadcrumb {
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   MOBILE TEXT SIZE UPDATE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .checkout-card-heading h2 {
+        font-size: 17px;
+    }
+
+    .checkout-card-heading p {
+        font-size: 10px;
+    }
+
+    .form-group label {
+        font-size: 10px;
+    }
+
+    .form-group input,
+    .form-group select {
+        height: 42px;
+        font-size: 12px;
+    }
+
+    .form-group input::placeholder {
+        font-size: 11px;
+    }
+
+    .payment-content strong {
+        font-size: 11px;
+    }
+
+    .payment-content small {
+        font-size: 9px;
+    }
+
+    .summary-heading h2 {
+        font-size: 18px;
+    }
+
+    .checkout-summary-item-info h4 {
+        font-size: 10px;
+    }
+
+    .checkout-summary-item-info span {
+        font-size: 8px;
+    }
+
+    .checkout-summary-item-price {
+        font-size: 10px;
+    }
+
+    .summary-row span {
+        font-size: 9px;
+    }
+
+    .summary-row strong {
+        font-size: 10px;
+    }
+
+    .summary-row.summary-total span {
+        font-size: 13px;
+    }
+
+    .summary-row.summary-total strong {
+        font-size: 18px;
+    }
+
+    .checkout-help-card strong {
+        font-size: 11px;
+    }
+
+    .checkout-help-card p,
+    .checkout-help-card a {
+        font-size: 9px;
+    }
+
+    .secure-checkout {
+        font-size: 9px;
+    }
+
+    .place-order-btn {
+        font-size: 12px;
+    }
+
+    .checkout-title p {
+        font-size: 11px;
+    }
+
+    .checkout-breadcrumb {
+        font-size: 10px;
+    }
+
+}

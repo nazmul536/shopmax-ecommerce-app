@@ -250,24 +250,6 @@
     display: none;
 }
 
-.select-wrap::after {
-    content: "\f078";
-
-    position: absolute;
-
-    top: 50%;
-    right: 14px;
-
-    transform: translateY(-50%);
-
-    color: #718096;
-
-    font-family: "Font Awesome 6 Free";
-    font-size: 10px;
-    font-weight: 900;
-
-    pointer-events: none;
-}
 
 
 /* Result */
@@ -2012,12 +1994,6 @@ body.modal-open {
         font-size: 11px;
     }
 
-    .select-wrap::after {
-        right: 10px;
-
-        font-size: 8px;
-    }
-
     .shop-result {
         grid-column: 1 / -1;
 
@@ -2053,6 +2029,19 @@ body.modal-open {
         padding: 0 8px;
 
         font-size: 9px;
+    }
+
+
+    .shop-filter-chip {
+        min-height: 27px;
+
+        padding: 0 8px;
+
+        font-size: 9px;
+    }
+
+    .shop-filter-chip i {
+        font-size: 8px;
     }
 
 
@@ -3524,4 +3513,1115 @@ body.modal-open {
         min-width: 36px;
         flex-basis: 36px;
     }
+}
+
+
+/* =========================================================
+   SHOP HEADER WISHLIST
+   EXACTLY MATCH INDEX.HTML
+========================================================= */
+
+@media (max-width: 768px) {
+
+    /* =====================================================
+       WISHLIST BUTTON
+    ===================================================== */
+
+    .header-actions #wishlistHeader {
+
+        position: relative !important;
+
+        display: inline-flex !important;
+
+        align-items: center !important;
+        justify-content: center !important;
+
+        gap: 0 !important;
+
+        width: 29px !important;
+        min-width: 29px !important;
+        max-width: 29px !important;
+
+        height: 30px !important;
+        min-height: 30px !important;
+
+        flex: 0 0 29px !important;
+
+        margin: 0 !important;
+        padding: 0 !important;
+
+        border: 0 !important;
+        outline: 0 !important;
+
+        background: transparent !important;
+
+        color: #172033 !important;
+
+        font-size: 0 !important;
+        line-height: 1 !important;
+
+        white-space: nowrap !important;
+
+        cursor: pointer !important;
+
+        box-shadow: none !important;
+    }
+
+
+    /* =====================================================
+       HEART WRAPPER
+    ===================================================== */
+
+    .header-actions #wishlistHeader
+    .wishlist-icon-wrap {
+
+        position: relative !important;
+
+        display: inline-flex !important;
+
+        align-items: center !important;
+        justify-content: center !important;
+
+        width: 21px !important;
+        min-width: 21px !important;
+        max-width: 21px !important;
+
+        height: 21px !important;
+        min-height: 21px !important;
+
+        flex: 0 0 21px !important;
+
+        margin: 0 !important;
+        padding: 0 !important;
+
+        border: 0 !important;
+
+        background: transparent !important;
+
+        box-sizing: border-box !important;
+    }
+
+
+    /* =====================================================
+       HEART
+    ===================================================== */
+
+    .header-actions #wishlistHeader
+    .wishlist-icon-wrap > i {
+
+        display: inline-block !important;
+
+        width: auto !important;
+        height: auto !important;
+
+        margin: 0 !important;
+        padding: 0 !important;
+
+        color: #172033 !important;
+
+        font-size: 14px !important;
+
+        line-height: 1 !important;
+
+        transform: none !important;
+    }
+
+
+    /* =====================================================
+       WISHLIST TEXT
+       Index mobile hides the text.
+    ===================================================== */
+
+    .header-actions #wishlistHeader
+    > span:not(.wishlist-icon-wrap) {
+
+        display: none !important;
+    }
+
+
+    /* =====================================================
+       BADGE
+    ===================================================== */
+
+    .header-actions #wishlistHeader
+    #wishlistCount {
+
+        position: absolute !important;
+
+        top: -4px !important;
+        right: -7px !important;
+
+        width: 14px !important;
+        min-width: 14px !important;
+        max-width: 14px !important;
+
+        height: 14px !important;
+        min-height: 14px !important;
+
+        display: grid !important;
+
+        place-items: center !important;
+
+        padding: 0 !important;
+        margin: 0 !important;
+
+        border: 0 !important;
+
+        border-radius: 50% !important;
+
+        background: #ef4444 !important;
+
+        color: #ffffff !important;
+
+        font-size: 7px !important;
+
+        font-weight: 800 !important;
+
+        line-height: 1 !important;
+
+        text-align: center !important;
+
+        pointer-events: none !important;
+
+        z-index: 10 !important;
+
+        box-sizing: border-box !important;
+    }
+
+
+    /* =====================================================
+       REMOVE EXTRA BUTTON STYLING
+    ===================================================== */
+
+    .header-actions #wishlistHeader:hover,
+    .header-actions #wishlistHeader:focus,
+    .header-actions #wishlistHeader:active {
+
+        background: transparent !important;
+
+        border: 0 !important;
+
+        outline: 0 !important;
+
+        box-shadow: none !important;
+
+        color: #172033 !important;
+    }
+
+      /* Drawer overlay */
+    .cart-overlay,
+    .wishlist-overlay {
+        z-index: 10040 !important;
+    }
+
+
+    /* Cart + Wishlist drawer */
+    .cart-drawer,
+    .wishlist-drawer {
+        z-index: 10050 !important;
+    }
+
+
+    /* Drawer contents must stay above everything */
+    .cart-drawer *,
+    .wishlist-drawer * {
+        position: relative;
+    }
+
+
+    /* Drawer itself must keep its stacking layer */
+    .cart-drawer,
+    .wishlist-drawer {
+        isolation: isolate !important;
+    }
+
+
+    /* Header stays below drawer */
+    .header {
+        z-index: 10000 !important;
+    }
+
+    .navigation,
+    .navigation-inner {
+        z-index: 10001 !important;
+    }
+
+
+    /* Mobile menu remains above normal page,
+       but below cart/wishlist drawer */
+    #mobileNav {
+        z-index: 10020 !important;
+    }
+
+    #mobileMenuToggle {
+        z-index: 10025 !important;
+    }
+
+    #mobileNavOverlay {
+        z-index: 10010 !important;
+    }
+
+}
+
+
+/* =========================================================
+   VERY SMALL PHONE
+   Match index.html
+========================================================= */
+
+@media (max-width: 430px) {
+
+    .header-actions #wishlistHeader
+    .wishlist-icon-wrap {
+
+        width: 21px !important;
+        height: 21px !important;
+
+        min-width: 21px !important;
+
+        flex-basis: 21px !important;
+
+    }
+
+
+    .header-actions #wishlistHeader
+    .wishlist-icon-wrap > i {
+
+        font-size: 13px !important;
+
+        padding-top: 3px !important;
+
+    }
+
+
+    .header-actions #wishlistHeader
+    #wishlistCount {
+
+        top: -6px !important;
+        right: -7px !important;
+
+        width: 14px !important;
+        height: 14px !important;
+
+        min-width: 14px !important;
+
+        font-size: 7px !important;
+
+    }
+
+    #wishlistDrawer{
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* =========================================================
+   SHOPMAX - FINAL MOBILE MENU LAYER FIX
+========================================================= */
+
+@media (max-width: 768px) {
+
+    /* ================================================
+       PAGE / HEADER
+    ================================================= */
+
+    .header {
+        position: relative !important;
+        z-index: 10000 !important;
+        overflow: visible !important;
+    }
+
+    .navigation {
+        position: relative !important;
+        z-index: 10001 !important;
+        overflow: visible !important;
+        filter: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+
+    .navigation-inner {
+        position: relative !important;
+        z-index: 10002 !important;
+        overflow: visible !important;
+    }
+
+
+    /* ================================================
+       MENU BUTTON
+    ================================================= */
+
+    #mobileMenuToggle {
+        position: relative !important;
+
+        z-index: 10006 !important;
+
+        width: 40px !important;
+        height: 40px !important;
+
+        display: grid !important;
+        place-items: center !important;
+
+        margin-left: auto !important;
+
+        flex: 0 0 40px !important;
+
+        padding: 0 !important;
+
+        border: 1px solid #e3e8ef !important;
+        border-radius: 9px !important;
+
+        background: #ffffff !important;
+        color: #172033 !important;
+
+        opacity: 1 !important;
+        visibility: visible !important;
+
+        filter: none !important;
+        transform: none !important;
+
+        cursor: pointer !important;
+        pointer-events: auto !important;
+    }
+
+    #mobileMenuToggle.is-active {
+        background: #2864e8 !important;
+        border-color: #2864e8 !important;
+        color: #ffffff !important;
+    }
+
+
+    /* ================================================
+       MOBILE MENU
+    ================================================= */
+
+    #mobileNav {
+        position: absolute !important;
+
+        top: calc(100% + 1px) !important;
+
+        left: 12px !important;
+        right: 12px !important;
+
+        z-index: 10005 !important;
+
+        display: none !important;
+
+        width: auto !important;
+        max-width: none !important;
+
+        height: auto !important;
+
+        max-height: calc(100vh - 120px) !important;
+
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+
+        padding: 0 !important;
+
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 12px !important;
+
+        background: #ffffff !important;
+
+        opacity: 1 !important;
+        visibility: visible !important;
+
+        filter: none !important;
+        transform: none !important;
+
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+
+        box-shadow:
+            0 18px 50px rgba(
+                15,
+                23,
+                42,
+                .18
+            ) !important;
+    }
+
+
+    #mobileNav.is-open {
+        display: block !important;
+
+        opacity: 1 !important;
+        visibility: visible !important;
+
+        pointer-events: auto !important;
+    }
+
+
+    /* ================================================
+       MENU LINKS
+    ================================================= */
+
+    #mobileNav a {
+        position: relative !important;
+
+        z-index: 10007 !important;
+
+        width: 100% !important;
+
+        min-height: 48px !important;
+
+        display: flex !important;
+        align-items: center !important;
+
+        padding: 0 18px !important;
+
+        border: 0 !important;
+
+        border-bottom:
+            1px solid #edf0f5 !important;
+
+        border-radius: 0 !important;
+
+        background: #ffffff !important;
+
+        color: #172033 !important;
+
+        opacity: 1 !important;
+        visibility: visible !important;
+
+        filter: none !important;
+
+        text-decoration: none !important;
+
+        font-size: 13px !important;
+        font-weight: 700 !important;
+
+        line-height: 1 !important;
+    }
+
+
+    #mobileNav a:last-child {
+        border-bottom: 0 !important;
+    }
+
+
+    #mobileNav a:hover {
+        background: #f5f8ff !important;
+        color: #2864e8 !important;
+    }
+
+
+    /* ================================================
+       OVERLAY
+       
+       IMPORTANT:
+       Overlay BELOW navigation.
+       
+       NO BLUR.
+    ================================================= */
+
+    #mobileNavOverlay {
+        position: fixed !important;
+
+        inset: 0 !important;
+
+        z-index: 9990 !important;
+
+        display: block !important;
+
+        width: 100vw !important;
+        height: 100vh !important;
+
+        background:
+            rgba(
+                15,
+                23,
+                42,
+                .28
+            ) !important;
+
+        opacity: 0 !important;
+
+        visibility: hidden !important;
+
+        pointer-events: none !important;
+
+        filter: none !important;
+
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+
+        transform: none !important;
+
+        transition:
+            opacity .2s ease,
+            visibility .2s ease !important;
+    }
+
+
+    /* ================================================
+       FORCE MENU ABOVE OVERLAY
+    ================================================= */
+
+    .header,
+    .navigation,
+    .navigation-inner,
+    #mobileNav,
+    #mobileMenuToggle {
+        isolation: isolate !important;
+    }
+
+
+    /* ================================================
+       BODY
+    ================================================= */
+
+    body.mobile-menu-open {
+        overflow: hidden !important;
+    }
+
+}
+
+
+
+
+
+/* =========================================================
+   SHOP FILTER CHIPS
+========================================================= */
+
+.shop-filter-chip {
+    min-height: 30px;
+
+    display: inline-flex;
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 0 10px;
+
+    border: 1px solid #dbe3ee;
+    border-radius: 7px;
+
+    background: #eaf1ff;
+    color: var(--shop-blue);
+
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 700;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+    transition:
+        background .2s ease,
+        border-color .2s ease;
+}
+
+.shop-filter-chip:hover {
+    background: #dfeaff;
+    border-color: #c6d8fa;
+}
+
+.shop-filter-chip strong {
+    font-weight: 800;
+}
+
+.shop-filter-chip i {
+    font-size: 10px;
+    color: currentColor;
+}
+
+
+/* =========================================================
+   CUSTOM SHOP DROPDOWN
+========================================================= */
+
+.shop-control .select-wrap {
+    position: relative !important;
+    width: 100%;
+}
+
+.shop-control .select-wrap::before,
+.shop-control .select-wrap::after {
+    content: none !important;
+    display: none !important;
+}
+
+
+/* ---------------------------------------------------------
+   HIDE NATIVE SELECT COMPLETELY
+--------------------------------------------------------- */
+
+.shop-control .select-wrap select.custom-select-native {
+    display: none !important;
+
+    position: absolute !important;
+
+    width: 0 !important;
+    height: 0 !important;
+
+    min-width: 0 !important;
+    min-height: 0 !important;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
+    border: 0 !important;
+
+    opacity: 0 !important;
+    visibility: hidden !important;
+
+    pointer-events: none !important;
+
+    overflow: hidden !important;
+}
+
+/* ---------------------------------------------------------
+   BUTTON
+--------------------------------------------------------- */
+
+.custom-select-button {
+    width: 100%;
+    height: 46px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    padding: 0 14px;
+
+    border: 1px solid #dbe3ee;
+    border-radius: 9px;
+
+    outline: none;
+
+    background: #ffffff;
+    color: #34435c;
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 400;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease,
+        border-radius .2s ease;
+}
+
+
+/* Hover */
+
+.custom-select-button:hover {
+    border-color: #b8c7da;
+}
+
+
+/* Open */
+
+.custom-select-open
+.custom-select-button {
+
+    border-color: var(--shop-blue);
+
+    box-shadow:
+        0 0 0 3px rgba(40, 100, 232, .1);
+
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+
+}
+
+
+/* ---------------------------------------------------------
+   TEXT
+--------------------------------------------------------- */
+
+.custom-select-text {
+    min-width: 0;
+
+    overflow: hidden;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+
+/* ---------------------------------------------------------
+   ARROW
+--------------------------------------------------------- */
+
+.custom-select-arrow {
+    flex: 0 0 auto;
+
+    color: #172033;
+
+    font-size: 11px;
+
+    line-height: 1;
+
+    transition:
+        transform .2s ease;
+}
+
+
+/* CLOSED */
+
+.custom-select-arrow {
+    transform: rotate(0deg);
+}
+
+
+/* OPEN */
+
+.custom-select-open
+.custom-select-arrow {
+    transform: rotate(180deg);
+}
+
+
+/* ---------------------------------------------------------
+   DROPDOWN PANEL
+--------------------------------------------------------- */
+
+.custom-select-dropdown {
+    position: absolute;
+
+    top: calc(100% - 1px);
+    left: 0;
+    right: 0;
+
+    z-index: 100;
+
+    max-height: 250px;
+
+    overflow-y: auto;
+
+    border: 1px solid var(--shop-blue);
+    border-top: 0;
+
+    border-bottom-left-radius: 9px;
+    border-bottom-right-radius: 9px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 12px 25px rgba(15, 23, 42, .12);
+
+    opacity: 0;
+    visibility: hidden;
+
+    pointer-events: none;
+
+    transform:
+        translateY(-5px);
+
+    transition:
+        opacity .18s ease,
+        visibility .18s ease,
+        transform .18s ease;
+}
+
+
+/* OPEN */
+
+.custom-select-open
+.custom-select-dropdown {
+
+    opacity: 1;
+    visibility: visible;
+
+    pointer-events: auto;
+
+    transform:
+        translateY(0);
+
+}
+
+
+/* ---------------------------------------------------------
+   OPTIONS
+--------------------------------------------------------- */
+
+.custom-select-option {
+    width: 100%;
+
+    min-height: 40px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 14px;
+
+    border: 0;
+
+    background: #ffffff;
+    color: #34435c;
+
+    font-family: inherit;
+    font-size: 14px;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    transition:
+        background .15s ease,
+        color .15s ease;
+}
+
+
+/* Hover */
+
+.custom-select-option:hover {
+    background: #f1f5ff;
+    color: var(--shop-blue);
+}
+
+
+/* Selected */
+
+.custom-select-option.selected {
+
+    background: #eaf1ff;
+    color: var(--shop-blue);
+
+    font-weight: 700;
+
+}
+
+
+/* ---------------------------------------------------------
+   SCROLLBAR
+--------------------------------------------------------- */
+
+.custom-select-dropdown::-webkit-scrollbar {
+    width: 6px;
+}
+
+.custom-select-dropdown::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-select-dropdown::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+
+    border-radius: 20px;
+}
+
+
+/* ---------------------------------------------------------
+   MOBILE
+--------------------------------------------------------- */
+
+@media (max-width: 600px) {
+
+    .custom-select-button {
+        height: 46px;
+
+        padding: 0 12px;
+
+        font-size: 14px;
+    }
+
+    .custom-select-arrow {
+        font-size: 10px;
+    }
+
+    .custom-select-dropdown {
+        max-height: 220px;
+    }
+
+}
+
+/* =========================================================
+   SHOP PAGINATION
+========================================================= */
+
+.shop-pagination {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 6px;
+
+    margin-top: 28px;
+    padding: 10px 0;
+}
+
+.shop-pagination button {
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border: 1px solid #dbe3ee;
+    border-radius: 7px;
+
+    background: #ffffff;
+    color: #34435c;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background .2s ease,
+        color .2s ease,
+        border-color .2s ease,
+        transform .15s ease;
+}
+
+.shop-pagination button:hover:not(:disabled) {
+    border-color: #2864e8;
+    color: #2864e8;
+
+    transform: translateY(-1px);
+}
+
+.shop-pagination button.active {
+    border-color: #2864e8;
+
+    background: #2864e8;
+    color: #ffffff;
+}
+
+.shop-pagination button:disabled {
+    opacity: .45;
+    cursor: not-allowed;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+/* =========================================================
+   FINAL MOBILE PRODUCT FIX
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .shop-products-grid {
+        display: grid;
+
+        grid-template-columns:
+            1fr;
+
+        gap: 12px;
+
+        align-items: start;
+
+        margin-top: 15px;
+    }
+
+
+    .shop-product-card {
+        width: 100%;
+
+        height: auto;
+        min-height: 0;
+
+        display: flex;
+        flex-direction: column;
+
+        align-self: start;
+    }
+
+
+    .shop-product-image {
+        width: 100%;
+        height: 145px;
+
+        min-height: 145px;
+
+        flex: 0 0 145px;
+
+        padding: 10px;
+    }
+
+
+    .shop-product-info {
+        width: 100%;
+
+        height: auto;
+        min-height: 0;
+
+        flex: none;
+
+        padding: 10px;
+    }
+
+
+    .shop-product-title {
+        min-height: 0;
+
+        height: auto;
+
+        line-height: 1.4;
+    }
+
+
+    .shop-product-price {
+        height: auto;
+    }
+
+
+    .shop-product-card .add-cart-btn,
+    .shop-product-card .shop-add-cart {
+        width: 100%;
+
+        min-height: 32px;
+
+        height: 32px;
+    }
+
+
+    .shop-pagination {
+        width: 100%;
+
+        display: flex;
+
+        flex-wrap: wrap;
+
+        justify-content: center;
+
+        gap: 5px;
+
+        margin-top: 20px;
+
+        padding: 5px 0;
+    }
+
 }

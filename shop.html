@@ -22,8 +22,10 @@
          FONT AWESOME
     ====================================================== -->
 
-    <link rel="stylesheet" href="assets/fontawesome/fontCss/all.min.css">
-
+    <link
+        rel="stylesheet"
+        href="assets/fontawesome/fontCss/all.min.css"
+    >
 
 
     <!-- =====================================================
@@ -34,6 +36,7 @@
         rel="stylesheet"
         href="assets/css/style.css"
     >
+
 
     <!-- =====================================================
          SHOP CSS
@@ -59,26 +62,42 @@
     <div class="container top-bar-inner">
 
         <div class="top-sale">
+
             <i class="fa-solid fa-fire"></i>
+
             Hot Deals
+
             <span>
                 Summer Sale For All Products - Up To 50% Off
             </span>
+
         </div>
+
 
         <div class="top-links">
 
-            <a href="#">Track Order</a>
-            <a href="#">Help Center</a>
+            <a href="#">
+                Track Order
+            </a>
 
-            <button>
+            <a href="#">
+                Help Center
+            </a>
+
+            <button type="button">
+
                 English
+
                 <i class="fa-solid fa-chevron-down"></i>
+
             </button>
 
-            <button>
+            <button type="button">
+
                 USD
+
                 <i class="fa-solid fa-chevron-down"></i>
+
             </button>
 
         </div>
@@ -106,7 +125,9 @@
         >
 
             <span class="logo-icon">
+
                 <i class="fa-solid fa-bag-shopping"></i>
+
             </span>
 
             <span>
@@ -114,6 +135,7 @@
             </span>
 
         </a>
+
 
 
         <!-- SEARCH -->
@@ -166,11 +188,19 @@
         </div>
 
 
+
         <!-- HEADER ACTIONS -->
 
         <div class="header-actions">
 
-           <button class="header-action wishlist-header-btn" id="wishlistHeader">
+
+            <!-- WISHLIST -->
+
+            <button
+                class="header-action wishlist-header-btn"
+                id="wishlistHeader"
+                type="button"
+            >
 
                 <span class="wishlist-icon-wrap">
 
@@ -182,25 +212,37 @@
 
                 </span>
 
-                <span>Wishlist</span>
+                <span>
+                    Wishlist
+                </span>
 
             </button>
 
 
+
+            <!-- ACCOUNT -->
+
             <button
                 class="header-action"
+                type="button"
             >
 
                 <i class="fa-regular fa-user"></i>
 
-                <span>Account</span>
+                <span>
+                    Account
+                </span>
 
             </button>
 
 
+
+            <!-- CART -->
+
             <button
                 class="header-action cart-header-btn"
                 id="cartBtn"
+                type="button"
             >
 
                 <span class="cart-icon-wrap">
@@ -213,24 +255,30 @@
 
                 </span>
 
-                <span>Cart</span>
+                <span>
+                    Cart
+                </span>
 
             </button>
 
         </div>
 
-
     </div>
 
 
-    <!-- NAVIGATION -->
+
+    <!-- =================================================
+         NAVIGATION
+    ================================================== -->
 
     <div class="navigation">
 
         <div class="container navigation-inner">
 
 
-            <!-- ALL CATEGORIES -->
+            <!-- =================================================
+                 ALL CATEGORIES
+            ================================================== -->
 
             <div class="categories-wrapper">
 
@@ -244,150 +292,458 @@
 
                     All Categories
 
-                    <i class="fa-solid fa-chevron-down arrow"></i>
+                    <i
+                        class="fa-solid fa-chevron-down arrow"
+                    ></i>
 
                 </button>
 
 
-                <!-- CATEGORY DROPDOWN -->
+
+                <!-- =================================================
+                     CATEGORY DROPDOWN
+                ================================================== -->
 
                 <div
                     class="category-dropdown"
                     id="categoryDropdown"
                 >
 
+
+                    <!-- TITLE -->
+
                     <div class="category-dropdown-title">
+
                         <i class="fa-solid fa-layer-group"></i>
+
                         Shop By Category
+
                     </div>
 
+
+
+                    <!-- ELECTRONICS -->
+
                     <div class="category-item has-submenu">
-                        <button type="button" data-category="electronics">
+
+                        <button
+                            type="button"
+                            data-category="electronics"
+                        >
+
                             <span>
+
                                 <i class="fa-solid fa-laptop"></i>
+
                                 Electronics
+
                             </span>
+
                             <i class="fa-solid fa-chevron-right"></i>
+
                         </button>
+
+
                         <div class="category-submenu">
-                            <a href="#" data-category="laptops">Laptops</a>
-                            <a href="#" data-category="smartphones">Smartphones</a>
-                            <a href="#" data-category="tablets">Tablets</a>
-                            <a href="#" data-category="mobile-accessories">Mobile Accessories</a>
+
+                            <a
+                                href="#"
+                                data-category="laptops"
+                            >
+                                Laptops
+                            </a>
+
+                            <a
+                                href="#"
+                                data-category="smartphones"
+                            >
+                                Smartphones
+                            </a>
+
+                            <a
+                                href="#"
+                                data-category="tablets"
+                            >
+                                Tablets
+                            </a>
+
+                            <a
+                                href="#"
+                                data-category="mobile-accessories"
+                            >
+                                Mobile Accessories
+                            </a>
+
                         </div>
+
                     </div>
 
+
+
+                    <!-- FASHION -->
+
                     <div class="category-item has-submenu">
-                        <button type="button" data-category="fashion">
+
+                        <button
+                            type="button"
+                            data-category="fashion"
+                        >
+
                             <span>
+
                                 <i class="fa-solid fa-shirt"></i>
+
                                 Fashion
+
                             </span>
+
                             <i class="fa-solid fa-chevron-right"></i>
+
                         </button>
+
+
                         <div class="category-submenu">
-                            <a href="#" data-category="mens-shirts">Men's Shirts</a>
-                            <a href="#" data-category="mens-shoes">Men's Shoes</a>
-                            <a href="#" data-category="mens-watches">Men's Watches</a>
-                            <a href="#" data-category="womens-dresses">Women's Dresses</a>
-                            <a href="#" data-category="womens-shoes">Women's Shoes</a>
-                            <a href="#" data-category="womens-watches">Women's Watches</a>
-                            <a href="#" data-category="tops">Tops</a>
-                            <a href="#" data-category="sunglasses">Sunglasses</a>
+
+                            <a
+                                href="#"
+                                data-category="mens-shirts"
+                            >
+                                Men's Shirts
+                            </a>
+
+                            <a
+                                href="#"
+                                data-category="mens-shoes"
+                            >
+                                Men's Shoes
+                            </a>
+
+                            <a
+                                href="#"
+                                data-category="mens-watches"
+                            >
+                                Men's Watches
+                            </a>
+
+                            <a
+                                href="#"
+                                data-category="womens-dresses"
+                            >
+                                Women's Dresses
+                            </a>
+
+                            <a
+                                href="#"
+                                data-category="womens-shoes"
+                            >
+                                Women's Shoes
+                            </a>
+
+                            <a
+                                href="#"
+                                data-category="womens-watches"
+                            >
+                                Women's Watches
+                            </a>
+
+                            <a
+                                href="#"
+                                data-category="tops"
+                            >
+                                Tops
+                            </a>
+
+                            <a
+                                href="#"
+                                data-category="sunglasses"
+                            >
+                                Sunglasses
+                            </a>
+
                         </div>
+
                     </div>
 
+
+
+                    <!-- HOME & KITCHEN -->
+
                     <div class="category-item has-submenu">
-                        <button type="button" data-category="home-kitchen">
+
+                        <button
+                            type="button"
+                            data-category="home-kitchen"
+                        >
+
                             <span>
+
                                 <i class="fa-solid fa-house"></i>
+
                                 Home & Kitchen
+
                             </span>
+
                             <i class="fa-solid fa-chevron-right"></i>
+
                         </button>
+
+
                         <div class="category-submenu">
-                            <a href="#" data-category="furniture">Furniture</a>
-                            <a href="#" data-category="home-decoration">Home Decoration</a>
-                            <a href="#" data-category="kitchen-accessories">Kitchen Accessories</a>
+
+                            <a
+                                href="#"
+                                data-category="furniture"
+                            >
+                                Furniture
+                            </a>
+
+                            <a
+                                href="#"
+                                data-category="home-decoration"
+                            >
+                                Home Decoration
+                            </a>
+
+                            <a
+                                href="#"
+                                data-category="kitchen-accessories"
+                            >
+                                Kitchen Accessories
+                            </a>
+
                         </div>
+
                     </div>
 
+
+
+                    <!-- BEAUTY & HEALTH -->
+
                     <div class="category-item has-submenu">
-                        <button type="button" data-category="beauty-health">
+
+                        <button
+                            type="button"
+                            data-category="beauty-health"
+                        >
+
                             <span>
+
                                 <i class="fa-solid fa-wand-magic-sparkles"></i>
+
                                 Beauty & Health
+
                             </span>
+
                             <i class="fa-solid fa-chevron-right"></i>
+
                         </button>
+
+
                         <div class="category-submenu">
-                            <a href="#" data-category="beauty">Beauty</a>
-                            <a href="#" data-category="fragrances">Fragrances</a>
-                            <a href="#" data-category="skin-care">Skin Care</a>
+
+                            <a
+                                href="#"
+                                data-category="beauty"
+                            >
+                                Beauty
+                            </a>
+
+                            <a
+                                href="#"
+                                data-category="fragrances"
+                            >
+                                Fragrances
+                            </a>
+
+                            <a
+                                href="#"
+                                data-category="skin-care"
+                            >
+                                Skin Care
+                            </a>
+
                         </div>
+
                     </div>
 
+
+
+                    <!-- SPORTS & OUTDOORS -->
+
                     <div class="category-item has-submenu">
-                        <button type="button" data-category="sports-outdoors">
+
+                        <button
+                            type="button"
+                            data-category="sports-outdoors"
+                        >
+
                             <span>
+
                                 <i class="fa-solid fa-futbol"></i>
+
                                 Sports & Outdoors
+
                             </span>
+
                             <i class="fa-solid fa-chevron-right"></i>
+
                         </button>
+
+
                         <div class="category-submenu">
-                            <a href="#" data-category="sports-accessories">Sports Accessories</a>
+
+                            <a
+                                href="#"
+                                data-category="sports-accessories"
+                            >
+                                Sports Accessories
+                            </a>
+
                         </div>
+
                     </div>
 
+
+
+                    <!-- TOYS & GAMES -->
+
                     <div class="category-item has-submenu">
-                        <button type="button" data-category="toys-games">
+
+                        <button
+                            type="button"
+                            data-category="toys-games"
+                        >
+
                             <span>
+
                                 <i class="fa-solid fa-gamepad"></i>
+
                                 Toys & Games
+
                             </span>
+
                             <i class="fa-solid fa-chevron-right"></i>
+
                         </button>
+
+
                         <div class="category-submenu">
-                            <a href="#" data-category="toys">Toys & Games</a>
+
+                            <a
+                                href="#"
+                                data-category="toys"
+                            >
+                                Toys & Games
+                            </a>
+
                         </div>
+
                     </div>
 
+
+
+                    <!-- AUTOMOTIVE -->
+
                     <div class="category-item has-submenu">
-                        <button type="button" data-category="automotive">
+
+                        <button
+                            type="button"
+                            data-category="automotive"
+                        >
+
                             <span>
+
                                 <i class="fa-solid fa-car"></i>
+
                                 Automotive
+
                             </span>
+
                             <i class="fa-solid fa-chevron-right"></i>
+
                         </button>
+
+
                         <div class="category-submenu">
-                            <a href="#" data-category="vehicle">Vehicle</a>
-                            <a href="#" data-category="motorcycle">Motorcycle</a>
+
+                            <a
+                                href="#"
+                                data-category="vehicle"
+                            >
+                                Vehicle
+                            </a>
+
+                            <a
+                                href="#"
+                                data-category="motorcycle"
+                            >
+                                Motorcycle
+                            </a>
+
                         </div>
+
                     </div>
 
+
+
+                    <!-- BOOKS & MEDIA -->
+
                     <div class="category-item has-submenu">
-                        <button type="button" data-category="books-media">
+
+                        <button
+                            type="button"
+                            data-category="books-media"
+                        >
+
                             <span>
+
                                 <i class="fa-solid fa-book"></i>
+
                                 Books & Media
+
                             </span>
+
                             <i class="fa-solid fa-chevron-right"></i>
+
                         </button>
+
+
                         <div class="category-submenu">
-                            <a href="#" data-category="books">Books</a>
+
+                            <a
+                                href="#"
+                                data-category="books"
+                            >
+                                Books
+                            </a>
+
                         </div>
+
                     </div>
+
+
+
+                    <!-- GROCERIES -->
 
                     <div class="category-item">
-                        <button type="button" data-category="groceries">
+
+                        <button
+                            type="button"
+                            data-category="groceries"
+                        >
+
                             <span>
+
                                 <i class="fa-solid fa-basket-shopping"></i>
+
                                 Groceries
+
                             </span>
+
                             <i class="fa-solid fa-chevron-right"></i>
+
                         </button>
+
                     </div>
 
                 </div>
@@ -395,13 +751,14 @@
             </div>
 
 
-            <!-- NAV LINKS -->
+
+            <!-- =================================================
+                 NAV LINKS
+            ================================================== -->
 
             <nav class="nav-links">
 
-                <a
-                    href="index.html"
-                >
+                <a href="index.html">
                     Home
                 </a>
 
@@ -431,26 +788,51 @@
             </nav>
 
 
-            <!-- HOTLINE -->
+
+            <!-- =================================================
+                 HOTLINE
+            ================================================== -->
 
             <div class="hotline">
 
                 <i class="fa-solid fa-headset"></i>
 
                 Hotline:
+
                 <strong>
                     (800) 123-4567
                 </strong>
 
             </div>
 
+
+
+            <!-- =================================================
+                 MOBILE MENU TOGGLE
+                 
+                 IMPORTANT:
+                 এই button এখন navigation-inner-এর ভিতরে।
+                 তাই mobile/tablet-এ All Categories row-এর
+                 ডান পাশে থাকবে।
+            ================================================== -->
+
+            <button
+                type="button"
+                class="mobile-menu-toggle"
+                id="mobileMenuToggle"
+                aria-label="Open navigation menu"
+                aria-expanded="false"
+            >
+
+                <i class="fa-solid fa-bars"></i>
+
+            </button>
+
         </div>
 
     </div>
 
 </header>
-
-
 
 
 
@@ -559,9 +941,7 @@
 
                     </select>
 
-                    <i
-                        class="fa-solid fa-chevron-down"
-                    ></i>
+                    <i class="fa-solid fa-chevron-down"></i>
 
                 </div>
 
@@ -603,9 +983,7 @@
 
                     </select>
 
-                    <i
-                        class="fa-solid fa-chevron-down"
-                    ></i>
+                    <i class="fa-solid fa-chevron-down"></i>
 
                 </div>
 
@@ -652,6 +1030,9 @@
             <!-- Products generated by JavaScript -->
 
         </section>
+        <nav class="shop-pagination"
+            id="shopPagination"
+        ></nav>
 
 
 
@@ -918,9 +1299,7 @@
 
             <!-- TITLE -->
 
-            <h2
-                id="modalProductTitle"
-            ></h2>
+            <h2 id="modalProductTitle"></h2>
 
 
             <!-- RATING -->

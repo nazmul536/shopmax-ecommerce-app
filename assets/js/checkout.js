@@ -889,8 +889,7 @@ function setupSearch() {
         event => {
 
             if (
-                event.key ===
-                "Enter"
+                event.key === "Enter"
             ) {
 
                 event.preventDefault();
@@ -902,8 +901,10 @@ function setupSearch() {
         }
     );
 
-}
 
+    setupCheckoutSearchSuggestions();
+
+}
 
 /* =========================================================
    HANDLE SEARCH
@@ -2200,6 +2201,768 @@ window.getLastOrder =
         );
 
     };
+
+
+
+async function setupCheckoutSearchSuggestions() {
+
+    if (!checkoutSearch) {
+        return;
+    }
+
+
+    let products = [];
+
+
+    /* =====================================================
+       LOAD PRODUCTS
+    ===================================================== */
+
+    try {
+
+        const response =
+            await fetch(
+                "https://dummyjson.com/products?limit=0"
+            );
+
+
+        if (!response.ok) {
+            return;
+        }
+
+
+        const data =
+            await response.json();
+
+
+        products =
+            Array.isArray(data.products)
+                ? data.products
+                : [];
+
+
+    } catch (error) {
+
+        console.error(
+            "Search suggestion error:",
+            error
+        );
+
+        return;
+
+    }
+
+
+    /* =====================================================
+       SUGGESTION BOX
+    ===================================================== */
+
+    let suggestionBox =
+        document.getElementById(
+            "checkoutSearchSuggestions"
+        );
+
+
+    if (!suggestionBox) {
+
+        suggestionBox =
+            document.createElement(
+                "div"
+            );
+
+        suggestionBox.id =
+            "checkoutSearchSuggestions";
+
+        checkoutSearch.parentElement.appendChild(
+            suggestionBox
+        );
+
+    }
+
+
+    /* =====================================================
+       SEARCH BOX POSITION
+    ===================================================== */
+
+    checkoutSearch.parentElement.style.position =
+        "relative";
+
+    checkoutSearch.parentElement.style.overflow =
+        "visible";
+
+
+    /* =====================================================
+       SUGGESTION BOX STYLE
+    ===================================================== */
+
+    Object.assign(
+        suggestionBox.style,
+        {
+
+            position: "absolute",
+
+            top: "calc(100% + 10px)",
+
+            left: "0",
+
+            width: "100%",
+
+            maxHeight: "630px",
+
+            overflowY: "auto",
+
+            overflowX: "hidden",
+
+            zIndex: "999999",
+
+            display: "none",
+
+            background: "#ffffff",
+
+            border:
+                "1px solid #e1e6ee",
+
+            borderRadius: "12px",
+
+            boxShadow:
+                "0 18px 45px rgba(15, 23, 42, 0.14)",
+
+            boxSizing: "border-box",
+
+            padding: "0",
+
+            margin: "0"
+
+        }
+    );
+
+
+    /* =====================================================
+       SCROLLBAR
+    ===================================================== */
+
+    suggestionBox.style.scrollbarWidth =
+        "thin";
+
+    suggestionBox.style.scrollbarColor =
+        "#cbd5e1 transparent";
+
+
+    /* =====================================================
+       INPUT EVENT
+    ===================================================== */
+
+    checkoutSearch.addEventListener(
+        "input",
+        () => {
+
+            const search =
+                checkoutSearch.value
+                    .trim()
+                    .toLowerCase();
+
+
+            /* ---------------------------------------------
+               EMPTY SEARCH
+            --------------------------------------------- */
+
+            if (!search) {
+
+                suggestionBox.innerHTML =
+                    "";
+
+                suggestionBox.style.display =
+                    "none";
+
+                return;
+
+            }
+
+
+            /* ---------------------------------------------
+               FIND MATCHES
+            --------------------------------------------- */
+
+            const matches =
+                products
+                    .filter(
+                        product => {
+
+                            const title =
+                                String(
+                                    product.title || ""
+                                ).toLowerCase();
+
+
+                            const category =
+                                String(
+                                    product.category || ""
+                                ).toLowerCase();
+
+
+                            const brand =
+                                String(
+                                    product.brand || ""
+                                ).toLowerCase();
+
+
+                            const description =
+                                String(
+                                    product.description || ""
+                                ).toLowerCase();
+
+
+                            return (
+                                title.includes(search) ||
+                                category.includes(search) ||
+                                brand.includes(search) ||
+                                description.includes(search)
+                            );
+
+                        }
+                    )
+                    .slice(0, 6);
+
+
+            /* ---------------------------------------------
+               NO RESULTS
+            --------------------------------------------- */
+
+            if (!matches.length) {
+
+                suggestionBox.innerHTML =
+                    "";
+
+                suggestionBox.style.display =
+                    "none";
+
+                return;
+
+            }
+
+
+            /* =================================================
+               CLEAR OLD RESULTS
+            ================================================= */
+
+            suggestionBox.innerHTML =
+                "";
+
+
+            /* =================================================
+               CREATE PRODUCTS
+            ================================================= */
+
+            matches.forEach(
+                product => {
+
+                    const item =
+                        document.createElement(
+                            "button"
+                        );
+
+
+                    const image =
+                        document.createElement(
+                            "img"
+                        );
+
+
+                    const content =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    const title =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    const category =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    const bottom =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    const price =
+                        document.createElement(
+                            "span"
+                        );
+
+
+                    const rating =
+                        document.createElement(
+                            "span"
+                        );
+
+
+                    const arrow =
+                        document.createElement(
+                            "span"
+                        );
+
+
+                    /* =================================================
+                       ITEM
+                    ================================================= */
+
+                    Object.assign(
+                        item.style,
+                        {
+
+                            width: "100%",
+
+                            minHeight: "112px",
+
+                            display: "flex",
+
+                            alignItems: "center",
+
+                            gap: "18px",
+
+                            padding:
+                                "14px 16px",
+
+                            margin: "0",
+
+                            border: "0",
+
+                            borderBottom:
+                                "1px solid #edf0f4",
+
+                            background:
+                                "#ffffff",
+
+                            textAlign: "left",
+
+                            cursor: "pointer",
+
+                            boxSizing: "border-box",
+
+                            fontFamily:
+                                "inherit",
+
+                            appearance:
+                                "none"
+
+                        }
+                    );
+
+
+                    /* =================================================
+                       IMAGE
+                    ================================================= */
+
+                    image.src =
+                        safeImage(
+                            product.thumbnail ||
+                            product.images?.[0]
+                        );
+
+
+                    image.alt =
+                        product.title || "";
+
+
+                    Object.assign(
+                        image.style,
+                        {
+
+                            width: "72px",
+
+                            height: "72px",
+
+                            minWidth: "72px",
+
+                            flex:
+                                "0 0 72px",
+
+                            objectFit:
+                                "contain",
+
+                            display:
+                                "block",
+
+                            borderRadius:
+                                "10px",
+
+                            background:
+                                "#f6f8fb",
+
+                            padding:
+                                "7px"
+
+                        }
+                    );
+
+
+                    /* =================================================
+                       CONTENT
+                    ================================================= */
+
+                    Object.assign(
+                        content.style,
+                        {
+
+                            flex: "1",
+
+                            minWidth: "0",
+
+                            display:
+                                "flex",
+
+                            flexDirection:
+                                "column",
+
+                            justifyContent:
+                                "center",
+
+                            gap: "4px"
+
+                        }
+                    );
+
+
+                    /* =================================================
+                       TITLE
+                    ================================================= */
+
+                    title.textContent =
+                        product.title || "";
+
+
+                    Object.assign(
+                        title.style,
+                        {
+
+                            color:
+                                "#17233b",
+
+                            fontSize:
+                                "16px",
+
+                            fontWeight:
+                                "700",
+
+                            lineHeight:
+                                "1.3",
+
+                            whiteSpace:
+                                "nowrap",
+
+                            overflow:
+                                "hidden",
+
+                            textOverflow:
+                                "ellipsis"
+
+                        }
+                    );
+
+
+                    /* =================================================
+                       CATEGORY
+                    ================================================= */
+
+                    category.textContent =
+                        product.category || "";
+
+
+                    Object.assign(
+                        category.style,
+                        {
+
+                            color:
+                                "#8a99ad",
+
+                            fontSize:
+                                "13px",
+
+                            fontWeight:
+                                "500",
+
+                            lineHeight:
+                                "1.3"
+
+                        }
+                    );
+
+
+                    /* =================================================
+                       BOTTOM ROW
+                    ================================================= */
+
+                    Object.assign(
+                        bottom.style,
+                        {
+
+                            display:
+                                "flex",
+
+                            alignItems:
+                                "center",
+
+                            gap: "12px",
+
+                            marginTop:
+                                "1px"
+
+                        }
+                    );
+
+
+                    /* =================================================
+                       PRICE
+                    ================================================= */
+
+                    price.textContent =
+                        `$${Number(
+                            product.price || 0
+                        ).toFixed(2)}`;
+
+
+                    Object.assign(
+                        price.style,
+                        {
+
+                            color:
+                                "#16a34a",
+
+                            fontSize:
+                                "15px",
+
+                            fontWeight:
+                                "800"
+
+                        }
+                    );
+
+
+                    /* =================================================
+                       RATING
+                    ================================================= */
+
+                    const ratingValue =
+                        Number(
+                            product.rating || 0
+                        ).toFixed(1);
+
+
+                    const reviewCount =
+                        Array.isArray(
+                            product.reviews
+                        )
+                            ? product.reviews.length
+                            : 0;
+
+
+                    rating.innerHTML =
+                        `★ ${ratingValue} ` +
+                        `<span style="
+                            color:#94a3b8;
+                            font-weight:500;
+                        ">(${reviewCount})</span>`;
+
+
+                    Object.assign(
+                        rating.style,
+                        {
+
+                            color:
+                                "#f59e0b",
+
+                            fontSize:
+                                "13px",
+
+                            fontWeight:
+                                "700"
+
+                        }
+                    );
+
+
+                    /* =================================================
+                       ARROW
+                    ================================================= */
+
+                    arrow.textContent =
+                        "›";
+
+
+                    Object.assign(
+                        arrow.style,
+                        {
+
+                            width:
+                                "28px",
+
+                            height:
+                                "28px",
+
+                            minWidth:
+                                "28px",
+
+                            display:
+                                "grid",
+
+                            placeItems:
+                                "center",
+
+                            marginLeft:
+                                "auto",
+
+                            color:
+                                "#8ca0b8",
+
+                            fontSize:
+                                "28px",
+
+                            fontWeight:
+                                "300",
+
+                            lineHeight:
+                                "1"
+
+                        }
+                    );
+
+
+                    /* =================================================
+                       HOVER
+                    ================================================= */
+
+                    item.addEventListener(
+                        "mouseenter",
+                        () => {
+
+                            item.style.background =
+                                "#f7f9fc";
+
+                            arrow.style.color =
+                                "#2864e8";
+
+                        }
+                    );
+
+
+                    item.addEventListener(
+                        "mouseleave",
+                        () => {
+
+                            item.style.background =
+                                "#ffffff";
+
+                            arrow.style.color =
+                                "#8ca0b8";
+
+                        }
+                    );
+
+
+                    /* =================================================
+                       CLICK
+                    ================================================= */
+
+                    item.addEventListener(
+                        "click",
+                        () => {
+
+                            window.location.href =
+                                `productDetails.html?id=${product.id}`;
+
+                        }
+                    );
+
+
+                    /* =================================================
+                       BUILD
+                    ================================================= */
+
+                    bottom.appendChild(
+                        price
+                    );
+
+                    bottom.appendChild(
+                        rating
+                    );
+
+
+                    content.appendChild(
+                        title
+                    );
+
+                    content.appendChild(
+                        category
+                    );
+
+                    content.appendChild(
+                        bottom
+                    );
+
+
+                    item.appendChild(
+                        image
+                    );
+
+                    item.appendChild(
+                        content
+                    );
+
+                    item.appendChild(
+                        arrow
+                    );
+
+
+                    suggestionBox.appendChild(
+                        item
+                    );
+
+                }
+            );
+
+
+            /* =================================================
+               SHOW
+            ================================================= */
+
+            suggestionBox.style.display =
+                "block";
+
+        }
+    );
+
+
+    /* =====================================================
+       CLOSE OUTSIDE
+    ===================================================== */
+
+    document.addEventListener(
+        "click",
+        event => {
+
+            if (
+                !checkoutSearch.parentElement.contains(
+                    event.target
+                )
+            ) {
+
+                suggestionBox.style.display =
+                    "none";
+
+            }
+
+        }
+    );
+
+}
 
 
 /* =========================================================
